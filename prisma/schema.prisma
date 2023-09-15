@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Define your models
+model Staff {
+  id         String  @id @default(uuid())
+  first_name String
+  last_name  String
+  Order      Order[]
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String
+  Products    Products[]
+}
+
+model Products {
+  id                    String                  @id @default(uuid())
+  categoryID            String
+  productName           String
+  price                 Int
+  description           String?
+  image                 String?
+  isAvailable           Boolean
+  category              Category                @relation(fields: [categoryID], references: [id])
+  OrderedItems          OrderedItems[]
+  OrderedItems_Products OrderedItems_Products[]
+}
+
+model Customer {
+  id           String         @id @default(uuid())
+  name         String
+  orders       Order[]
+  OrderedItems OrderedItems[]
+}
+
+model OrderedItems {
+  customerID            String                  @id @default(uuid())
+  productID             String                  @unique
+  quantity              Int
+  customer              Customer                @relation(fields: [customerID], references: [id])
+  product               Products                @relation(fields: [productID], references: [id])
+  Order                 Order[]
+  OrderedItems_Products OrderedItems_Products[]
+}
+
+model Order {
+  id            String         @id @default(uuid())
+  customerID    String
+  staffID       String?
+  orderItemsID  String?
+  paymentID     String?
+  totalAmount   Int
+  customer      Customer       @relation(fields: [customerID], references: [id])
+  staff         Staff?         @relation(fields: [staffID], references: [id])
+  orderItems    OrderedItems?  @relation(fields: [orderItemsID], references: [customerID])
+  paymentMethod PaymentMethod? @relation(fields: [paymentID], references: [id])
+}
+
+model PaymentMethod {
+  id          String  @id @default(uuid())
+  paymentType String
+  Order       Order[]
+}
+
+// Define the many-to-many relationship table
+model OrderedItems_Products {
+  OrderedItems_productID String
+  Products_id            String
+  orderedItem            OrderedItems @relation(fields: [OrderedItems_productID], references: [productID])
+  product                Products     @relation(fields: [Products_id], references: [id])
+
+  @@id([OrderedItems_productID, Products_id])
+}
