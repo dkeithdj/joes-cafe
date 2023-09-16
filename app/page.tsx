@@ -1,32 +1,28 @@
 import Image from "next/image";
 
 import { PrismaClient } from "@prisma/client";
+import Product from "../components/Product";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 const prisma = new PrismaClient();
 
 export default async function Home() {
-  const post = await prisma.products.findMany({
-    include: {
-      category: true,
-    },
-    // select: {
-    //   productName: true,
-    //   categoryID: true,
-    //   description: true,
-    // },
-  });
-  console.log(post.map((pos) => pos));
-  // console.log("owo");
-  // console.log(post.map((pos) => pos.id));
+  const products = await prisma.products.findMany();
+  const test = await prisma.products.findMany();
+
+  console.log(test.map((product) => product));
+  console.log(products.map((product) => product));
 
   return (
-    <ul>
-      {post.map((pos) => (
-        <div>
-          {/* <div>{pos}</div> */}
-          {/* <div>{pos.price}</div> */}
-        </div>
+    <div className="flex">
+      {products.map((product) => (
+        <Product pos={product} />
       ))}
-    </ul>
+    </div>
   );
 }

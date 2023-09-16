@@ -33,7 +33,7 @@ model Products {
   description           String?
   image                 String?
   isAvailable           Boolean
-  category              Category                @relation(fields: [categoryID], references: [id])
+  category              Category[]
   OrderedItems          OrderedItems[]
   OrderedItems_Products OrderedItems_Products[]
 }
