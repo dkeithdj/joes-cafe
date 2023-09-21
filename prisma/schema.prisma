@@ -10,76 +10,76 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Define your models
+model Customer {
+  id     String   @id @unique @default(uuid())
+  name   String
+  basket Basket[]
+}
+
 model Staff {
   id         String  @id @default(uuid())
   first_name String
   last_name  String
-  Order      Order[]
+  order      Order[]
 }
 
 model Category {
-  id          String     @id @default(uuid())
-  name        String     @unique
-  description String
-  Products    Products[]
-}
-
-model Products {
-  id                    String                  @id @default(uuid())
-  categoryID            String
-  productName           String
-  price                 Int
-  description           String?
-  image                 String?
-  isAvailable           Boolean
-  category              Category[]
-  OrderedItems          OrderedItems[]
-  OrderedItems_Products OrderedItems_Products[]
-}
-
-model Customer {
-  id           String         @id @default(uuid())
-  name         String
-  orders       Order[]
-  OrderedItems OrderedItems[]
-}
-
-model OrderedItems {
-  customerID            String                  @id @default(uuid())
-  productID             String                  @unique
-  quantity              Int
-  customer              Customer                @relation(fields: [customerID], references: [id])
-  product               Products                @relation(fields: [productID], references: [id])
-  Order                 Order[]
-  OrderedItems_Products OrderedItems_Products[]
-}
-
-model Order {
-  id            String         @id @default(uuid())
-  customerID    String
-  staffID       String?
-  orderItemsID  String?
-  paymentID     String?
-  totalAmount   Int
-  customer      Customer       @relation(fields: [customerID], references: [id])
-  staff         Staff?         @relation(fields: [staffID], references: [id])
-  orderItems    OrderedItems?  @relation(fields: [orderItemsID], references: [customerID])
-  paymentMethod PaymentMethod? @relation(fields: [paymentID], references: [id])
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  products    Product[]
 }
 
 model PaymentMethod {
   id          String  @id @default(uuid())
   paymentType String
-  Order       Order[]
+  order       Order[]
 }
 
-// Define the many-to-many relationship table
-model OrderedItems_Products {
-  OrderedItems_productID String
-  Products_id            String
-  orderedItem            OrderedItems @relation(fields: [OrderedItems_productID], references: [productID])
-  product                Products     @relation(fields: [Products_id], references: [id])
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  price       Int
+  description String?
+  image       String?
+  isAvailable Boolean
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  basket      Basket[]
+}
 
-  @@id([OrderedItems_productID, Products_id])
+model Basket {
+  // id         String   @id @default(uuid())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Int      @default(1)
+  customerId String   @id
+  productId  String
+  order      Order[]
+}
+
+model Order {
+  id            String        @id @default(uuid())
+  date          DateTime      @default(now())
+  totalAmount   Int
+  staff         Staff         @relation(fields: [staffId], references: [id])
+  paymentMethod PaymentMethod @relation(fields: [paymentId], references: [id])
+  basket        Basket        @relation(fields: [basketId], references: [customerId])
+  status        Order_Status  @relation(fields: [statusId], references: [id])
+  staffId       String
+  paymentId     String
+  basketId      String
+  statusId      String
+}
+
+model Order_Status {
+  id     String  @id @default(uuid())
+  status Status  @default(Completed)
+  order  Order[]
+}
+
+enum Status {
+  Processing
+  Completed
+  Declined
 }
