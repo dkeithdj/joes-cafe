@@ -1,6 +1,7 @@
-"use client";
+// "use client";
 import React, { useState } from "react";
 import Basket from "./Basket";
+import Categories from "./Categories";
 
 const Nav = () => {
   return (
@@ -12,7 +13,7 @@ const Nav = () => {
         </div>
         <Basket />
       </div>
-      <div>Categories</div>
+      <Categories />
     </div>
   );
 };

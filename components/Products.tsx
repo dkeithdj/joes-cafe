@@ -2,16 +2,16 @@ import React from "react";
 import { Card, CardHeader, CardContent, CardFooter } from "./ui/card";
 import Image from "next/image";
 
-const Product = ({ pos }) => {
+const Product = ({ product }) => {
   return (
     <Card className=" w-[150px] h-[200px] m-4">
       <div className="flex items-center justify-center py-2">
         <Image src={"/coffee.png"} alt="coffee" width={60} height={60} />
       </div>
       <CardContent className="px-4">
-        <div>{pos.category.name}</div>
+        <div>{product.category.name}</div>
         <div className="flex items-start justify-between">
-          <div className="text-lg leading-4">{pos.name}</div>
+          <div className="text-lg leading-4">{product.name}</div>
           <Image
             src={"/add.svg"}
             alt="add"
@@ -21,7 +21,7 @@ const Product = ({ pos }) => {
           />
         </div>
         <div className="font-['Yantramanav'] font-semibold">
-          PHP {pos.price}.00
+          PHP {product.price}.00
         </div>
       </CardContent>
       <CardFooter></CardFooter>

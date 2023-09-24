@@ -1,13 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prismaClientSingleton = () => {
+  return new PrismaClient();
+};
 
-// Add an onUnload handler to disconnect the Prisma client when the application shuts down
-async function onUnload() {
-  await prisma.$disconnect();
-}
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
 
-// Attach the onUnload function to the global process object
-process.on("beforeExit", onUnload);
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClientSingleton | undefined;
+};
+
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 export default prisma;
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

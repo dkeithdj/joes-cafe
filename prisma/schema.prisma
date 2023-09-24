@@ -11,9 +11,15 @@ datasource db {
 }
 
 model Customer {
-  id     String   @id @unique @default(uuid())
-  name   String
-  basket Basket[]
+  id          String        @id @default(uuid())
+  name        String
+  transaction Transaction[]
+}
+
+model Order_Status {
+  id     String  @id @default(uuid())
+  status Status
+  order  Order[]
 }
 
 model Staff {
@@ -36,46 +42,55 @@ model PaymentMethod {
   order       Order[]
 }
 
+model Table {
+  id     String  @id @default(uuid())
+  number Int
+  Order  Order[]
+}
+
 model Product {
   id          String   @id @default(uuid())
   name        String
   price       Int
   description String?
   image       String?
-  isAvailable Boolean
   category    Category @relation(fields: [categoryId], references: [id])
+  isAvailable Boolean
   categoryId  String
-  basket      Basket[]
+  Items       Items[]
 }
 
-model Basket {
-  // id         String   @id @default(uuid())
+model Items {
+  id            String      @id @default(uuid())
+  quantity      Int         @default(1)
+  product       Product     @relation(fields: [productId], references: [id])
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  productId     String
+  transactionId String
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  customerId String
   customer   Customer @relation(fields: [customerId], references: [id])
-  product    Product  @relation(fields: [productId], references: [id])
-  quantity   Int      @default(1)
-  customerId String   @id
-  productId  String
   order      Order[]
+  items      Items[]
 }
 
 model Order {
   id            String        @id @default(uuid())
   date          DateTime      @default(now())
   totalAmount   Int
+  table         Table         @relation(fields: [tableId], references: [id])
+  transaction   Transaction   @relation(fields: [transactionId], references: [id])
+  status        Order_Status  @relation(fields: [statusId], references: [id])
   staff         Staff         @relation(fields: [staffId], references: [id])
   paymentMethod PaymentMethod @relation(fields: [paymentId], references: [id])
-  basket        Basket        @relation(fields: [basketId], references: [customerId])
-  status        Order_Status  @relation(fields: [statusId], references: [id])
+  tableId       String
+  transactionId String
+  statusId      String
   staffId       String
   paymentId     String
-  basketId      String
-  statusId      String
-}
-
-model Order_Status {
-  id     String  @id @default(uuid())
-  status Status  @default(Completed)
-  order  Order[]
 }
 
 enum Status {

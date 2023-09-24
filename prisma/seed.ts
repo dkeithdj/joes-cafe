@@ -1,5 +1,5 @@
 import {
-  Basket,
+  Items,
   Category,
   Customer,
   PaymentMethod,
@@ -42,6 +42,19 @@ const getStatus = (): Prisma.Order_StatusCreateInput[] => [
   { status: "Declined" },
 ];
 
+const getTable = (): Prisma.TableCreateInput[] => [
+  { number: 1 },
+  { number: 2 },
+  { number: 3 },
+  { number: 4 },
+  { number: 5 },
+  { number: 6 },
+  { number: 7 },
+  { number: 8 },
+  { number: 9 },
+  { number: 10 },
+];
+
 const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
   {
     name: "Coffee Latte",
@@ -81,87 +94,87 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
   },
 ];
 
-const getBasket = (
-  customer: Customer[],
-  products: Product[]
-): Prisma.BasketCreateInput[] => [
-  {
-    customer: {
-      connect: {
-        id: customer[0].id,
-        name: customer[0].name,
-      },
-    },
-    product: {
-      connect: {
-        id: products[0].id,
-      },
-    },
-    quantity: 1,
-  },
-  {
-    customer: {
-      connect: {
-        id: customer[0].id,
-        name: customer[0].name,
-      },
-    },
-    product: {
-      connect: {
-        id: products[1].id,
-      },
-    },
-    quantity: 2,
-  },
-  {
-    customer: {
-      connect: {
-        id: customer[1].id,
-        name: customer[1].name,
-      },
-    },
-    product: {
-      connect: {
-        id: products[1].id,
-      },
-    },
-    quantity: 1,
-  },
-];
+// const getBasket = (
+//   customer: Customer[],
+//   products: Product[]
+// ): Prisma.BasketCreateInput[] => [
+//   {
+//     customer: {
+//       connect: {
+//         id: customer[0].id,
+//         name: customer[0].name,
+//       },
+//     },
+//     product: {
+//       connect: {
+//         id: products[0].id,
+//       },
+//     },
+//     quantity: 1,
+//   },
+//   {
+//     customer: {
+//       connect: {
+//         id: customer[0].id,
+//         name: customer[0].name,
+//       },
+//     },
+//     product: {
+//       connect: {
+//         id: products[1].id,
+//       },
+//     },
+//     quantity: 2,
+//   },
+//   {
+//     customer: {
+//       connect: {
+//         id: customer[1].id,
+//         name: customer[1].name,
+//       },
+//     },
+//     product: {
+//       connect: {
+//         id: products[1].id,
+//       },
+//     },
+//     quantity: 1,
+//   },
+// ];
 
-const getOrders = (
-  staff: Staff[],
-  payment: PaymentMethod[],
-  basket: Basket[],
-  status: Status[]
-): Prisma.OrderCreateInput[] => [
-  {
-    staff: {
-      connect: {
-        id: staff[0].id,
-        first_name: staff[0].first_name,
-        last_name: staff[0].last_name,
-      },
-    },
-    paymentMethod: {
-      connect: {
-        id: payment[0].id,
-        paymentType: payment[0].paymentType,
-      },
-    },
-    basket: {
-      connect: {
-        id: basket[0].id,
-      },
-    },
-    totalAmount: 500,
-    status: {
-      // connect: {
-      //   id: status[0].
-      // }
-    },
-  },
-];
+// const getOrders = (
+//   staff: Staff[],
+//   payment: PaymentMethod[],
+//   basket: Basket[],
+//   status: Status[]
+// ): Prisma.OrderCreateInput[] => [
+//   {
+//     staff: {
+//       connect: {
+//         id: staff[0].id,
+//         first_name: staff[0].first_name,
+//         last_name: staff[0].last_name,
+//       },
+//     },
+//     paymentMethod: {
+//       connect: {
+//         id: payment[0].id,
+//         paymentType: payment[0].paymentType,
+//       },
+//     },
+//     basket: {
+//       connect: {
+//         id: basket[0].id,
+//       },
+//     },
+//     totalAmount: 500,
+//     status: {
+//       // connect: {
+//       //   id: status[0].
+//       // }
+//     },
+//   },
+// ];
 
 const main = async () => {
   const categories = await Promise.all(
@@ -187,6 +200,10 @@ const main = async () => {
     getProducts(categories).map((product) =>
       client.product.create({ data: product })
     )
+  );
+
+  const tables = await Promise.all(
+    getTable().map((table) => client.table.create({ data: table }))
   );
   // const baskets = await Promise.all(
   //   getBasket(customers, products).map((basket) =>
