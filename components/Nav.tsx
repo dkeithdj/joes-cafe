@@ -10,6 +10,8 @@ const Nav = () => {
         <div className="space-x-2 text-[#f9ebd3]">
           <a href="/">Home</a>
           <a href="/order">Order</a>
+          <a href="/table/test">Table</a>
+          <a href="/table/test/testing">Testing</a>
         </div>
         <Basket />
       </div>

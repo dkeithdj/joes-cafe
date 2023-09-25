@@ -1,15 +1,34 @@
+"use client";
+import { fetcher } from "@/lib/utils";
 import React from "react";
+import useSWR from "swr";
 
-const Order = async () => {
-  const response = await fetch("http://localhost:3000/api/customer", {
-    method: "GET",
-    cache: "no-cache",
-  });
-  const data = await response.json();
+const Orders = () => {
+  const getOrders = () => {
+    const { data, error } = useSWR("http://localhost:3000/api/orders", fetcher);
+    if (!error) {
+      console.log(data);
+    } else {
+      console.log(error);
+    }
+  };
+  const getItems = () => {
+    const { data, error } = useSWR(
+      `http://localhost:3000/api/items/${"72ac1510-c31d-46b6-906d-cf8a884c55d8"}`,
+      fetcher
+    );
+    if (!error) {
+      console.log(data);
+    } else {
+      console.log(error);
+    }
+  };
 
-  console.log(data);
+  getOrders();
+  console.log("owowow1");
+  getItems();
 
   return <div>Order</div>;
 };
 
-export default Order;
+export default Orders;

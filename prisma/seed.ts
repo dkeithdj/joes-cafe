@@ -37,9 +37,9 @@ const getPaymentMethod = (): Prisma.PaymentMethodCreateInput[] => [
 ];
 
 const getStatus = (): Prisma.Order_StatusCreateInput[] => [
-  { status: "Processing" },
-  { status: "Completed" },
-  { status: "Declined" },
+  { id: 0, status: "Processing" },
+  { id: 1, status: "Completed" },
+  { id: 2, status: "Declined" },
 ];
 
 const getTable = (): Prisma.TableCreateInput[] => [
@@ -62,8 +62,8 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     category: {
       connect: {
         id: category[0].id,
-        name: category[0].name,
-        description: category[0].description,
+        // name: category[0].name,
+        // description: category[0].description,
       },
     },
     isAvailable: true,
@@ -74,8 +74,8 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     category: {
       connect: {
         id: category[1].id,
-        name: category[1].name,
-        description: category[1].description,
+        // name: category[1].name,
+        // description: category[1].description,
       },
     },
     isAvailable: true,
@@ -86,8 +86,6 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     category: {
       connect: {
         id: category[2].id,
-        name: category[2].name,
-        description: category[2].description,
       },
     },
     isAvailable: true,

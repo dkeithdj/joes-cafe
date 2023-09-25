@@ -18,18 +18,29 @@ export const GET = async (req: NextRequest) => {
         isAvailable: true,
       },
     });
-    return new NextResponse(JSON.stringify(products), { status: 200 });
+    // return new NextResponse(JSON.stringify(products), { status: 200 });
+    return NextResponse.json(products, { status: 200 });
   } catch (error) {
-    return new NextResponse("Failed to fetch all prompts", { status: 500 });
+    return NextResponse.json(error, { status: 500 });
   }
 };
 
 export const POST = async (req: NextRequest) => {
   try {
-    const input = await req.json();
+    const data = await req.json();
+    const product = await prisma.product.create({
+      data: {
+        name: data.name,
+        price: data.price,
+        categoryId: "0",
+        image: data.image,
+        description: data.description,
+        isAvailable: true,
+      },
+    });
 
-    return NextResponse.json({ message: "yehey" }, { status: 200 });
+    return NextResponse.json(product, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json(error);
   }
 };

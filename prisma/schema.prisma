@@ -17,7 +17,7 @@ model Customer {
 }
 
 model Order_Status {
-  id     String  @id @default(uuid())
+  id     Int     @id
   status Status
   order  Order[]
 }
@@ -88,7 +88,7 @@ model Order {
   paymentMethod PaymentMethod @relation(fields: [paymentId], references: [id])
   tableId       String
   transactionId String
-  statusId      String
+  statusId      Int
   staffId       String
   paymentId     String
 }

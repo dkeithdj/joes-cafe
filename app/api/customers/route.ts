@@ -8,9 +8,9 @@ export const GET = async (req: NextRequest) => {
         name: true,
       },
     });
-    return new NextResponse(JSON.stringify(customers), { status: 200 });
+    return NextResponse.json(customers);
   } catch (error) {
-    return new NextResponse("Failed to fetch all prompts", { status: 500 });
+    return NextResponse.json(error);
   }
 };
 

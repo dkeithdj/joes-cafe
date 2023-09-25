@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, CardHeader, CardContent, CardFooter } from "./ui/card";
 import Image from "next/image";
+import { ProductProps } from "@/types";
 
-const Product = ({ product }) => {
+const Product = ({ product }: { product: ProductProps }) => {
   return (
     <Card className=" w-[150px] h-[200px] m-4">
       <div className="flex items-center justify-center py-2">

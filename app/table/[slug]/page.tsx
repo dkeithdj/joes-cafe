@@ -12,7 +12,7 @@ const ProductView = ({ params }: { params: { slug: string } }) => {
 
     try {
       // Send the POST request here
-      const response = await fetch("/api/customer", {
+      const response = await fetch("/api/customers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
