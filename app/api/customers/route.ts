@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
   try {
-    const customers = await prisma.customer.findMany({
-      select: {
-        name: true,
-      },
-    });
-    return NextResponse.json(customers);
+    // const customers = await prisma.customer.findMany({
+    //   select: {
+    //     name: true,
+    //   },
+    // });
+    return NextResponse.json("hiih");
   } catch (error) {
     return NextResponse.json(error);
   }
@@ -18,9 +18,19 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
     const data = await req.json();
 
-    const createUser = await prisma.customer.create({ data: data });
+    console.log(data.name);
 
-    return NextResponse.json(createUser);
+    // const createTransaction = await prisma.transaction.create({
+    //   data: {
+    //     customer: {
+    //       create: data,
+    //     },
+    //   },
+    // });
+
+    // const createUser = await prisma.customer.create({ data: data });
+
+    return NextResponse.json("yes");
   } catch (error) {
     return NextResponse.json(error);
   }

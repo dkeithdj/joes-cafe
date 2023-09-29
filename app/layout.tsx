@@ -1,7 +1,9 @@
+"use client";
 import Nav from "@/components/Nav";
 import "./globals.css";
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { Inter } from "next/font/google";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -11,6 +13,8 @@ export const metadata: Metadata = {
   description: "Order Menu of Joe's Cafe",
 };
 
+const queryClient = new QueryClient();
+
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#463C3A]">{children}</body>
+      <QueryClientProvider client={queryClient}>
+        <body className="bg-[#463C3A]">{children}</body>
+      </QueryClientProvider>
     </html>
   );
 }

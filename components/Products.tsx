@@ -7,7 +7,12 @@ const Product = ({ product }: { product: ProductProps }) => {
   return (
     <Card className=" w-[150px] h-[200px] m-4">
       <div className="flex items-center justify-center py-2">
-        <Image src={"/coffee.png"} alt="coffee" width={60} height={60} />
+        <Image
+          src={"/coffee_default.png"}
+          alt="coffee"
+          width={60}
+          height={60}
+        />
       </div>
       <CardContent className="px-4">
         <div>{product.category.name}</div>

@@ -9,7 +9,7 @@ export const GET = async (
     const items = await prisma.items.findMany({
       where: {
         transaction: {
-          customerId: params.id,
+          id: params.id,
         },
       },
       select: {
@@ -27,6 +27,29 @@ export const GET = async (
     });
 
     return NextResponse.json(items);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
+};
+
+export const POST = async (req: NextRequest, res: NextResponse) => {
+  try {
+    const items = await prisma.items.create({
+      data: {
+        product: {
+          connect: {
+            id: "",
+          },
+        },
+        transaction: {
+          connect: {
+            id: "",
+          },
+        },
+        quantity: 1,
+      },
+    });
+    return NextResponse.json("a");
   } catch (error) {
     return NextResponse.json(error);
   }

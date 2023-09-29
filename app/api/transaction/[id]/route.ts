@@ -6,23 +6,21 @@ export const GET = async (
   { params }: { params: { id: string } }
 ) => {
   try {
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        customerId: params.id,
-      },
-      select: {
-        id: true,
-        customer: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    // const transactions = await prisma.transaction.findMany({
+    //   where: {
+    //     customerId: params.id,
+    //   },
+    //   select: {
+    //     id: true,
+    //     customer: {
+    //       select: {
+    //         name: true,
+    //       },
+    //     },
+    //   },
+    // });
 
-    console.log(transactions);
-
-    return NextResponse.json(transactions);
+    return NextResponse.json("transaction");
   } catch (error) {
     return NextResponse.json(error);
   }

@@ -1,30 +1,34 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 
 const LoginPage = () => {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
     password: "",
   });
 
+  // if (session !== null) router.push("/admin");
+
+  const query = useQuery({
+    queryKey: ["orders"],
+    queryFn: async () => {
+      const res = await fetch("/api/orders");
+      const data = await res.json();
+
+      return data;
+    },
+  });
+
   const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn("credentials", {});
+    signIn("credentials", { ...data, redirect: false });
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const userInfo = await response.json();
-    console.log(userInfo);
-    router.push("/admin");
+    // router.push("/admin");
   };
   return (
     <div>

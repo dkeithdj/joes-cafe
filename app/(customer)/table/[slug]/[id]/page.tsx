@@ -2,7 +2,8 @@
 import Products from "@/components/Products";
 import prisma from "@/lib/prisma";
 import { fetcher } from "@/lib/utils";
-import { CustomerProps } from "@/types";
+import { CustomerProps, ProductProps } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -12,7 +13,7 @@ const CustomerOrder = ({
   params: { id: string; slug: string };
 }) => {
   const [products, setProducts] = useState([]);
-  const [customers, setCustomers] = useState([]);
+  // const [customers, setCustomers] = useState([]);
 
   const fetchProducts = async () => {
     const response = await fetch("/api/products");
@@ -20,22 +21,20 @@ const CustomerOrder = ({
     setProducts(data);
   };
 
-  const fetchCustomers = async () => {
-    const response = await fetch("/api/customer");
-    const data = await response.json();
-    setCustomers(data);
-  };
+  // const fetchCustomers = async () => {
+  //   const response = await fetch("/api/customers");
+  //   const data = await response.json();
+  //   setCustomers(data);
+  // };
 
   useEffect(() => {
     fetchProducts();
-    fetchCustomers();
+    // fetchCustomers();
   }, []);
 
-  const { data, error } = useSWR(
-    "http://localhost:3000/api/customers",
-    fetcher
-  );
+  // console.log(qqCustomers.data);
 
+  // console.log(qCustomers);
   // if (!error) {
   //   console.log(data);
   // } else {
@@ -55,15 +54,15 @@ const CustomerOrder = ({
       </div>
 
       <div className="grid grid-cols-2 place-items-center px-2 md:flex">
-        {products.map((product) => (
-          <Products product={product} />
+        {products.map((product: ProductProps) => (
+          <Products key={product.id} product={product} />
         ))}
       </div>
-      <div>
+      {/* <div>
         {customers.map((customer: CustomerProps) => (
           <div key={customer.id}>{customer.name}</div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

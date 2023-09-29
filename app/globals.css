@@ -79,3 +79,36 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+  top: -0.5rem;
+  background-color: rgb(243, 229, 213);
+}
+label {
+  color: #664229;
+  transition: top 200ms ease-in, left 200ms ease-in;
+}
+button p,
+p,
+label {
+  font-family: "Zilla Slab", serif;
+  font-weight: bold;
+}
+.name {
+  color: black;
+}
+.box {
+  width: 20rem;
+  height: 20rem;
+  position: relative;
+}
+.box::after {
+  content: "";
+  position: absolute;
+  width: 20rem;
+  height: 20rem;
+  background: white;
+  z-index: 1;
+  mix-blend-mode: soft-light;
+}

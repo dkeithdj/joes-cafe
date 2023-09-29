@@ -14,11 +14,6 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
             last_name: true,
           },
         },
-        status: {
-          select: {
-            status: true,
-          },
-        },
         table: {
           select: {
             number: true,
@@ -31,18 +26,43 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         },
         totalAmount: true,
         transaction: {
-          select: {
-            customer: {
-              select: {
-                name: true,
-              },
-            },
-          },
+          select: {},
         },
       },
     });
 
     return NextResponse.json(orders);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
+};
+
+export const POST = async (req: NextRequest, res: NextResponse) => {
+  try {
+    const { tableId, customerId, transactionId } = await req.json();
+
+    const order = await prisma.order.create({
+      data: {
+        totalAmount: 0,
+        table: {
+          connect: {
+            id: tableId,
+          },
+        },
+        transaction: {
+          create: {},
+          // connectOrCreate: {
+          //   create: {
+          //     customerId: customerId,
+          //   },
+          //   where: {
+          //     id: transactionId,
+          //   },
+          // },
+        },
+      },
+    });
+    return NextResponse.json("a");
   } catch (error) {
     return NextResponse.json(error);
   }

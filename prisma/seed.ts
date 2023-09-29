@@ -1,13 +1,13 @@
 import {
   Items,
   Category,
-  Customer,
+  // Customer,
   PaymentMethod,
   Prisma,
   PrismaClient,
   Product,
   Staff,
-  Status,
+  // Status,
 } from "@prisma/client";
 
 const client = new PrismaClient();
@@ -18,12 +18,12 @@ const getCategories = (): Prisma.CategoryCreateInput[] => [
   { name: "Frappe", description: "Frappe Drink" },
 ];
 
-const getCustomer = (): Prisma.CustomerCreateInput[] => [
-  { name: "den" },
-  { name: "steph" },
-  { name: "nick" },
-  { name: "dec" },
-];
+// const getCustomer = (): Prisma.CustomerCreateInput[] => [
+//   { name: "den" },
+//   { name: "steph" },
+//   { name: "nick" },
+//   { name: "dec" },
+// ];
 
 const getStaff = (): Prisma.StaffCreateInput[] => [
   { first_name: "John", last_name: "Doe" },
@@ -36,11 +36,11 @@ const getPaymentMethod = (): Prisma.PaymentMethodCreateInput[] => [
   { paymentType: "Cash" },
 ];
 
-const getStatus = (): Prisma.Order_StatusCreateInput[] => [
-  { id: 0, status: "Processing" },
-  { id: 1, status: "Completed" },
-  { id: 2, status: "Declined" },
-];
+// const getStatus = (): Prisma.Order_StatusCreateInput[] => [
+//   { id: 0, status: "Processing" },
+//   { id: 1, status: "Completed" },
+//   { id: 2, status: "Declined" },
+// ];
 
 const getTable = (): Prisma.TableCreateInput[] => [
   { number: 1 },
@@ -98,9 +98,9 @@ const main = async () => {
       client.category.create({ data: category })
     )
   );
-  const customers = await Promise.all(
-    getCustomer().map((customer) => client.customer.create({ data: customer }))
-  );
+  // const customers = await Promise.all(
+  //   getCustomer().map((customer) => client.customer.create({ data: customer }))
+  // );
   const staffs = await Promise.all(
     getStaff().map((staff) => client.staff.create({ data: staff }))
   );
@@ -109,9 +109,9 @@ const main = async () => {
       client.paymentMethod.create({ data: method })
     )
   );
-  const status = await Promise.all(
-    getStatus().map((status) => client.order_Status.create({ data: status }))
-  );
+  // const status = await Promise.all(
+  //   getStatus().map((status) => client.order_Status.create({ data: status }))
+  // );
   const products = await Promise.all(
     getProducts(categories).map((product) =>
       client.product.create({ data: product })
