@@ -1,11 +1,17 @@
 "use client";
-import Admin from "@/components/Admin";
-import { useSession } from "next-auth/react";
+import _Admin from "@/components/_Admin";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const page = () => {
+// export const getServersideProps = async (context) => {
+//   const session = await getSession({ req: context.req });
+//   if (session) return { redirect: { destination: "/admin", permanent: false } };
+//   return { props: { session } };
+// };
+
+const Admin = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   if (session === null) router.push("/admin/login");
@@ -19,4 +25,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Admin;

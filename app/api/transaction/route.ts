@@ -6,27 +6,21 @@ export const GET = async (
   { params }: { params: { id: string } }
 ) => {
   try {
-    const items = await prisma.items.findMany({
+    const transactions = await prisma.transaction.findMany({
       where: {
-        transaction: {
-          id: params.id,
-        },
+        customerId: params.id,
       },
       select: {
         id: true,
-        product: {
+        customer: {
           select: {
-            id: true,
             name: true,
-            image: true,
-            price: true,
           },
         },
-        quantity: true,
       },
     });
 
-    return NextResponse.json(items);
+    return NextResponse.json(transactions);
   } catch (error) {
     return NextResponse.json(error);
   }
@@ -34,22 +28,15 @@ export const GET = async (
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
-    const items = await prisma.items.create({
+    const data = await req.json();
+    const createTransaction = await prisma.transaction.create({
       data: {
-        product: {
-          connect: {
-            id: "",
-          },
+        customer: {
+          create: data,
         },
-        transaction: {
-          connect: {
-            id: "",
-          },
-        },
-        quantity: 1,
       },
     });
-    return NextResponse.json("a");
+    return NextResponse.json(createTransaction);
   } catch (error) {
     return NextResponse.json(error);
   }

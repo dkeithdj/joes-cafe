@@ -4,26 +4,37 @@ import {
   // Customer,
   PaymentMethod,
   Prisma,
-  PrismaClient,
   Product,
   Staff,
+  PrismaClient,
   // Status,
 } from "@prisma/client";
 
-const client = new PrismaClient();
+const prisma = new PrismaClient();
 
 const getCategories = (): Prisma.CategoryCreateInput[] => [
-  { name: "Iced Joe", description: "Iced Joe latte" },
-  { name: "Hot Joe", description: "Hot Joe latte" },
-  { name: "Frappe", description: "Frappe Drink" },
+  { name: "Iced Joe" },
+  { name: "Hot Joe" },
+  { name: "Frappe" },
+  { name: "Smoothies" },
+  { name: "Affogato" },
+  { name: "Fruit Tea" },
+  { name: "Fruit Latte" },
+  { name: "Tea" },
+  { name: "Snacks" },
+  { name: "Sparkling Drinks" },
+  { name: "Sandwhiches" },
+  { name: "Meals" },
+  { name: "Ala Carte" },
+  { name: "Specials" },
 ];
 
-// const getCustomer = (): Prisma.CustomerCreateInput[] => [
-//   { name: "den" },
-//   { name: "steph" },
-//   { name: "nick" },
-//   { name: "dec" },
-// ];
+const getCustomer = (): Prisma.CustomerCreateInput[] => [
+  { name: "den" },
+  { name: "steph" },
+  { name: "nick" },
+  { name: "dec" },
+];
 
 const getStaff = (): Prisma.StaffCreateInput[] => [
   { first_name: "John", last_name: "Doe" },
@@ -62,8 +73,6 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     category: {
       connect: {
         id: category[0].id,
-        // name: category[0].name,
-        // description: category[0].description,
       },
     },
     isAvailable: true,
@@ -74,8 +83,6 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     category: {
       connect: {
         id: category[1].id,
-        // name: category[1].name,
-        // description: category[1].description,
       },
     },
     isAvailable: true,
@@ -90,23 +97,53 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
     },
     isAvailable: true,
   },
+  {
+    name: "Salisbury Steak",
+    price: 150,
+    category: {
+      connect: {
+        id: category[11].id,
+      },
+    },
+    isAvailable: true,
+  },
+  {
+    name: "Fries",
+    price: 125,
+    category: {
+      connect: {
+        id: category[8].id,
+      },
+    },
+    isAvailable: true,
+  },
+  {
+    name: "Popcorn",
+    price: 100,
+    category: {
+      connect: {
+        id: category[8].id,
+      },
+    },
+    isAvailable: true,
+  },
 ];
 
 const main = async () => {
   const categories = await Promise.all(
     getCategories().map((category) =>
-      client.category.create({ data: category })
+      prisma.category.create({ data: category })
     )
   );
-  // const customers = await Promise.all(
-  //   getCustomer().map((customer) => client.customer.create({ data: customer }))
-  // );
+  const customers = await Promise.all(
+    getCustomer().map((customer) => prisma.customer.create({ data: customer }))
+  );
   const staffs = await Promise.all(
-    getStaff().map((staff) => client.staff.create({ data: staff }))
+    getStaff().map((staff) => prisma.staff.create({ data: staff }))
   );
   const paymentMethod = await Promise.all(
     getPaymentMethod().map((method) =>
-      client.paymentMethod.create({ data: method })
+      prisma.paymentMethod.create({ data: method })
     )
   );
   // const status = await Promise.all(
@@ -114,12 +151,12 @@ const main = async () => {
   // );
   const products = await Promise.all(
     getProducts(categories).map((product) =>
-      client.product.create({ data: product })
+      prisma.product.create({ data: product })
     )
   );
 
   const tables = await Promise.all(
-    getTable().map((table) => client.table.create({ data: table }))
+    getTable().map((table) => prisma.table.create({ data: table }))
   );
   // const baskets = await Promise.all(
   //   getBasket(customers, products).map((basket) =>
@@ -129,3 +166,4 @@ const main = async () => {
 };
 
 main();
+prisma.$disconnect;

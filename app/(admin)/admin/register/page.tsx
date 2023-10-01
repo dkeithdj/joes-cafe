@@ -21,9 +21,10 @@ const Register = () => {
       body: JSON.stringify(data),
     });
 
-    const userInfo = await response.json();
-    console.log(userInfo);
-    router.push("/admin");
+    // const userInfo = await response.json();
+    if (response.ok) router.push("/admin/dashboard");
+    // console.log(userInfo);
+    // router.push("/admin");
   };
 
   return (

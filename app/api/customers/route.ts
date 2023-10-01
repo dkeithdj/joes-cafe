@@ -20,17 +20,15 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
 
     console.log(data.name);
 
-    // const createTransaction = await prisma.transaction.create({
-    //   data: {
-    //     customer: {
-    //       create: data,
-    //     },
-    //   },
-    // });
+    const createTransaction = await prisma.transaction.create({
+      data: {
+        customerId: data,
+      },
+    });
 
     // const createUser = await prisma.customer.create({ data: data });
 
-    return NextResponse.json("yes");
+    return NextResponse.json(createTransaction);
   } catch (error) {
     return NextResponse.json(error);
   }
