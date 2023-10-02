@@ -10,7 +10,7 @@ export default function RootLayout({
     <main>
       <Nav />
       {children}
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }

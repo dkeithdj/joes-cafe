@@ -41,31 +41,30 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
-    const { tableId, customerId, transactionId } = await req.json();
+    const { tableId, transactionId, totalAmount } = await req.json();
 
-    // const order = await prisma.order.create({
-    //   data: {
-    //     totalAmount: 0,
-    //     table: {
-    //       connect: {
-    //         id: tableId,
-    //       },
-    //     },
-    // transaction: {
-    //   create: {},
-    // connectOrCreate: {
-    //   create: {
-    //     customerId: customerId,
-    //   },
-    //   where: {
-    //     id: transactionId,
-    //   },
-    // },
-    // },
-    //   },
-    // });
-    return NextResponse.json("a");
+    const order = await prisma.order.create({
+      data: {
+        transaction: {
+          connect: {
+            id: transactionId,
+          },
+        },
+        table: {
+          connect: {
+            id: tableId,
+          },
+        },
+        status: {
+          connect: {
+            id: 1,
+          },
+        },
+        totalAmount: totalAmount,
+      },
+    });
+    return NextResponse.json(order, { status: 201 });
   } catch (error) {
-    return NextResponse.json(error);
+    return NextResponse.json(error, { status: 500 });
   }
 };

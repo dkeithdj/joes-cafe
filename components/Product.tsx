@@ -4,31 +4,19 @@ import { Card, CardHeader, CardContent, CardFooter } from "./ui/card";
 import Image from "next/image";
 import { ProductProps } from "@/types";
 import Cookies from "js-cookie";
+import { useAddItems } from "@/hooks/useProducts";
 
 const Product = ({ product }: { product: ProductProps }) => {
+  const { mutate: _addItem, isSuccess, data, isError, error } = useAddItems();
+  const productId = product.id;
+
   const addItem = () => {
     const customerCookie = Cookies.get("customer");
 
-    const { transaction, customer } = JSON.parse(customerCookie as string);
-
-    const createItem = async () => {
-      const response = await fetch("/api/items", {
-        method: "POST",
-        body: JSON.stringify({
-          transactionId: transaction,
-          productId: product.id,
-          customerId: customer,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        console.log(response);
-      }
-    };
-    createItem();
+    const { transaction: transactionId, customer: customerId } = JSON.parse(
+      customerCookie as string
+    );
+    _addItem({ transactionId, productId, customerId });
   };
 
   return (

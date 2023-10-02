@@ -6,12 +6,16 @@ export const GET = async (
   // { params }: { params: { id: string } }
 ) => {
   try {
+    const searchParams = req.nextUrl.searchParams;
+    const transactionId = searchParams.get("transactionId");
     // const data = await req.json();
     // const { itemId, productId, transactionId } = data;
     // const itemsView = await prisma.itemsView.findMany();
     // console.log(itemsView);
 
-    const itemsView = await prisma.itemsView.findMany();
+    const itemsView = await prisma.itemsView.findMany({
+      where: { transactionId: transactionId! },
+    });
 
     return NextResponse.json(itemsView, { status: 200 });
   } catch (error) {
@@ -46,41 +50,24 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
               },
             },
           },
-
-          // connect: {
-          //   id: transactionId,
-          // },
         },
-        // transactionId: transactionId,
-        // productId: productId,
       },
     });
-    //   return NextResponse.json(items);
-    // }
-
-    // if (itemId && productId) {
-    // const items = await prisma.items.upsert({
-    //   where: {
-    //     id: itemId
-    //   },
-    //   create: {
-    //     product: {
-    //       connect: {
-    //         id: productId
-    //       }
-    //     },
-    //     transaction: {
-    //       connect: {
-    //         id: transactionId
-    //       }
-    //     }
-    //   },
-    //   update: {
-    //     der
-    //   }
-    // })
-    // }
     return NextResponse.json(items, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+};
+
+export const DELETE = async (req: NextRequest, res: NextResponse) => {
+  try {
+    const { itemId } = await req.json();
+    const deleteItem = await prisma.items.delete({
+      where: {
+        id: itemId,
+      },
+    });
+    return NextResponse.json(deleteItem, { status: 200 });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
   }

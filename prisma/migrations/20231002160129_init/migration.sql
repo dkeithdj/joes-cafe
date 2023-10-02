@@ -60,6 +60,14 @@ CREATE TABLE `Customer` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Order_Status` (
+    `id` INTEGER NOT NULL,
+    `status` ENUM('Processing', 'Completed', 'Declined') NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Staff` (
     `id` VARCHAR(191) NOT NULL,
     `first_name` VARCHAR(191) NOT NULL,
@@ -128,9 +136,10 @@ CREATE TABLE `Order` (
     `id` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `totalAmount` INTEGER NOT NULL,
-    `staffId` VARCHAR(191) NOT NULL,
+    `staffId` VARCHAR(191) NULL,
     `tableId` VARCHAR(191) NOT NULL,
     `transactionId` VARCHAR(191) NOT NULL,
+    `statusId` INTEGER NOT NULL DEFAULT 1,
     `paymentId` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
@@ -161,7 +170,10 @@ ALTER TABLE `Order` ADD CONSTRAINT `Order_tableId_fkey` FOREIGN KEY (`tableId`) 
 ALTER TABLE `Order` ADD CONSTRAINT `Order_transactionId_fkey` FOREIGN KEY (`transactionId`) REFERENCES `Transaction`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Order` ADD CONSTRAINT `Order_staffId_fkey` FOREIGN KEY (`staffId`) REFERENCES `Staff`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Order` ADD CONSTRAINT `Order_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `Order_Status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Order` ADD CONSTRAINT `Order_staffId_fkey` FOREIGN KEY (`staffId`) REFERENCES `Staff`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Order` ADD CONSTRAINT `Order_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `PaymentMethod`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

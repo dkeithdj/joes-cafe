@@ -47,11 +47,11 @@ const getPaymentMethod = (): Prisma.PaymentMethodCreateInput[] => [
   { paymentType: "Cash" },
 ];
 
-// const getStatus = (): Prisma.Order_StatusCreateInput[] => [
-//   { id: 0, status: "Processing" },
-//   { id: 1, status: "Completed" },
-//   { id: 2, status: "Declined" },
-// ];
+const getStatus = (): Prisma.Order_StatusCreateInput[] => [
+  { id: 1, status: "Processing" },
+  { id: 2, status: "Completed" },
+  { id: 3, status: "Declined" },
+];
 
 const getTable = (): Prisma.TableCreateInput[] => [
   { number: 1 },
@@ -146,9 +146,9 @@ const main = async () => {
       prisma.paymentMethod.create({ data: method })
     )
   );
-  // const status = await Promise.all(
-  //   getStatus().map((status) => client.order_Status.create({ data: status }))
-  // );
+  const status = await Promise.all(
+    getStatus().map((status) => prisma.order_Status.create({ data: status }))
+  );
   const products = await Promise.all(
     getProducts(categories).map((product) =>
       prisma.product.create({ data: product })

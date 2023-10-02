@@ -112,3 +112,28 @@ label {
   z-index: 1;
   mix-blend-mode: soft-light;
 }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate-reverse {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+.logo {
+  animation: rotate 25s linear infinite;
+}
+
+.plate {
+  animation: rotate-reverse 5000s linear infinite;
+}

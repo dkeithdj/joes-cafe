@@ -1,14 +1,8 @@
 import { OrderProps, ProductProps, TransactionProps } from "@/types";
-import { Order } from "@prisma/client";
+import { ItemsView, Order } from "@prisma/client";
 
 export const getOrders = async (): Promise<OrderProps[]> => {
   const res = await fetch("/api/orders");
-  const data = await res.json();
-  return data;
-};
-
-export const getProducts = async (): Promise<ProductProps[]> => {
-  const res = await fetch("/api/products");
   const data = await res.json();
   return data;
 };

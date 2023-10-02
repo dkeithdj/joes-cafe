@@ -63,11 +63,11 @@ model Customer {
   transaction Transaction[]
 }
 
-// model Order_Status {
-//   id     Int     @id
-//   status Status
-//   order  Order[]
-// }
+model Order_Status {
+  id     Int     @id
+  status Status
+  order  Order[]
+}
 
 model Staff {
   id         String  @id @default(uuid())
@@ -129,13 +129,13 @@ model Order {
   totalAmount   Int
   table         Table          @relation(fields: [tableId], references: [id])
   transaction   Transaction    @relation(fields: [transactionId], references: [id])
-  // status        Order_Status   @relation(fields: [statusId], references: [id])
-  staffId       String
+  status        Order_Status   @relation(fields: [statusId], references: [id])
+  staffId       String?
   staff         Staff?         @relation(fields: [staffId], references: [id])
   paymentMethod PaymentMethod? @relation(fields: [paymentId], references: [id])
   tableId       String
   transactionId String
-  // statusId      Int  staffId       String?
+  statusId      Int            @default(1)
   paymentId     String?
 }
 
@@ -149,8 +149,8 @@ view ItemsView {
   transactionId String
 }
 
-// enum Status {
-//   Processing
-//   Completed
-//   Declined
-// }
+enum Status {
+  Processing
+  Completed
+  Declined
+}
