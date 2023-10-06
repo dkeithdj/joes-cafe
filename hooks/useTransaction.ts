@@ -8,7 +8,8 @@ const createTransaction = async ({ name }: { name: string }) => {
     },
     body: JSON.stringify({ name: name }),
   });
-  return response;
+  const data = await response.json();
+  return data;
 };
 
 const useAddTransaction = () => {

@@ -13,10 +13,9 @@ const ProductView = () => {
 
   const [name, setName] = useState("");
 
-  const customerCookies = Cookies.get("customer");
+  const customerCookies = Cookies.get("customer.customer");
   if (customerCookies) {
-    const data = JSON.parse(customerCookies);
-    router.push(`/table/${params.slug}/${data.customer}`);
+    router.push(`/table/${params.slug}/${customerCookies}`);
   }
 
   const {
@@ -27,23 +26,26 @@ const ProductView = () => {
     error,
   } = useAddTransaction();
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     addTransaction({ name });
 
     if (isSuccess) {
-      const { id: transactionId, customerId } = await data.json();
-      Cookies.set(
-        "customer",
-        JSON.stringify({
-          transaction: transactionId,
-          customer: customerId,
-        }),
-        { expires: 1 }
-      );
+      const { customerId } = data;
       router.push(`/table/${params.slug}/${customerId}`);
+      console.log(customerId);
     }
-    if (isError) console.log(error);
+    //   console.log(customerId);
+    // Cookies.set(
+    //   "customer",
+    //   JSON.stringify({
+    //     transaction: transactionId,
+    //     customer: customerId,
+    //   }),
+    //   { expires: 1 }
+    // );
+    // }
+    // if (isError) console.log(error);
   };
 
   return (

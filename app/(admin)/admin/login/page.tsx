@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
 const LoginPage = () => {
@@ -13,24 +12,11 @@ const LoginPage = () => {
     password: "",
   });
 
-  // if (session !== null) router.push("/admin");
-
-  // const query = useQuery({
-  //   queryKey: ["orders"],
-  //   queryFn: async () => {
-  //     const res = await fetch("/api/orders");
-  //     const data = await res.json();
-
-  //     return data;
-  //   },
-  // });
-  // if (session !== null) router.push("/admin");
+  if (session !== null) router.push("/admin/dashboard");
 
   const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn("credentials", { ...data, redirect: false });
-
-    // router.push("/admin");
+    signIn("credentials", { ...data, callbackUrl: "/admin/dashboard" });
   };
   return (
     <div>

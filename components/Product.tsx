@@ -10,12 +10,10 @@ const Product = ({ product }: { product: ProductProps }) => {
   const { mutate: _addItem, isSuccess, data, isError, error } = useAddItems();
   const productId = product.id;
 
-  const addItem = () => {
-    const customerCookie = Cookies.get("customer");
+  const customerId = Cookies.get("customer.customer");
+  const transactionId = Cookies.get("customer.transaction");
 
-    const { transaction: transactionId, customer: customerId } = JSON.parse(
-      customerCookie as string
-    );
+  const addItem = () => {
     _addItem({ transactionId, productId, customerId });
   };
 

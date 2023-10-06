@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export const GET = async (
   req: NextRequest,
@@ -36,6 +37,21 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         },
       },
     });
+
+    cookies().set("customer.transaction", createTransaction.id, {
+      maxAge: 60 * 60 * 24,
+    });
+    cookies().set("customer.customer", createTransaction.customerId, {
+      maxAge: 60 * 60 * 24,
+    });
+    // cookies().set("customer.transaction", createTransaction.id, {
+    //   maxAge: 60,
+    // });
+    // cookies().set("customer.customer", createTransaction.customerId, {
+    //   maxAge: 60,
+    // });
+    console.log(cookies().get("customer-customer"));
+
     return NextResponse.json(createTransaction);
   } catch (error) {
     return NextResponse.json(error);

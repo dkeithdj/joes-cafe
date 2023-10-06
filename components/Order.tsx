@@ -1,7 +1,19 @@
+"use client";
+import { useOrder } from "@/hooks/useOrders";
 import Image from "next/image";
-import React from "react";
+import Cookies from "js-cookie";
 
 const Order = () => {
+  const orderId = Cookies.get("orderId");
+  // if (!orderId) return <div>Loading Cookies...</div>;
+  const { data, isFetched, isError, error } = useOrder(orderId);
+
+  if (isFetched) {
+    console.log(data);
+    //trigger to create another transactionId for customer
+  }
+  // console.log(error);
+  //do a check if status is still pending or not
   return (
     <div className="relative bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] min-h-screen bg-no-repeat">
       <div className="absolute w-full h-full z-0 bg-[url('/background.png')]"></div>

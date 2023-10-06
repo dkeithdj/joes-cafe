@@ -17,7 +17,7 @@ const CustomerOrder = () => {
     error,
   } = useProducts();
 
-  const customerCookie = Cookies.get("customer");
+  const customerCookie = Cookies.get("customer.customer");
   if (!customerCookie) router.push(`/table/${params.slug}`);
 
   if (isLoading) return <div>Loading...</div>;

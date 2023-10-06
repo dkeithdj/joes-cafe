@@ -4,7 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
   try {
-    const orders = await prisma.order.findMany({
+    const cookies = req.cookies.get("orderId");
+    const id = cookies?.value;
+    // console.log(id);
+
+    const orders = await prisma.order.findFirst({
+      where: {
+        id: id,
+      },
       select: {
         id: true,
         date: true,
@@ -25,11 +32,6 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
             paymentType: true,
           },
         },
-        status: {
-          select: {
-            status: true,
-          },
-        },
         totalAmount: true,
         transaction: {
           select: {
@@ -45,35 +47,37 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
   }
 };
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const PATCH = async (req: NextRequest, res: NextResponse) => {
   try {
-    const { tableId, transactionId, totalAmount } = await req.json();
+    const id = req.cookies.get("orderId")?.value;
+    const data = await req.json();
+    const { staffId, paymentId, statusId } = data;
 
-    const order = await prisma.order.create({
+    const updateOrder = prisma.order.update({
+      where: {
+        id: id,
+      },
       data: {
-        transaction: {
+        staff: {
           connect: {
-            id: transactionId,
+            id: staffId,
           },
         },
-        table: {
+        paymentMethod: {
           connect: {
-            id: tableId,
+            id: paymentId,
           },
         },
         status: {
           connect: {
-            id: 1,
+            id: statusId,
           },
         },
-        totalAmount: totalAmount,
       },
     });
-
-    cookies().set("orderId", order.id);
-
-    return NextResponse.json(order, { status: 201 });
+    cookies().delete("orderId");
+    return NextResponse.json(updateOrder);
   } catch (error) {
-    return NextResponse.json(error, { status: 500 });
+    return NextResponse.json(error);
   }
 };

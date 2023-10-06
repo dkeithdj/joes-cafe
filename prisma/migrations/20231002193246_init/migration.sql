@@ -184,6 +184,7 @@ SELECT
   p.id AS productId,
   p.name AS productName,
   p.image AS productImage,
+  p.price AS productPrice,
   COUNT(i.id) AS totalQuantity,
   SUM(p.price) AS totalAmount,
   i.transactionId AS transactionId

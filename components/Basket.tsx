@@ -8,16 +8,17 @@ import Image from "next/image";
 import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
 import { useAddItems } from "@/hooks/useProducts";
 import { Button } from "./ui/button";
-import { useAddOrder } from "@/hooks/useBasket";
+import { useAddOrder } from "@/hooks/useOrders";
 import { useParams } from "next/navigation";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import Checkout from "./Checkout";
+// import {cookies} from "next/headers"
 
 const Basket = () => {
   const params = useParams();
-  let customerCookie = Cookies.get("customer");
-  if (customerCookie) {
-    customerCookie = JSON.parse(customerCookie);
-  }
-  const { transaction, customer } = customerCookie;
+  // cookies().
+  const customer = Cookies.get("customer.customer");
+  const transaction = Cookies.get("customer.transaction");
 
   const {
     data: items,
@@ -60,7 +61,7 @@ const Basket = () => {
       .map((item) => Number(item.totalAmount))
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  console.log(items);
+  // console.log(items);
 
   const {
     mutate: _placeOrder,
@@ -82,10 +83,9 @@ const Basket = () => {
     _placeOrder({ tableId, transactionId, totalAmount });
   };
 
-  console.log(params.slug, transaction, totalPayment);
+  // console.log(params.slug, transaction, totalPayment);
   if (isOrderPlaced) {
     console.log("yay", orderData);
-    // do a router push on a loading  screen
     // create new transactionId
     //update the transactionId from cookies
   }
@@ -133,6 +133,7 @@ const Basket = () => {
                   </div>
                   <div>
                     <div>{item.productName}</div>
+                    <div>{item.productPrice}</div>
                     <div>PHP {item.totalAmount + ""}.00</div>
                     <div>
                       <div className="h-10 w-32">
@@ -173,18 +174,19 @@ const Basket = () => {
           <div>Basket is empty, Buy our Products!</div>
         )}
         <div className="">
-          <Button
-            onClick={() =>
-              placeOrder({
-                tableId: params.slug,
-                transactionId: transaction,
-                totalAmount: totalPayment,
-              })
-            }
-            className="w-full"
-          >
-            Checkout PHP {totalPayment}.00
-          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <div>Proceed to Checkout</div>
+            </DialogTrigger>
+            <DialogContent>
+              <Checkout
+                items={items}
+                totalAmount={totalPayment}
+                tableId={params.slug}
+                transactionId={transaction}
+              />
+            </DialogContent>
+          </Dialog>
         </div>
       </PopoverContent>
     </Popover>

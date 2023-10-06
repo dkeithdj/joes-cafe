@@ -16,13 +16,14 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials, req) {
         const { email, password }: any = credentials;
+
         if (!email || !password) return null;
         const user = await prisma.user.findUnique({
           where: {
             email: email,
           },
         });
-        console.log(user?.hashedPassword);
+        // console.log(user?.hashedPassword);
         if (!user) return null;
         const hashedPassword = user?.hashedPassword;
         // if (hashedPassword) {

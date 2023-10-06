@@ -15,7 +15,11 @@ const AdminNav = () => {
               <a href="/admin/register">Register</a>
             </>
           )}
-          {session?.user && <button onClick={() => signOut()}>Logout</button>}
+          {session?.user && (
+            <button onClick={() => signOut({ callbackUrl: "/admin/login" })}>
+              Logout
+            </button>
+          )}
           {/* <a href="/api/register">Register</a> */}
         </div>
       </div>

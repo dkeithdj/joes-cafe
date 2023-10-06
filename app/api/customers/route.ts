@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
     const data = await req.json();
 
-    console.log(data.name);
+    // console.log(data.name);
 
     const createTransaction = await prisma.transaction.create({
       data: {
