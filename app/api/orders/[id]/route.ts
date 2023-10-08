@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { cookies } from "next/headers";
+import { useRouter } from "next/router";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
@@ -47,15 +48,17 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
   }
 };
 
-export const PATCH = async (req: NextRequest, res: NextResponse) => {
+export const PATCH = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   try {
-    const id = req.cookies.get("orderId")?.value;
     const data = await req.json();
     const { staffId, paymentId, statusId } = data;
 
-    const updateOrder = prisma.order.update({
+    const updateOrder = await prisma.order.update({
       where: {
-        id: id,
+        id: params.id,
       },
       data: {
         staff: {
@@ -70,12 +73,11 @@ export const PATCH = async (req: NextRequest, res: NextResponse) => {
         },
         status: {
           connect: {
-            id: statusId,
+            id: Number(statusId),
           },
         },
       },
     });
-    cookies().delete("orderId");
     return NextResponse.json(updateOrder);
   } catch (error) {
     return NextResponse.json(error);

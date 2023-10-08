@@ -64,7 +64,7 @@ export default function DashboardLayout({
           </div>
         </div>
         {/* <!--Main Container--> */}
-        <div>{children}</div>
+        <div className="w-full">{children}</div>
       </div>
     </div>
   );

@@ -24,4 +24,28 @@ const useAddItems = () => {
   });
 };
 
-export { useProducts, getProducts, useAddItems };
+const updateProduct = async (product) => {
+  const res = await fetch(`/api/products/${product.id}`, {
+    method: "PUT",
+    body: JSON.stringify(product),
+  });
+  const data = await res.json();
+  return data;
+};
+
+const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateProduct, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export {
+  useProducts,
+  getProducts,
+  useAddItems,
+  updateProduct,
+  useUpdateProduct,
+};

@@ -1,10 +1,19 @@
 import prisma from "@/lib/prisma";
+import { Status } from "@prisma/client";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
   try {
+    const status: Status = req.nextUrl.searchParams.get("status");
+    // const status = "Completed";
+    // const status = "Processing";
     const orders = await prisma.order.findMany({
+      where: {
+        status: {
+          status: status,
+        },
+      },
       select: {
         id: true,
         date: true,
@@ -17,16 +26,19 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         },
         table: {
           select: {
+            id: true,
             number: true,
           },
         },
         paymentMethod: {
           select: {
+            id: true,
             paymentType: true,
           },
         },
         status: {
           select: {
+            id: true,
             status: true,
           },
         },
@@ -34,6 +46,11 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         transaction: {
           select: {
             id: true,
+            customer: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },

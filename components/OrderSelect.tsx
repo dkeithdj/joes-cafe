@@ -29,6 +29,13 @@ import {
 } from "@/components/ui/popover";
 import { useStaff } from "@/hooks/useStaff";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type Status = {
   value: string;
@@ -85,9 +92,8 @@ const frameworks = [
     label: "Astro",
   },
 ];
-export function OrderSelect() {
+export function OrderSelect({ value, setValue }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   const { data, isSuccess: staffSuccess, isLoading } = useStaff();
 
@@ -95,57 +101,29 @@ export function OrderSelect() {
 
   if (staffSuccess) {
     const edit: { value: string; label: string }[] = data.map((person) => ({
-      // id: person.id,
-      // value: `${person.first_name}-${person.last_name}`,
-      // label: `${person.first_name}-${person.last_name}`,
       value: person.id,
       label: person.last_name,
-      // icon: User2,
     }));
 
-    const frameworks = edit;
+    const staff = edit;
+
+    const handleChange = (e) => {
+      setValue(e.target.value);
+    };
 
     return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-[200px] justify-between"
-          >
-            {value
-              ? frameworks.find((framework) => framework.value === value)?.label
-              : "Select framework..."}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
-          <Command>
-            <CommandInput placeholder="Search framework..." />
-            <CommandEmpty>No framework found.</CommandEmpty>
-            <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </Command>
-        </PopoverContent>
-      </Popover>
+      <Select>
+        <SelectTrigger className="w-[100px]">
+          <SelectValue placeholder="Staff" />
+        </SelectTrigger>
+        <SelectContent>
+          {staff.map((item, i) => (
+            <SelectItem key={i} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     );
   }
 }

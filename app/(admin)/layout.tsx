@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <main>
       <Provider>
-        <AdminNav />
+        {/* <AdminNav /> */}
         {children}
       </Provider>
     </main>

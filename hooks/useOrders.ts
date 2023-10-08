@@ -1,3 +1,4 @@
+import { OrderProps } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetchOrder = async ({
@@ -27,16 +28,16 @@ const useAddOrder = () => {
   return useMutation(fetchOrder);
 };
 
-const getOrders = async () => {
-  const response = await fetch("/api/orders");
+const getOrders = async (status: string): Promise<OrderProps[]> => {
+  const response = await fetch(`/api/orders?status=${status}`);
   const data = await response.json();
   return data;
 };
 
-const useOrders = () => {
+const useOrders = (status: string) => {
   return useQuery({
-    queryKey: ["order"],
-    queryFn: getOrders,
+    queryKey: ["order", status],
+    queryFn: () => getOrders(status),
   });
 };
 
@@ -78,8 +79,8 @@ const updateOrder = async ({
 const useUpdateOrder = () => {
   const queryClient = useQueryClient();
   return useMutation(updateOrder, {
-    onSuccess(data, variables, context) {
-      queryClient.invalidateQueries(["orders", variables.orderId]);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["order"] });
     },
   });
 };

@@ -10,7 +10,7 @@ datasource db {
 
 // Next-Auth START
 model Account {
-  id                String  @id @default(uuid())
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -29,7 +29,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(uuid())
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -37,7 +37,7 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(uuid())
+  id             String    @id @default(cuid())
   name           String?
   email          String?   @unique
   hashedPassword String?   @db.Text
@@ -58,7 +58,7 @@ model VerificationToken {
 // Next-Auth END
 
 model Customer {
-  id          String        @id @default(uuid())
+  id          String        @id @default(cuid())
   name        String
   transaction Transaction[]
 }
@@ -70,33 +70,33 @@ model Order_Status {
 }
 
 model Staff {
-  id         String  @id @default(uuid())
+  id         String  @id @default(cuid())
   first_name String
   last_name  String
   order      Order[]
 }
 
 model Category {
-  id          String    @id @default(uuid())
+  id          String    @id @default(cuid())
   name        String
   description String?
   products    Product[]
 }
 
 model PaymentMethod {
-  id          String  @id @default(uuid())
+  id          String  @id @default(cuid())
   paymentType String
   order       Order[]
 }
 
 model Table {
-  id     String  @id @default(uuid())
+  id     String  @id @default(cuid())
   number Int
   Order  Order[]
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          String   @id @default(cuid())
   name        String
   price       Int
   description String?
@@ -108,7 +108,7 @@ model Product {
 }
 
 model Items {
-  id            String      @id @default(uuid())
+  id            String      @id @default(cuid())
   product       Product     @relation(fields: [productId], references: [id])
   transaction   Transaction @relation(fields: [transactionId], references: [id])
   productId     String
@@ -116,7 +116,7 @@ model Items {
 }
 
 model Transaction {
-  id         String   @id @default(uuid())
+  id         String   @id @default(cuid())
   order      Order[]
   items      Items[]
   customerId String
@@ -124,7 +124,7 @@ model Transaction {
 }
 
 model Order {
-  id            String         @id @default(uuid())
+  id            String         @id @default(cuid())
   date          DateTime       @default(now())
   totalAmount   Int
   table         Table          @relation(fields: [tableId], references: [id])
