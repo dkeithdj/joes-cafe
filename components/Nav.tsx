@@ -5,14 +5,8 @@ import Categories from "./Categories";
 
 const Nav = () => {
   return (
-    <div className="bg-[#2e2a29] pt-4 ">
+    <div className="bg-[#2e2a29] pt-4 sticky top-0 z-10">
       <div className="flex justify-between px-4">
-        <div className="space-x-2 text-[#f9ebd3]">
-          <a href="/">Home</a>
-          <a href="/order">Order</a>
-          <a href="/table/test">Table</a>
-          <a href="/table/test/testing">Testing</a>
-        </div>
         <Basket />
       </div>
       <Categories />

@@ -1,10 +1,19 @@
 "use client";
+import Loading from "@/components/Loading";
+import AddProduct from "@/components/admin/AddProduct";
 import Products from "@/components/admin/Products";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductProps } from "@/types";
-import React, { useState } from "react";
-
+import React, { Suspense, useState } from "react";
 const AdminProducts = () => {
   const {
     data: products,
@@ -16,14 +25,25 @@ const AdminProducts = () => {
 
   const [availability, setAvailability] = useState(true);
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
   return (
     <div className="w-auto mx-14">
       {/* <Dashboard /> */}
       <div className="flex flex-row justify-between">
         <div className="text-6xl text-[#603D04] py-4 ">Products</div>
         <div className="flex flex-row items-center gap-x-4">
-          <Button>Add Product</Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Add Product</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add Product</DialogTitle>
+                <DialogDescription>Add product details.</DialogDescription>
+              </DialogHeader>
+              <AddProduct />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -45,7 +65,12 @@ const AdminProducts = () => {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Loading length={6} height="150" />
+        </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
         {isSuccess &&
           products
             .filter((product) => availability === product.isAvailable)

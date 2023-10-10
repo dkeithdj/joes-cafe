@@ -6,12 +6,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
-import { useAddItems } from "@/hooks/useProducts";
-import { Button } from "./ui/button";
 import { useAddOrder } from "@/hooks/useOrders";
 import { useParams } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import Checkout from "./Checkout";
+import { Button } from "./ui/button";
 // import {cookies} from "next/headers"
 
 const Basket = () => {
@@ -83,17 +82,6 @@ const Basket = () => {
     _placeOrder({ tableId, transactionId, totalAmount });
   };
 
-  // console.log(params.slug, transaction, totalPayment);
-  if (isOrderPlaced) {
-    console.log("yay", orderData);
-    // create new transactionId
-    //update the transactionId from cookies
-  }
-
-  if (isOrderError) {
-    console.log(orderError);
-  }
-
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -117,27 +105,34 @@ const Basket = () => {
           </div>
         </div>
       </PopoverTrigger>
-      <PopoverContent align="end" className="flex flex-col">
+      <PopoverContent align="start" className="flex flex-col">
         {items && items.length !== 0 ? (
           <div>
             {items &&
               items.map((item, i) => (
-                <Card key={i} className="flex flex-row">
-                  <div className="">
+                <Card
+                  key={i}
+                  className=" h-[100px] rounded-[24px] flex flex-row items-center  space-x-2 my-2"
+                >
+                  <div className="flex w-[80px] h-[80px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
                     <Image
-                      src={"/coffee_default.png"}
+                      // src={"/Joes-Logo-Whitebg.png"}
+                      src={item?.productImage}
                       alt={item.productName}
-                      width={50}
-                      height={50}
+                      width={90}
+                      height={90}
                     />
                   </div>
-                  <div>
-                    <div>{item.productName}</div>
-                    <div>{item.productPrice}</div>
-                    <div>PHP {item.totalAmount + ""}.00</div>
-                    <div>
-                      <div className="h-10 w-32">
-                        <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                  <div className="grid grid-cols-2 pr-2 py-2 w-[80%]">
+                    <div className="font-bold text-base">
+                      {item.productName}
+                    </div>
+                    <div className="text-end">
+                      PHP {item.totalAmount + ""}.00
+                    </div>
+                    <div className="col-span-2">
+                      <div className="h-10 w-full">
+                        <div className="flex flex-row h-8 w-full rounded-lg relative bg-transparent mt-1">
                           <button
                             onClick={() => minusItem(item.id)}
                             className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none"
@@ -173,11 +168,15 @@ const Basket = () => {
         ) : (
           <div>Basket is empty, Buy our Products!</div>
         )}
-        <div className="">
+        <div className="flex flex-grow w-full justify-end pt-2">
           <Dialog>
-            <DialogTrigger>
-              <div>Proceed to Checkout</div>
-            </DialogTrigger>
+            {items?.length !== 0 && (
+              <DialogTrigger className="">
+                <div className="">
+                  <Button className="">Proceed to Checkout</Button>
+                </div>
+              </DialogTrigger>
+            )}
             <DialogContent>
               <Checkout
                 items={items}

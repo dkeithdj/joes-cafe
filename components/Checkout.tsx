@@ -15,10 +15,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useState } from "react";
 
 const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [submitted, setSubmitted] = useState(false);
   const {
     mutate: _placeOrder,
     isSuccess: isOrderPlaced,
@@ -46,14 +48,23 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
     <div>
       <div>
         <Tabs defaultValue="orders" className="w-full mt-4">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-1">
             <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="checkout">Checkout</TabsTrigger>
           </TabsList>
           <TabsContent value="orders">
             <Table>
               <TableCaption className="text-3xl text-black">
-                Total: PHP {totalAmount}.00
+                <div>Total: PHP {totalAmount}.00</div>
+                <Button
+                  onClick={() => {
+                    placeOrder();
+                    setSubmitted(!submitted);
+                  }}
+                  disabled={submitted}
+                  className="w-full text-xl"
+                >
+                  Confirm Order
+                </Button>
               </TableCaption>
               <TableHeader>
                 <TableRow>
@@ -76,59 +87,6 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="checkout">
-            <Table>
-              <TableCaption className="">
-                <Button onClick={placeOrder} className="w-full text-xl">
-                  Confirm Order
-                </Button>
-              </TableCaption>
-
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>[name]</TableCell>
-                </TableRow>
-              </TableBody>
-
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>[date]</TableCell>
-                </TableRow>
-              </TableBody>
-
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Reference String</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>{transactionId}</TableCell>
-                </TableRow>
-              </TableBody>
-
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Table No.</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>[table no.]</TableCell>
-                </TableRow>
               </TableBody>
             </Table>
           </TabsContent>

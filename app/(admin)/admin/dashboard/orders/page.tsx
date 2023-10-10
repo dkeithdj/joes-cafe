@@ -1,9 +1,6 @@
 "use client";
-import Dashboard from "@/components/Dashboard";
+import Loading from "@/components/Loading";
 import _Orders from "@/components/admin/_Orders";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useOrders } from "@/hooks/useOrders";
 import { useStaff } from "@/hooks/useStaff";
 import React, { useState } from "react";
@@ -20,8 +17,6 @@ const AdminOrders = () => {
     isLoading,
   } = useOrders(status);
   console.log(orders);
-
-  if (isLoading) return <div>Loading..</div>;
 
   const edit: { value: string; label: string }[] = data?.map((person) => ({
     value: person.id,
@@ -82,12 +77,13 @@ const AdminOrders = () => {
           </button>
         </div>
       </div>
+      <div>{isLoading && <Loading length={5} height="200" />}</div>
       {orders && orders.length !== 0 ? (
         orders.map((order, i) => (
           <_Orders staff={staff} order={order} key={i} />
         ))
       ) : (
-        <div>No orders here...</div>
+        <div></div>
       )}
     </div>
   );

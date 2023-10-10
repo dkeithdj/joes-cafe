@@ -41,7 +41,11 @@ const useOrders = (status: string) => {
   });
 };
 
-const getOrder = async ({ orderId }: { orderId: string }) => {
+const getOrder = async ({
+  orderId,
+}: {
+  orderId: string;
+}): Promise<OrderProps> => {
   const response = await fetch(`/api/orders/${orderId}`);
   const data = await response.json();
   return data;

@@ -36,12 +36,19 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
           create: data,
         },
       },
+      select: {
+        id: true,
+        customer: true,
+      },
     });
 
     cookies().set("customer.transaction", createTransaction.id, {
       maxAge: 60 * 60 * 24,
     });
-    cookies().set("customer.customer", createTransaction.customerId, {
+    cookies().set("customer.customer", createTransaction.customer.id, {
+      maxAge: 60 * 60 * 24,
+    });
+    cookies().set("customer.name", createTransaction.customer.name, {
       maxAge: 60 * 60 * 24,
     });
     // cookies().set("customer.transaction", createTransaction.id, {

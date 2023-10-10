@@ -12,7 +12,7 @@ const LoginPage = () => {
     password: "",
   });
 
-  if (session !== null) router.push("/admin/dashboard");
+  if (session) router.push("/admin/dashboard");
 
   const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();

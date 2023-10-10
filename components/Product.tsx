@@ -18,10 +18,14 @@ const Product = ({ product }: { product: ProductProps }) => {
   };
 
   return (
-    <Card className=" w-[150px] h-[210px] m-4 rounded-[24px] flex flex-col items-center">
-      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] bg-red-400 object-cover overflow-hidden">
+    <Card className="relative w-[150px] h-[210px] m-4 rounded-[24px] flex flex-col items-center bg-[#e1cdad]">
+      {!product.isAvailable && (
+        <div className="absolute inset-0 bg-muted/60 rounded-[24px]"></div>
+      )}
+      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden">
         <Image
-          src={"/coffee_default.png"}
+          // src={"/Joes-Logo-Whitebg.png"}
+          src={product?.image || "/Joes-Logo-Whitebg.png"}
           alt="coffee"
           width={130}
           height={130}
@@ -38,6 +42,7 @@ const Product = ({ product }: { product: ProductProps }) => {
               height={20}
               className=""
               onClick={addItem}
+              hidden={!product.isAvailable}
             />
           </div>
         </div>

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Card } from "../ui/card";
 import Image from "next/image";
-import { useProducts } from "@/hooks/useProducts";
+import { useProducts, useUpdateProduct } from "@/hooks/useProducts";
 import { Switch } from "../ui/switch";
 import {
   Dialog,
@@ -16,28 +16,32 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useRouter } from "next/navigation";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const Products = ({ product }) => {
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [isAvailable, setIsAvailable] = useState(product.isAvailable);
 
+  const { mutate, data } = useUpdateProduct();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
+    mutate({
       ...product,
       name: productName,
       price: price,
       isAvailable: isAvailable,
     });
-    // console.log(e.target.price.value);
   };
 
   return (
-    <Card className=" w-full h-[150px] rounded-[24px] flex flex-row items-center ">
-      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] bg-red-400 object-cover overflow-hidden">
+    <Card className=" h-[150px] max-w-[500px] rounded-[24px] flex flex-row items-center  space-x-2">
+      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
         <Image
-          src={"/coffee_default.png"}
+          // src={"/Joes-Logo-Whitebg.png"}
+          src={product.image || "/Joes-Logo-Whitebg.png"}
           alt="coffee"
           width={130}
           height={130}
@@ -46,21 +50,21 @@ const Products = ({ product }) => {
       <div className="">
         <div className="">
           <div className="flex flex-col">
-            <div className="text-2xl leading-4">{product.name}</div>
+            <div className="text-2xl">{product.name}</div>
             <div className="font-['Yantramanav'] font-semibold">
               PHP {product.price}.00
             </div>
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline">Edit Profile</Button>
+                <Button variant="outline" className="w-[50px]">
+                  Edit
+                </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>Edit Product</DialogTitle>
-                  <DialogDescription>
-                    Edit the product details.
-                  </DialogDescription>
+                  <DialogDescription>Edit product.</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                   <div className="grid gap-4 py-4">
@@ -98,7 +102,9 @@ const Products = ({ product }) => {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button>Save changes</Button>
+                    <DialogClose>
+                      <Button>Save changes</Button>
+                    </DialogClose>
                   </DialogFooter>
                 </form>
               </DialogContent>

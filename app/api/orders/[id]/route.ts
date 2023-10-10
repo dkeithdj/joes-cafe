@@ -3,15 +3,14 @@ import { cookies } from "next/headers";
 import { useRouter } from "next/router";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   try {
-    const cookies = req.cookies.get("orderId");
-    const id = cookies?.value;
-    // console.log(id);
-
     const orders = await prisma.order.findFirst({
       where: {
-        id: id,
+        id: params.id,
       },
       select: {
         id: true,
@@ -31,6 +30,12 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         paymentMethod: {
           select: {
             paymentType: true,
+          },
+        },
+        status: {
+          select: {
+            id: true,
+            status: true,
           },
         },
         totalAmount: true,

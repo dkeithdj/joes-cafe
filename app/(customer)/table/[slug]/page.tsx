@@ -12,6 +12,7 @@ const ProductView = () => {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const customerCookies = Cookies.get("customer.customer");
   if (customerCookies) {
@@ -27,6 +28,7 @@ const ProductView = () => {
   } = useAddTransaction();
 
   const handleSubmit = (e: any) => {
+    setSubmitting(true);
     e.preventDefault();
     addTransaction({ name });
 
@@ -35,17 +37,7 @@ const ProductView = () => {
       router.push(`/table/${params.slug}/${customerId}`);
       console.log(customerId);
     }
-    //   console.log(customerId);
-    // Cookies.set(
-    //   "customer",
-    //   JSON.stringify({
-    //     transaction: transactionId,
-    //     customer: customerId,
-    //   }),
-    //   { expires: 1 }
-    // );
-    // }
-    // if (isError) console.log(error);
+    setSubmitting(false);
   };
 
   return (
@@ -77,7 +69,10 @@ const ProductView = () => {
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
-                <button className="absolute right-0 bg-[#664229] w-24 h-10 rounded-md flex justify-center items-center text-white">
+                <button
+                  disabled={submitting}
+                  className="hover:bg-[#664229be] absolute right-0 bg-[#664229] w-24 h-10 rounded-md flex justify-center items-center text-white"
+                >
                   <p>CONFIRM</p>
                 </button>
                 <label className="absolute text-[14px] left-2 top-2 cursor-text select-none ">

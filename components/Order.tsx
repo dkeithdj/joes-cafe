@@ -2,16 +2,35 @@
 import { useOrder } from "@/hooks/useOrders";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import { Button } from "./ui/button";
+import { useParams, useRouter } from "next/navigation";
+import {
+  useAddTransaction,
+  useUpdateTransaction,
+} from "@/hooks/useTransaction";
 
 const Order = () => {
+  const params = useParams();
+  const router = useRouter();
   const orderId = Cookies.get("orderId");
+  const customerId = Cookies.get("customer.customer");
+  const customerName = Cookies.get("customer.name");
   // if (!orderId) return <div>Loading Cookies...</div>;
   const { data, isFetched, isError, error } = useOrder(orderId);
 
-  if (isFetched) {
-    console.log(data);
-    //trigger to create another transactionId for customer
-  }
+  if (data?.status?.id !== 1) console.log("Order Processed");
+
+  const { mutate: updateTransaction, data: newTransactionId } =
+    useUpdateTransaction();
+
+  const returnOrder = () => {
+    Cookies.remove("orderId");
+    //create transactionId here
+    updateTransaction({ id: customerId, name: customerName });
+    Cookies.set("customer.transaction", newTransactionId);
+
+    router.back();
+  };
   // console.log(error);
   //do a check if status is still pending or not
   return (
@@ -29,9 +48,27 @@ const Order = () => {
             />
           </div>
           <div className="text-center z-10">
-            <p className="font-['Zilla Slab'] font-light text-[32px]">
-              WAITING FOR YOUR PAYMENT...
-            </p>
+            {data?.status?.id === 1 && (
+              <p className="font-['Zilla Slab'] font-light text-[32px]">
+                WAITING FOR YOUR PAYMENT...
+              </p>
+            )}
+            {data?.status?.id === 2 && (
+              <div>
+                <p className="font-['Zilla Slab'] font-light text-[32px]">
+                  Order Success
+                </p>
+                <Button onClick={returnOrder}>Go back to ordering!</Button>
+              </div>
+            )}
+            {data?.status?.id === 3 && (
+              <div>
+                <p className="font-['Zilla Slab'] font-light text-[32px]">
+                  Order Declined
+                </p>
+                <Button onClick={returnOrder}>Go back to ordering!</Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
