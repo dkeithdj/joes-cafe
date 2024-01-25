@@ -1,5 +1,27 @@
 {
   "name": "joes-cafe",
+  "keywords": [
+    "nextjs",
+    "prisma",
+    "monorepo",
+    "mysql",
+    "typescript",
+    "turbo"
+  ],
+  "contributors": [
+    {
+      "name": "Denrei Keith De Jesus"
+    },
+    {
+      "name": "Nickler Sarana"
+    },
+    {
+      "name": "Stephanie Palero"
+    },
+    {
+      "name": "Dec Marse Estepa"
+    }
+  ],
   "private": true,
   "workspaces": [
     "packages/*",
