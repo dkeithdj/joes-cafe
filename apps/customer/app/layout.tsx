@@ -8,10 +8,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Joe's Cafe",
-  description: "Order Menu of Joe's Cafe",
-};
+// export const metadata: Metadata = {
+//   title: "Joe's Cafe",
+//   description: "Order Menu of Joe's Cafe",
+// };
 
 const queryClient = new QueryClient();
 
