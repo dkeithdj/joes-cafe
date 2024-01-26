@@ -4,9 +4,4 @@ A web application that allows users to order food and drinks from Joe's Cafe.
 
 ## TODO
 
-- [ ] setup monorepo
-- [ ] migrate database to `packages/`
-- [ ] migrate ui to `packages/`
-- [ ] segregate existing customer application
-- [ ] create admin application
-- [ ] create kitchen application
+Refer to Issue [#2](https://github.com/dkeithdj/joes-cafe/issues/2) for updates
