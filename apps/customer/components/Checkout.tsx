@@ -1,7 +1,7 @@
 "use client";
 
 import { useAddOrder } from "@/hooks/useOrders";
-import { Button } from "./ui/button";
+import { Button } from "@ui/components/ui/button";
 import {
   Table,
   TableBody,

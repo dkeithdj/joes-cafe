@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
-import { useAddOrder } from "@/hooks/useOrders";
+// import { useAddOrder } from "@/hooks/useOrders";
 import { useParams } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import Checkout from "./Checkout";
@@ -45,7 +45,7 @@ const Basket = () => {
   const addItem = (
     productId: string,
     transactionId: string,
-    customerId: string
+    customerId: string,
   ) => {
     _addItem({ productId, transactionId, customerId });
   };
@@ -151,7 +151,7 @@ const Basket = () => {
                               addItem(
                                 item.productId,
                                 item.transactionId,
-                                customer
+                                customer,
                               )
                             }
                             className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer"
