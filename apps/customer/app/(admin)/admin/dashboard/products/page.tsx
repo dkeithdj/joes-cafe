@@ -2,7 +2,7 @@
 import Loading from "@/components/Loading";
 import AddProduct from "@/components/admin/AddProduct";
 import Products from "@/components/admin/Products";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@ui/components/ui/dialog";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductProps } from "@/types";
 import React, { Suspense, useState } from "react";

@@ -1,16 +1,20 @@
 "use client";
 import React from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Card, CardContent, CardHeader } from "@ui/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@ui/components/ui/popover";
 // import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
 // import { useAddOrder } from "@/hooks/useOrders";
 import { useParams } from "next/navigation";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@ui/components/ui/dialog";
 import Checkout from "./Checkout";
-import { Button } from "./ui/button";
+import { Button } from "@ui/components/ui/button";
 // import {cookies} from "next/headers"
 
 const Basket = () => {

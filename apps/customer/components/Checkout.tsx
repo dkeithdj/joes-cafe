@@ -11,8 +11,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+} from "@ui/components/ui/table";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@ui/components/ui/tabs";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState } from "react";

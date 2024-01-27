@@ -5,7 +5,7 @@ import Analytics from "@/components/admin/Analytics";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@ui/components/ui/skeleton";
 import Loading from "@/components/Loading";
 
 const DashboardPage = () => {

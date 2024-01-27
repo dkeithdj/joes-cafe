@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import { Card, CardHeader, CardContent, CardFooter } from "./ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@ui/components/ui/card";
 import Image from "next/image";
 import { ProductProps } from "@/types";
 import Cookies from "js-cookie";

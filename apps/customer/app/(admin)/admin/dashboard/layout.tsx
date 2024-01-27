@@ -3,7 +3,7 @@ import _Dashboard from "@/components/_Dashboard";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@ui/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -11,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@ui/components/ui/sheet";
 import SideBarNav from "@/components/_SideBarNav";
 import { useState } from "react";
 

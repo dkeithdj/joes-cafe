@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@repo/database";
 import { Status } from "@prisma/client";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";

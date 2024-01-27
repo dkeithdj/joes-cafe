@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@ui/components/ui/table";
 import { useStaff } from "@/hooks/useStaff";
 import { usePaymethod } from "@/hooks/usePaymethod";
 import { useItems } from "@/hooks/useItems";

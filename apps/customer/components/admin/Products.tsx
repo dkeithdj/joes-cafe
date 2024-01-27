@@ -1,23 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { Card } from "../ui/card";
+import { Card } from "@ui/components/ui/card";
 import Image from "next/image";
 import { useProducts, useUpdateProduct } from "@/hooks/useProducts";
-import { Switch } from "../ui/switch";
+import { Switch } from "@ui/components/ui/switch";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+} from "@ui/components/ui/dialog";
+import { Button } from "@ui/components/ui/button";
+import { Label } from "@ui/components/ui/label";
+import { Input } from "@ui/components/ui/input";
 import { useRouter } from "next/navigation";
-import { DialogClose } from "@radix-ui/react-dialog";
+// import { DialogClose } from "@radix-ui/react-dialog";
 
 const Products = ({ product }) => {
   const [productName, setProductName] = useState(product.name);

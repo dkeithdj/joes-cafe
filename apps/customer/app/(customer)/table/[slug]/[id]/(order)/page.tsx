@@ -38,7 +38,7 @@ const CustomerOrder = () => {
             .filter((filter) =>
               categoryParam && categoryParam?.length > 0
                 ? filter.category.id === categoryParam
-                : filter
+                : filter,
             )
             .map((product: ProductProps) => (
               <Products key={product.id} product={product} />

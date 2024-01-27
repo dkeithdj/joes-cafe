@@ -1,11 +1,10 @@
 import React from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "@ui/components/ui/input";
+import { Label } from "@ui/components/ui/label";
 import Image from "next/image";
-import { Switch } from "../ui/switch";
-import { DialogFooter } from "../ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { Button } from "../ui/button";
+import { Switch } from "@ui/components/ui/switch";
+import { DialogClose, DialogFooter } from "@ui/components/ui/dialog";
+import { Button } from "@ui/components/ui/button";
 
 const ProductForm = ({
   type,

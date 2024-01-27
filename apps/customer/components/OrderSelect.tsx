@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@ui/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -21,12 +21,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from "@ui/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@ui/components/ui/popover";
 import { useStaff } from "@/hooks/useStaff";
 import { useState } from "react";
 import {
@@ -35,7 +35,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@ui/components/ui/select";
 
 type Status = {
   value: string;

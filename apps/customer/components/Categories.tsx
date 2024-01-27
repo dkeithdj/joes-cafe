@@ -1,9 +1,8 @@
 "use client";
 import { useCategories } from "@/hooks/useCategories";
-import prisma from "@/lib/prisma";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea } from "@ui/components/ui/scroll-area";
 
 const Categories = () => {
   const router = useRouter();
@@ -47,7 +46,7 @@ const Categories = () => {
                   active.isSet && active.id === category.id
                     ? `?category=${active.id}`
                     : `?`
-                }`
+                }`,
               );
             }}
           >

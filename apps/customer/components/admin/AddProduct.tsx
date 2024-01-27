@@ -1,16 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { DialogFooter } from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Switch } from "../ui/switch";
-import { Select } from "../ui/select";
+import { Button } from "@ui/components/ui/button";
+import { DialogClose, DialogFooter } from "@ui/components/ui/dialog";
+import { Label } from "@ui/components/ui/label";
+import { Input } from "@ui/components/ui/input";
+import { Switch } from "@ui/components/ui/switch";
+import { Select } from "@ui/components/ui/select";
 import { useCategories } from "@/hooks/useCategories";
 import { useAddProduct } from "@/hooks/useProducts";
-import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "@ui/components/ui/scroll-area";
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");

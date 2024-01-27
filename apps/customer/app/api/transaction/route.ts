@@ -1,10 +1,10 @@
-import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { prisma } from "@repo/database";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) => {
   try {
     const transactions = await prisma.transaction.findMany({
