@@ -28,7 +28,7 @@ const useAddOrder = () => {
   return useMutation(fetchOrder);
 };
 
-const getOrders = async (status: string): Promise<OrderProps[]> => {
+const getOrders = async (status: string) => {
   const response = await fetch(`/api/orders?status=${status}`);
   const data = await response.json();
   return data;

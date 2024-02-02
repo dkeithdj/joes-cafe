@@ -28,7 +28,7 @@ const SideBarNav = ({ active, setActive }: any) => {
           <button
             onClick={() => {
               setActive("dashboard");
-              router.push("/admin/dashboard");
+              router.push("/dashboard");
             }}
             className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
               active === "dashboard"
@@ -43,7 +43,7 @@ const SideBarNav = ({ active, setActive }: any) => {
           <button
             onClick={() => {
               setActive("orders");
-              router.push("/admin/dashboard/orders");
+              router.push("/dashboard/orders");
             }}
             className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
               active === "orders"
@@ -58,7 +58,7 @@ const SideBarNav = ({ active, setActive }: any) => {
           <button
             onClick={() => {
               setActive("products");
-              router.push("/admin/dashboard/products");
+              router.push("/dashboard/products");
             }}
             className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
               active === "products"
@@ -71,7 +71,7 @@ const SideBarNav = ({ active, setActive }: any) => {
         </div>
         <div className="pt-8 pb-4 justify-end">
           <button
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            onClick={() => signOut({ callbackUrl: "/login" })}
             className="hover:bg-[#512711] hover:text-[#F9EBD3] text-[#512711]  bg-[#F9EBD3] text-[20px] font-['Alata'] rounded-xl w-full h-14"
           >
             Log Out

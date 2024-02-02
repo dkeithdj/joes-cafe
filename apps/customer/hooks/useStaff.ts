@@ -1,7 +1,7 @@
 import { Staff } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-export const getStaff = async (): Promise<Staff[]> => {
+export const getStaff = async () => {
   const response = await fetch("/api/staff");
   const data = await response.json();
   return data;
