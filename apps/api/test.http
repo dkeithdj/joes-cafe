@@ -1,0 +1,18 @@
+### GET USER
+GET http://localhost:3000/trpc/getUserById?input="1706873089318" HTTP/1.1
+
+### CREATE USER
+POST http://localhost:3000/trpc/createUser HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "john",
+    "bio": "this is my bio"
+}
+
+### RANDOM NUMBER
+GET http://localhost:3000/rand HTTP/1.1
+
+### getProducts()
+
+GET http://localhost:3000/trpc/getProducts HTTP/1.1
