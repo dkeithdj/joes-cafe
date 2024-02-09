@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Card } from "@ui/components/ui/card";
 import Image from "next/image";
-import { useProducts, useUpdateProduct } from "@/hooks/useProducts";
+import {  useUpdateProduct } from "@/hooks/useProducts";
 import { Switch } from "@ui/components/ui/switch";
 import {
   Dialog,
@@ -25,16 +25,16 @@ const Products = ({ product }) => {
   const [price, setPrice] = useState(product.price);
   const [isAvailable, setIsAvailable] = useState(product.isAvailable);
 
-  const { mutate, data } = useUpdateProduct();
+  // const { mutate, data } = useUpdateProduct();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutate({
-      ...product,
-      name: productName,
-      price: price,
-      isAvailable: isAvailable,
-    });
+    // mutate({
+    //   ...product,
+    //   name: productName,
+    //   price: price,
+    //   isAvailable: isAvailable,
+    // });
   };
 
   return (

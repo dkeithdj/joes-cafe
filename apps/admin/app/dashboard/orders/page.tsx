@@ -1,27 +1,23 @@
 "use client";
 import Loading from "@/components/Loading";
 import _Orders from "@/components/admin/_Orders";
+import { trpc } from "@/hooks/trpc";
 import { useOrders } from "@/hooks/useOrders";
 import { useStaff } from "@/hooks/useStaff";
+import { Status } from "@repo/database";
 import React, { useState } from "react";
 
 const AdminOrders = () => {
   const [staff, setStaff] = useState("");
-  const [status, setStatus] = useState("Processing");
+  const [status, setStatus] = useState<Status>(Status.Processing);
 
-  const { data, isSuccess: staffSuccess } = useStaff();
 
-  const {
-    data: orders,
-    isSuccess: ordersSuccess,
-    isLoading,
-  } = useOrders(status);
+  const { data, isSuccess: staffSuccess } = trpc.getStaff.useQuery()
+
+  const { data: orders, isSuccess: ordersSuccess, isLoading } = trpc.getOrders.useQuery({status: status})
   console.log(data);
 
-  // const edit: { value: string; label: string }[] = data?.map((person) => ({
-  //   value: person.id,
-  //   label: person.last_name,
-  // }));
+  console.log(orders)
 
   const edit = data?.map((person) => ({
     value: person.id,
@@ -67,15 +63,15 @@ const AdminOrders = () => {
             Processing
           </button>
           <button
-            disabled={status === "Completed"}
-            onClick={() => setStatus("Completed")}
+            disabled={status === Status.Completed}
+            onClick={() => setStatus(Status.Completed)}
             className="inline-flex disabled:bg-[#512711] disabled:text-[#E1CDAD] items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none "
           >
             Completed
           </button>
           <button
-            disabled={status === "Declined"}
-            onClick={() => setStatus("Declined")}
+            disabled={status === Status.Declined}
+            onClick={() => setStatus(Status.Declined)}
             className="inline-flex disabled:bg-[#512711] disabled:text-[#E1CDAD] items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none "
           >
             Declined

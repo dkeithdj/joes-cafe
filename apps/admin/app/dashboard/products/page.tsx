@@ -11,9 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@ui/components/ui/dialog";
-import { useProducts } from "@/hooks/useProducts";
-import { ProductProps } from "@/types";
-import React, { Suspense, useState } from "react";
+import React, {  useState } from "react";
+import { trpc } from "@/hooks/trpc";
 const AdminProducts = () => {
   const {
     data: products,
@@ -21,7 +20,7 @@ const AdminProducts = () => {
     isLoading,
     isError,
     error,
-  } = useProducts();
+  } = trpc.getProducts.useQuery()
 
   const [availability, setAvailability] = useState(true);
 
@@ -74,7 +73,7 @@ const AdminProducts = () => {
         {isSuccess &&
           products
             .filter((product) => availability === product.isAvailable)
-            .map((product: ProductProps) => (
+            .map((product) => (
               <Products key={product.id} product={product} />
             ))}
       </div>

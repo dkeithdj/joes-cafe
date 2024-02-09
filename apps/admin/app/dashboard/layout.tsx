@@ -1,15 +1,8 @@
 "use client";
 import _Dashboard from "@/components/_Dashboard";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { ScrollArea } from "@ui/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@ui/components/ui/sheet";
 import SideBarNav from "@/components/_SideBarNav";

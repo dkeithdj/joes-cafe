@@ -7,12 +7,16 @@ import { useRouter } from "next/navigation";
 import React, { Suspense } from "react";
 import { Skeleton } from "@ui/components/ui/skeleton";
 import Loading from "@/components/Loading";
+import { trpc } from "@/hooks/trpc";
 
 const DashboardPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   // if (session === null) router.push("/login");
 
+  const {data} = trpc.getProducts.useQuery()
+
+  console.log(data)
   return (
     <div className="w-auto mx-14">
       <div className="flex flex-row justify-between">
