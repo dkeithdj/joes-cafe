@@ -13,7 +13,6 @@ export const appRouter = router({
   hello: publicProcedure.query(({ ctx, input }) => {
     return { greeting: "hello world" };
   }),
-  getUsers: publicProcedure.query(() => {}),
   getProducts: publicProcedure.query(async () => {
     return await prisma.product.findMany({
       select: {
@@ -31,65 +30,125 @@ export const appRouter = router({
       },
     });
   }),
+  createTransaction: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const createTransaction = await prisma.transaction.create({
+        data: {
+          customer: {
+            create: {
+              name: input.name,
+            },
+          },
+        },
+        select: {
+          id: true,
+          customer: true,
+        },
+      });
+      ctx.res
+        .cookie("customer.transaction", createTransaction.id, {
+          maxAge: 60 * 60 * 24,
+        })
+        .cookie("customer.customer", createTransaction.customer.id, {
+          maxAge: 60 * 60 * 24,
+        })
+        .cookie("customer.name", createTransaction.customer.name, {
+          maxAge: 60 * 60 * 24,
+        });
+      return createTransaction;
+    }),
+  createProduct: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        price: z.number(),
+        category: z.string(),
+        image: z.string(),
+        isAvailable: z.boolean(),
+      })
+    )
+    .mutation((opts) => {
+      return prisma.product.create({
+        data: {
+          name: opts.input.name,
+          price: opts.input.price,
+          category: {
+            connect: {
+              id: opts.input.category,
+            },
+          },
+          image: opts.input.image,
+          isAvailable: opts.input.isAvailable,
+        },
+      });
+    }),
 
-  getOrders: publicProcedure.input(z.object({status: z.enum([Status.Declined,Status.Completed,Status.Processing])})).query((opts) => {
-    return prisma.order.findMany({
-      where: {
-        status: {
-          status: opts.input.status,
-        },
-      },
-      select: {
-        id: true,
-        date: true,
-        staff: {
-          select: {
-            id: true,
-            first_name: true,
-            last_name: true,
+  getOrders: publicProcedure
+    .input(
+      z.object({
+        status: z.enum([Status.Declined, Status.Completed, Status.Processing]),
+      })
+    )
+    .query((opts) => {
+      return prisma.order.findMany({
+        where: {
+          status: {
+            status: opts.input.status,
           },
         },
-        table: {
-          select: {
-            id: true,
-            number: true,
+        select: {
+          id: true,
+          date: true,
+          staff: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+            },
           },
-        },
-        paymentMethod: {
-          select: {
-            id: true,
-            paymentType: true,
+          table: {
+            select: {
+              id: true,
+              number: true,
+            },
           },
-        },
-        status: {
-          select: {
-            id: true,
-            status: true,
+          paymentMethod: {
+            select: {
+              id: true,
+              paymentType: true,
+            },
           },
-        },
-        totalAmount: true,
-        transaction: {
-          select: {
-            id: true,
-            customer: {
-              select: {
-                name: true,
+          status: {
+            select: {
+              id: true,
+              status: true,
+            },
+          },
+          totalAmount: true,
+          transaction: {
+            select: {
+              id: true,
+              customer: {
+                select: {
+                  name: true,
+                },
               },
             },
           },
         },
-      },
-    })
-  }),
+      });
+    }),
   getStatus: publicProcedure.query(() => {}),
   getStaff: publicProcedure.query(() => {
-    return prisma.staff.findMany()
+    return prisma.staff.findMany();
   }),
   getCategories: publicProcedure.query(({ input, ctx }) => {
     return prisma.category.findMany();
-  }),
-  getState: publicProcedure.query(() => {
-    return { mess: "hi" };
   }),
   randomNumber: publicProcedure.subscription(() => {
     return observable<{ randomNumber: number }>((emit) => {
