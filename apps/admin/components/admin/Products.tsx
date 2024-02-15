@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Card } from "@ui/components/ui/card";
 import Image from "next/image";
-import {  useUpdateProduct } from "@/hooks/useProducts";
 import { Switch } from "@ui/components/ui/switch";
 import {
   Dialog,
@@ -17,18 +16,29 @@ import {
 import { Button } from "@ui/components/ui/button";
 import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
-import { useRouter } from "next/navigation";
+import { Product } from "@repo/database";
+import { trpc } from "@/hooks/trpc";
 // import { DialogClose } from "@radix-ui/react-dialog";
 
-const Products = ({ product }) => {
+const Products = ({ product }: {product: Product}) => {
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [isAvailable, setIsAvailable] = useState(product.isAvailable);
 
   // const { mutate, data } = useUpdateProduct();
 
-  const handleSubmit = (e) => {
+  const mutation = trpc.createProduct.useMutation();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    mutation.mutate({
+      ...product,
+      name: productName,
+      price: price,
+      category: product.categoryId,
+      image: "",
+      isAvailable: isAvailable,
+    })
     // mutate({
     //   ...product,
     //   name: productName,

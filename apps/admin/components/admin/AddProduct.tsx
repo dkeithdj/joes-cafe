@@ -6,10 +6,11 @@ import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
 import { Switch } from "@ui/components/ui/switch";
 import { Select } from "@ui/components/ui/select";
-import { useCategories } from "@/hooks/useCategories";
-import { useAddProduct } from "@/hooks/useProducts";
+// import { useCategories } from "@/hooks/useCategories";
+// import { useAddProduct } from "@/hooks/useProducts";
 import Image from "next/image";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
+import { trpc } from "@/hooks/trpc";
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");
@@ -29,36 +30,22 @@ const AddProduct = () => {
     isAvailable: true,
   });
 
-  const { data: categories } = useCategories();
-  const { mutate: addProduct, data } = useAddProduct();
+  const { data: categories } = trpc.getCategories.useQuery();
+  // const { mutate: addProduct, data } = useAddProduct();
+  const mutation = trpc.createProduct.useMutation();
 
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log({
+    mutation.mutate({
       name: productName,
-      category: {
-        connect: {
-          id: category,
-        },
-      },
+      category: category,
       price: price,
+      image: "",
       isAvailable: isAvailable,
     });
-
-    addProduct({
-      name: productName,
-      category: {
-        connect: {
-          id: category,
-        },
-      },
-      price: price,
-      isAvailable: isAvailable,
-    });
-    console.log(data);
   };
 
   return (

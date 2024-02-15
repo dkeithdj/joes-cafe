@@ -14,8 +14,10 @@ import { usePaymethod } from "@/hooks/usePaymethod";
 import { useItems } from "@/hooks/useItems";
 import { OrderProps } from "@/types";
 import { useUpdateOrder } from "@/hooks/useOrders";
+import { Staff } from "@repo/database";
 
-const _Orders = ({ order, staff }: { order: OrderProps; staff: string }) => {
+
+const _Orders = ({ order, staff }: { order: OrderProps; staff: Staff }) => {
   const { data: dataPaymethod } = usePaymethod();
   const [payMethod, setPayMethod] = useState("");
   const [status, setStatus] = useState("");
@@ -28,7 +30,7 @@ const _Orders = ({ order, staff }: { order: OrderProps; staff: string }) => {
       updateOrder({
         orderId: order.id,
         statusId: status,
-        staffId: staff,
+        staffId: staff.id,
         paymentId: payMethod,
       });
     } else {

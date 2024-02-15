@@ -74,6 +74,7 @@ const AdminProducts = () => {
           products
             .filter((product) => availability === product.isAvailable)
             .map((product) => (
+              // FIX: types
               <Products key={product.id} product={product} />
             ))}
       </div>

@@ -15,11 +15,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <TrpcProvider>
-        <Provider>
-        <QueryClientProvider client={queryClient}>
-          <main className="bg-[#f9ebd3]">{children}</main>
-        </QueryClientProvider>
-         </Provider> 
+          <Provider>
+            <QueryClientProvider client={queryClient}>
+              <main className="bg-[#f9ebd3]">{children}</main>
+            </QueryClientProvider>
+          </Provider>
         </TrpcProvider>
       </body>
     </html>
