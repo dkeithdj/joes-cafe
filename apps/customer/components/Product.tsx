@@ -9,14 +9,34 @@ import {
 import Image from "next/image";
 import { ProductProps } from "@/types";
 import Cookies from "js-cookie";
-import { useAddItems } from "@/hooks/useProducts";
+import { trpc } from "@/hooks/trpc";
 
-const Product = ({ product }: { product: ProductProps }) => {
-  const { mutate: _addItem, isSuccess, data, isError, error } = useAddItems();
+const Product = ({
+  product,
+}: {
+  product: {
+    name: string;
+    price: number;
+    category: {
+      name: string;
+      id: string;
+    };
+    image: string | null;
+    isAvailable: boolean;
+    id: string;
+  };
+}) => {
+  const {
+    mutate: _addItem,
+    isSuccess,
+    data,
+    isError,
+    error,
+  } = trpc.addItem.useMutation();
   const productId = product.id;
 
-  const customerId = Cookies.get("customer.customer");
-  const transactionId = Cookies.get("customer.transaction");
+  const customerId = Cookies.get("customer.customer") as string;
+  const transactionId = Cookies.get("customer.transaction") as string;
 
   const addItem = () => {
     _addItem({ transactionId, productId, customerId });

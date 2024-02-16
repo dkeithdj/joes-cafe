@@ -21,6 +21,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { trpc } from "@/hooks/trpc";
 
 const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
   const router = useRouter();
@@ -32,7 +33,8 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
     data: orderData,
     isError: isOrderError,
     error: orderError,
-  } = useAddOrder();
+    // } = useAddOrder();
+  } = trpc.createOrder.useMutation();
 
   const placeOrder = () => {
     _placeOrder({ tableId, transactionId, totalAmount });
@@ -80,7 +82,7 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((item, i) => (
+                {items.map((item, i: number) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">
                       {item.productName}

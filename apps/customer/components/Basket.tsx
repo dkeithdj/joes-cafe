@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "@ui/components/ui/dialog";
 import Checkout from "./Checkout";
 import { Button } from "@ui/components/ui/button";
+import { trpc } from "@/hooks/trpc";
 // import {cookies} from "next/headers"
 
 const Basket = () => {
@@ -22,13 +23,14 @@ const Basket = () => {
   // cookies().
   const customer = Cookies.get("customer.customer");
   const transaction = Cookies.get("customer.transaction");
+  const utils = trpc.useUtils();
 
   const {
     data: items,
     isSuccess,
     isLoading,
     isFetching,
-  } = useItems(transaction);
+  } = trpc.getItem.useQuery({ transactionId: transaction! });
 
   const {
     mutate: _minusItem,
@@ -36,7 +38,9 @@ const Basket = () => {
     data: mData,
     isError: mIsError,
     error: mError,
-  } = useMinusQuantity();
+  } = trpc.deleteItem.useMutation({
+    onSuccess: () => utils.getItem.invalidate(),
+  });
 
   const {
     mutate: _addItem,
@@ -44,7 +48,7 @@ const Basket = () => {
     data: aData,
     isError: aIsError,
     error: aError,
-  } = useAddQuantity();
+  } = trpc.addItem.useMutation({ onSuccess: () => utils.getItem.invalidate() });
 
   const addItem = (
     productId: string,
@@ -72,7 +76,7 @@ const Basket = () => {
     data: orderData,
     isError: isOrderError,
     error: orderError,
-  } = useAddOrder();
+  } = trpc.createOrder.useMutation();
 
   const placeOrder = ({
     tableId,

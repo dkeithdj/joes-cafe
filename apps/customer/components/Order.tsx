@@ -8,26 +8,30 @@ import {
   useAddTransaction,
   useUpdateTransaction,
 } from "@/hooks/useTransaction";
+import { trpc } from "@/hooks/trpc";
 
 const Order = () => {
   const params = useParams();
   const router = useRouter();
-  const orderId = Cookies.get("orderId");
-  const customerId = Cookies.get("customer.customer");
-  const customerName = Cookies.get("customer.name");
+  const orderId = Cookies.get("orderId") as string;
+  const customerId = Cookies.get("customer.customer") as string;
+  const customerName = Cookies.get("customer.name") as string;
   // if (!orderId) return <div>Loading Cookies...</div>;
+  // const { data, isFetched, isError, error } = trpc.getOrders.useQuery({status: orderId})
   const { data, isFetched, isError, error } = useOrder(orderId);
 
   if (data?.status?.id !== 1) console.log("Order Processed");
 
+  // const { mutate: updateTransaction, data: newTransactionId } = useUpdateTransaction();
   const { mutate: updateTransaction, data: newTransactionId } =
-    useUpdateTransaction();
+    trpc.updateTransaction.useMutation();
 
   const returnOrder = () => {
     Cookies.remove("orderId");
     //create transactionId here
     updateTransaction({ id: customerId, name: customerName });
-    Cookies.set("customer.transaction", newTransactionId);
+    const transactionId = newTransactionId?.id as string;
+    Cookies.set("customer.transaction", transactionId);
 
     router.back();
   };
