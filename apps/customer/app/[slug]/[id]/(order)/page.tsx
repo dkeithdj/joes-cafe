@@ -1,9 +1,9 @@
 "use client";
 import Products from "@/components/Product";
+import { trpc } from "@/hooks/trpc";
 import { ProductProps } from "@/types";
 import Cookies from "js-cookie";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useProducts } from "@/hooks/useProducts";
 import { useEffect } from "react";
 
 const CustomerOrder = () => {
@@ -17,12 +17,12 @@ const CustomerOrder = () => {
     isLoading,
     isError,
     error,
-  } = useProducts();
+  } = trpc.getProducts.useQuery();
 
   const customerCookie = Cookies.get("customer.customer");
-  useEffect(() => {
-    if (!customerCookie) router.push(`/table/${params.slug}`);
-  }, [customerCookie]);
+  // useEffect(() => {
+  //   if (!customerCookie) router.push(`/${params.slug}`);
+  // }, [customerCookie]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -40,9 +40,7 @@ const CustomerOrder = () => {
                 ? filter.category.id === categoryParam
                 : filter,
             )
-            .map((product: ProductProps) => (
-              <Products key={product.id} product={product} />
-            ))}
+            .map((product) => <Products key={product.id} product={product} />)}
       </div>
     </div>
   );
