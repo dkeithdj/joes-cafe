@@ -2,8 +2,6 @@
 import Loading from "@/components/Loading";
 import _Orders from "@/components/admin/_Orders";
 import { trpc } from "@/hooks/trpc";
-import { useOrders } from "@/hooks/useOrders";
-import { useStaff } from "@/hooks/useStaff";
 import { Status } from "@repo/database";
 import React, { useState } from "react";
 
@@ -11,13 +9,16 @@ const AdminOrders = () => {
   const [staff, setStaff] = useState("");
   const [status, setStatus] = useState<Status>(Status.Processing);
 
+  const { data, isSuccess: staffSuccess } = trpc.getStaff.useQuery();
 
-  const { data, isSuccess: staffSuccess } = trpc.getStaff.useQuery()
+  const {
+    data: orders,
+    isSuccess: ordersSuccess,
+    isLoading,
+  } = trpc.getOrders.useQuery({ status: status });
 
-  const { data: orders, isSuccess: ordersSuccess, isLoading } = trpc.getOrders.useQuery({status: status})
-  console.log(data);
-
-  console.log(orders)
+  console.log(orders);
+  console.log(status);
 
   const edit = data?.map((person) => ({
     value: person.id,
@@ -25,7 +26,7 @@ const AdminOrders = () => {
   }));
 
   const fetchStaff = edit;
-  // console.log(staff);
+  console.log(staff);
 
   return (
     <div className="w-auto mx-14">

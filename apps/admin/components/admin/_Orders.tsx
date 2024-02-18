@@ -9,20 +9,30 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import { useStaff } from "@/hooks/useStaff";
-import { usePaymethod } from "@/hooks/usePaymethod";
-import { useItems } from "@/hooks/useItems";
+// import { useStaff } from "@/hooks/useStaff";
+// import { usePaymethod } from "@/hooks/usePaymethod";
+// import { useItems } from "@/hooks/useItems";
 import { OrderProps } from "@/types";
-import { useUpdateOrder } from "@/hooks/useOrders";
+// import { useUpdateOrder } from "@/hooks/useOrders";
 import { Staff } from "@repo/database";
+import { trpc } from "@/hooks/trpc";
 
+const _Orders = ({ order, staff }) => {
+  const utils = trpc.useUtils();
 
-const _Orders = ({ order, staff }: { order: OrderProps; staff: Staff }) => {
-  const { data: dataPaymethod } = usePaymethod();
   const [payMethod, setPayMethod] = useState("");
   const [status, setStatus] = useState("");
 
-  const { mutate: updateOrder } = useUpdateOrder();
+  const { data: dataPaymethod } = trpc.getPaymentMethod.useQuery();
+  console.log(dataPaymethod);
+
+  const { mutate: updateOrder } = trpc.updateOrder.useMutation({
+    onSuccess: () => {
+      utils.getOrderById.invalidate();
+      utils.getOrders.invalidate();
+    },
+  });
+  console.log("hihi", staff);
 
   const handleOrderProcess = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +40,7 @@ const _Orders = ({ order, staff }: { order: OrderProps; staff: Staff }) => {
       updateOrder({
         orderId: order.id,
         statusId: status,
-        staffId: staff.id,
+        staffId: staff,
         paymentId: payMethod,
       });
     } else {
@@ -38,12 +48,14 @@ const _Orders = ({ order, staff }: { order: OrderProps; staff: Staff }) => {
     }
   };
 
-  const { data: items } = useItems(order.transaction?.id!);
+  const { data: items } = trpc.getItem.useQuery({
+    transactionId: order.transaction?.id!,
+  });
 
   const totalPayment =
     items &&
     items
-      .map((item) => Number(item.totalAmount))
+      .map((item) => Number(item.totalamount))
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   return (
@@ -96,12 +108,12 @@ const _Orders = ({ order, staff }: { order: OrderProps; staff: Staff }) => {
               items.map((item, i) => (
                 <TableRow key={i}>
                   <TableCell className="font-medium">
-                    {item.productId}
+                    {item.productid}
                   </TableCell>
-                  <TableCell>{item.productName}</TableCell>
-                  <TableCell>{item.totalQuantity}</TableCell>
+                  <TableCell>{item.productname}</TableCell>
+                  <TableCell>{item.totalquantity}</TableCell>
                   <TableCell className="text-right ">
-                    PHP {Number(item.totalAmount)}.00
+                    PHP {Number(item.totalamount)}.00
                   </TableCell>
                 </TableRow>
               ))}
