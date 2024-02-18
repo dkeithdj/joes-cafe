@@ -111,11 +111,11 @@ export const appRouter = router({
         status: z.enum([Status.Declined, Status.Completed, Status.Processing]),
       }),
     )
-    .query(async (opts) => {
-      return await prisma.order.findMany({
+    .query(async ({ input, ctx }) => {
+      const orders = await prisma.order.findMany({
         where: {
           status: {
-            status: opts.input.status,
+            status: input.status,
           },
         },
         select: {
@@ -159,6 +159,55 @@ export const appRouter = router({
           },
         },
       });
+      console.log(orders);
+      return orders;
+    }),
+  getOrderById: publicProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const orders = await prisma.order.findFirst({
+        where: {
+          id: input.orderId,
+        },
+        select: {
+          id: true,
+          date: true,
+          staff: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+            },
+          },
+          table: {
+            select: {
+              number: true,
+            },
+          },
+          paymentMethod: {
+            select: {
+              paymentType: true,
+            },
+          },
+          status: {
+            select: {
+              id: true,
+              status: true,
+            },
+          },
+          totalAmount: true,
+          transaction: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+      return orders;
     }),
   createOrder: publicProcedure
     .input(
@@ -191,9 +240,51 @@ export const appRouter = router({
           totalAmount: totalAmount,
         },
       });
+      console.log(order);
+      ctx.res.setCookie("orderId", order.id);
       return order;
     }),
+  updateOrder: publicProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        staffId: z.string(),
+        paymentId: z.string(),
+        statusId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { orderId, staffId, paymentId, statusId } = input;
+
+      const updateOrder = await prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          staff: {
+            connect: {
+              id: staffId,
+            },
+          },
+          paymentMethod: {
+            connect: {
+              id: paymentId,
+            },
+          },
+          status: {
+            connect: {
+              id: Number(statusId),
+            },
+          },
+        },
+      });
+      return updateOrder;
+    }),
   getStatus: publicProcedure.query(() => {}),
+  getPaymentMethod: publicProcedure.query(async ({ input, ctx }) => {
+    const paymentMethod = await prisma.paymentMethod.findMany();
+    return paymentMethod;
+  }),
   getStaff: publicProcedure.query(async () => {
     return await prisma.staff.findMany();
   }),
