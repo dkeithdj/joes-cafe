@@ -29,8 +29,8 @@ const ProductView = () => {
   const params = useParams();
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  // const [name, setName] = useState("");
+  // const [submitting, setSubmitting] = useState(false);
 
   const customerCookies = Cookies.get("customer.customer");
 

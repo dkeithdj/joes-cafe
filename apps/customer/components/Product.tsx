@@ -26,13 +26,18 @@ const Product = ({
     id: string;
   };
 }) => {
+  const utils = trpc.useUtils();
   const {
     mutate: _addItem,
     isSuccess,
     data,
     isError,
     error,
-  } = trpc.addItem.useMutation();
+  } = trpc.addItem.useMutation({
+    onSuccess(data, variables, context) {
+      utils.getItem.invalidate();
+    },
+  });
   const productId = product.id;
 
   const customerId = Cookies.get("customer.customer") as string;

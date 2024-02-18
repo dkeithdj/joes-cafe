@@ -39,7 +39,9 @@ const Basket = () => {
     isError: mIsError,
     error: mError,
   } = trpc.deleteItem.useMutation({
-    onSuccess: () => utils.getItem.invalidate(),
+    onSuccess: () => {
+      utils.getItem.invalidate();
+    },
   });
 
   const {
@@ -48,7 +50,11 @@ const Basket = () => {
     data: aData,
     isError: aIsError,
     error: aError,
-  } = trpc.addItem.useMutation({ onSuccess: () => utils.getItem.invalidate() });
+  } = trpc.addItem.useMutation({
+    onSuccess: () => {
+      utils.getItem.invalidate();
+    },
+  });
 
   const addItem = (
     productId: string,
@@ -76,7 +82,11 @@ const Basket = () => {
     data: orderData,
     isError: isOrderError,
     error: orderError,
-  } = trpc.createOrder.useMutation();
+  } = trpc.createOrder.useMutation({
+    onSuccess: () => {
+      utils.getOrders.invalidate();
+    },
+  });
 
   const placeOrder = ({
     tableId,
