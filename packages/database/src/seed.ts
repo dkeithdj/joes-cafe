@@ -132,31 +132,31 @@ const getProducts = (category: Category[]): Prisma.ProductCreateInput[] => [
 const main = async () => {
   const categories = await Promise.all(
     getCategories().map((category) =>
-      prisma.category.create({ data: category })
-    )
+      prisma.category.create({ data: category }),
+    ),
   );
   const customers = await Promise.all(
-    getCustomer().map((customer) => prisma.customer.create({ data: customer }))
+    getCustomer().map((customer) => prisma.customer.create({ data: customer })),
   );
   const staffs = await Promise.all(
-    getStaff().map((staff) => prisma.staff.create({ data: staff }))
+    getStaff().map((staff) => prisma.staff.create({ data: staff })),
   );
   const paymentMethod = await Promise.all(
     getPaymentMethod().map((method) =>
-      prisma.paymentMethod.create({ data: method })
-    )
+      prisma.paymentMethod.create({ data: method }),
+    ),
   );
   const status = await Promise.all(
-    getStatus().map((status) => prisma.order_Status.create({ data: status }))
+    getStatus().map((status) => prisma.order_Status.create({ data: status })),
   );
   const products = await Promise.all(
     getProducts(categories).map((product) =>
-      prisma.product.create({ data: product })
-    )
+      prisma.product.create({ data: product }),
+    ),
   );
 
   const tables = await Promise.all(
-    getTable().map((table) => prisma.table.create({ data: table }))
+    getTable().map((table) => prisma.table.create({ data: table })),
   );
   // const baskets = await Promise.all(
   //   getBasket(customers, products).map((basket) =>

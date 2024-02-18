@@ -1,6 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
-import { Status, prisma } from "@repo/database";
+import { Prisma, Status, prisma } from "@repo/database";
 import { z } from "zod";
 import { Context } from "../context/index.js";
 
@@ -13,6 +13,16 @@ export const publicProcedure = t.procedure;
  * <table>.<get/post/put/patch/delete>.<filter, e.g. by id, name, etc.>
  */
 
+type ItemView = {
+  id: string;
+  productId: string;
+  productName: string;
+  productImage: string;
+  productPrice: number;
+  totalQuantity: number;
+  totalAmount: number;
+  transactionId: string;
+};
 export const appRouter = router({
   hello: publicProcedure.query(({ ctx, input }) => {
     return { greeting: "hello world" };
@@ -230,7 +240,7 @@ export const appRouter = router({
     .input(z.object({ transactionId: z.string() }))
     .query(async ({ input, ctx }) => {
       const itemsView = await prisma.itemsView.findMany({
-        where: { transactionId: input.transactionId },
+        where: { transactionid: input.transactionId },
       });
 
       return itemsView;

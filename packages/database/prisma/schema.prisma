@@ -139,15 +139,15 @@ model Order {
   paymentId     String?
 }
 
-view ItemsView {
+view itemsView {
   id            String   @id
-  productId     String
-  productName   String
-  productImage  String?
-  productPrice  Int
-  totalQuantity Int      @default(0)
-  totalAmount   Decimal? @db.Decimal(32, 0)
-  transactionId String
+  productid     String
+  productname   String
+  productimage  String?
+  productprice  Int
+  totalquantity Int      @default(0)
+  totalamount   Decimal? @db.Decimal(32, 0)
+  transactionid String
 }
 
 enum Status {
