@@ -139,7 +139,7 @@ model Order {
   paymentId     String?
 }
 
-view itemsView {
+view itemsview {
   id            String   @id
   productid     String
   productname   String

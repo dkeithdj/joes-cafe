@@ -190,9 +190,9 @@ ALTER TABLE "Order" ADD CONSTRAINT "Order_staffId_fkey" FOREIGN KEY ("staffId") 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "PaymentMethod"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
-CREATE VIEW ItemsView AS
+CREATE VIEW itemsview AS
 SELECT
-  i.id AS id,
+  MIN(i.id) AS id,
   p.id AS productId,
   p.name AS productName,
   p.image AS productImage,
@@ -202,7 +202,7 @@ SELECT
   i."transactionId" AS transactionId
 FROM
   "Product" p
-INNER JOIN
+JOIN
   "Items" i ON p.id = i."productId"
 GROUP BY
-  i.id, p.id, p.name, p.image, i."transactionId";
+  p.id, p.name, p.image, i."transactionId";
