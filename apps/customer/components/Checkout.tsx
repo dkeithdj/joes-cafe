@@ -1,6 +1,5 @@
 "use client";
 
-import { useAddOrder } from "@/hooks/useOrders";
 import { Button } from "@ui/components/ui/button";
 import {
   Table,
@@ -30,7 +29,7 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
   const {
     mutate: _placeOrder,
     isSuccess: isOrderPlaced,
-    data: orderData,
+    data,
     isError: isOrderError,
     error: orderError,
     // } = useAddOrder();
@@ -40,8 +39,8 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
     _placeOrder({ tableId, transactionId, totalAmount });
 
     // if (isOrderPlaced) {
-    //   console.log("checkout", orderData);
-    //   console.log(pathname);
+    // console.log("checkout", orderData);
+    // console.log(pathname);
 
     // const data = await orderData.json();
     // console.log(data);
@@ -85,12 +84,12 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
                 {items.map((item, i: number) => (
                   <TableRow key={i}>
                     <TableCell className="font-medium">
-                      {item.productName}
+                      {item.productname}
                     </TableCell>
-                    <TableCell>{item.productPrice}</TableCell>
-                    <TableCell>{item.totalQuantity}</TableCell>
+                    <TableCell>{item.productprice}</TableCell>
+                    <TableCell>{item.totalquantity}</TableCell>
                     <TableCell className="text-right">
-                      PHP {item.totalAmount}.00
+                      PHP {item.totalamount}.00
                     </TableCell>
                   </TableRow>
                 ))}

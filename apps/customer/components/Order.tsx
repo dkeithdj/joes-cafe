@@ -1,13 +1,8 @@
 "use client";
-import { useOrder } from "@/hooks/useOrders";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { Button } from "@ui/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import {
-  useAddTransaction,
-  useUpdateTransaction,
-} from "@/hooks/useTransaction";
 import { trpc } from "@/hooks/trpc";
 
 const Order = () => {
@@ -17,8 +12,10 @@ const Order = () => {
   const customerId = Cookies.get("customer.customer") as string;
   const customerName = Cookies.get("customer.name") as string;
   // if (!orderId) return <div>Loading Cookies...</div>;
-  // const { data, isFetched, isError, error } = trpc.getOrders.useQuery({status: orderId})
-  const { data, isFetched, isError, error } = useOrder(orderId);
+  const { data, isFetched, isError, error } = trpc.getOrderById.useQuery({
+    orderId: orderId,
+  });
+  // const { data, isFetched, isError, error } = useOrder(orderId);
 
   if (data?.status?.id !== 1) console.log("Order Processed");
 

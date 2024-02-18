@@ -9,7 +9,7 @@ import {
 // import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
+// import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
 // import { useAddOrder } from "@/hooks/useOrders";
 import { useParams } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "@ui/components/ui/dialog";
@@ -76,29 +76,29 @@ const Basket = () => {
 
   // console.log(items);
 
-  const {
-    mutate: _placeOrder,
-    isSuccess: isOrderPlaced,
-    data: orderData,
-    isError: isOrderError,
-    error: orderError,
-  } = trpc.createOrder.useMutation({
-    onSuccess: () => {
-      utils.getOrders.invalidate();
-    },
-  });
+  // const {
+  //   mutate: _placeOrder,
+  //   isSuccess: isOrderPlaced,
+  //   data: orderData,
+  //   isError: isOrderError,
+  //   error: orderError,
+  // } = trpc.createOrder.useMutation({
+  //   onSuccess: () => {
+  //     utils.getOrders.invalidate();
+  //   },
+  // });
 
-  const placeOrder = ({
-    tableId,
-    transactionId,
-    totalAmount,
-  }: {
-    tableId: string;
-    transactionId: string;
-    totalAmount: number;
-  }) => {
-    _placeOrder({ tableId, transactionId, totalAmount });
-  };
+  // const placeOrder = ({
+  //   tableId,
+  //   transactionId,
+  //   totalAmount,
+  // }: {
+  //   tableId: string;
+  //   transactionId: string;
+  //   totalAmount: number;
+  // }) => {
+  //   _placeOrder({ tableId, transactionId, totalAmount });
+  // };
 
   return (
     <Popover>
