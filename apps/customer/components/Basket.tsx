@@ -21,7 +21,7 @@ import { trpc } from "@/hooks/trpc";
 const Basket = () => {
   const params = useParams();
   // cookies().
-  const customer = Cookies.get("customer.customer");
+  const customer = Cookies.get("customer.customer") as string;
   const transaction = Cookies.get("customer.transaction");
   const utils = trpc.useUtils();
 
@@ -71,7 +71,7 @@ const Basket = () => {
   const totalPayment =
     items &&
     items
-      .map((item) => Number(item.totalAmount))
+      .map((item) => Number(item.totalamount))
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   // console.log(items);
@@ -134,19 +134,19 @@ const Basket = () => {
                 >
                   <div className="flex w-[80px] h-[80px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
                     <Image
-                      // src={"/Joes-Logo-Whitebg.png"}
-                      src={item?.productImage}
-                      alt={item.productName}
+                      src={"/Joes-Logo-Whitebg.png"}
+                      // src={item?.productimage}
+                      alt={item.productname}
                       width={90}
                       height={90}
                     />
                   </div>
                   <div className="grid grid-cols-2 pr-2 py-2 w-[80%]">
                     <div className="font-bold text-base">
-                      {item.productName}
+                      {item.productname}
                     </div>
                     <div className="text-end">
-                      PHP {item.totalAmount + ""}.00
+                      PHP {item.totalamount + ""}.00
                     </div>
                     <div className="col-span-2">
                       <div className="h-10 w-full">
@@ -161,14 +161,14 @@ const Basket = () => {
                             type="number"
                             className="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700"
                             name="custom-input-number"
-                            value={item.totalQuantity}
+                            value={item.totalquantity}
                             readOnly
                           ></input>
                           <button
                             onClick={() =>
                               addItem(
-                                item.productId,
-                                item.transactionId,
+                                item.productid,
+                                item.transactionid,
                                 customer,
                               )
                             }

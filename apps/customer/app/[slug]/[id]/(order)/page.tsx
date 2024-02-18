@@ -24,6 +24,8 @@ const CustomerOrder = () => {
   //   if (!customerCookie) router.push(`/${params.slug}`);
   // }, [customerCookie]);
 
+  if (!customerCookie) router.push(`/${params.slug}`);
+
   if (isLoading) return <div>Loading...</div>;
 
   if (isError) return <div>Error. Try refreshing</div>;
