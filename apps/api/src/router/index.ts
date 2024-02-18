@@ -239,7 +239,7 @@ export const appRouter = router({
   getItem: publicProcedure
     .input(z.object({ transactionId: z.string() }))
     .query(async ({ input, ctx }) => {
-      const itemsView = await prisma.itemsView.findMany({
+      const itemsView = await prisma.itemsview.findMany({
         where: { transactionid: input.transactionId },
       });
 
