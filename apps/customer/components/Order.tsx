@@ -3,7 +3,7 @@ import Image from "next/image";
 import Cookies from "js-cookie";
 import { Button } from "@ui/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
 
 const Order = () => {
   const params = useParams();

@@ -9,20 +9,20 @@ import {
 // import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import Image from "next/image";
-// import { useAddQuantity, useItems, useMinusQuantity } from "@/hooks/useItems";
-// import { useAddOrder } from "@/hooks/useOrders";
+// import { useAddQuantity, useItems, useMinusQuantity } from "@customer/hooks/useItems";
+// import { useAddOrder } from "@customer/hooks/useOrders";
 import { useParams } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "@ui/components/ui/dialog";
 import Checkout from "./Checkout";
 import { Button } from "@ui/components/ui/button";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
 // import {cookies} from "next/headers"
 
 const Basket = () => {
   const params = useParams();
   // cookies().
   const customer = Cookies.get("customer.customer") as string;
-  const transaction = Cookies.get("customer.transaction");
+  const transaction = Cookies.get("customer.transaction") as string;
   const utils = trpc.useUtils();
 
   const {
@@ -196,12 +196,15 @@ const Basket = () => {
               </DialogTrigger>
             )}
             <DialogContent>
-              <Checkout
-                items={items}
-                totalAmount={totalPayment}
-                tableId={params.slug}
-                transactionId={transaction}
-              />
+              {items && totalPayment && transaction && (
+                // FIX: Types
+                <Checkout
+                  items={items}
+                  totalAmount={totalPayment}
+                  tableId={params.slug as string}
+                  transactionId={transaction}
+                />
+              )}
             </DialogContent>
           </Dialog>
         </div>

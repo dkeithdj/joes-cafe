@@ -12,7 +12,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@customer/lib/utils";
 import { Button } from "@ui/components/ui/button";
 import {
   Command,
@@ -27,7 +27,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@ui/components/ui/popover";
-import { useStaff } from "@/hooks/useStaff";
+import { useStaff } from "@customer/hooks/useStaff";
 import { useState } from "react";
 import {
   Select,

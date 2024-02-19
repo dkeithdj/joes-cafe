@@ -2,7 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
 
 const Categories = () => {
   const router = useRouter();

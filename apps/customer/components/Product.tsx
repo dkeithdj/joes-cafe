@@ -7,9 +7,9 @@ import {
   CardFooter,
 } from "@ui/components/ui/card";
 import Image from "next/image";
-import { ProductProps } from "@/types";
+import { ProductProps } from "@customer/types";
 import Cookies from "js-cookie";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
 
 const Product = ({
   product,

@@ -20,9 +20,20 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
+import { itemsview } from "@repo/database";
 
-const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
+const Checkout = ({
+  items,
+  totalAmount,
+  tableId,
+  transactionId,
+}: {
+  items: itemsview[];
+  totalAmount: number;
+  tableId: string;
+  transactionId: string;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const [submitted, setSubmitted] = useState(false);
@@ -89,7 +100,7 @@ const Checkout = ({ items, totalAmount, tableId, transactionId }) => {
                     <TableCell>{item.productprice}</TableCell>
                     <TableCell>{item.totalquantity}</TableCell>
                     <TableCell className="text-right">
-                      PHP {item.totalamount}.00
+                      PHP {item.totalamount?.dp()}.00
                     </TableCell>
                   </TableRow>
                 ))}

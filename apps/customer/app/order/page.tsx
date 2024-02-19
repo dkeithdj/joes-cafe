@@ -1,6 +1,6 @@
 "use client";
 
-import Order from "@/components/Order";
+import Order from "@customer/components/Order";
 
 const Orders = () => {
   return <Order />;

@@ -1,7 +1,7 @@
 "use client";
-import Products from "@/components/Product";
-import { trpc } from "@/hooks/trpc";
-import { ProductProps } from "@/types";
+import Products from "@customer/components/Product";
+import { trpc } from "@customer/hooks/trpc";
+import { ProductProps } from "@customer/types";
 import Cookies from "js-cookie";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";

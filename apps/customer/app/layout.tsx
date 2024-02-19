@@ -1,10 +1,10 @@
 "use client";
-import Nav from "@/components/Nav";
+import Nav from "@customer/components/Nav";
 import "@repo/ui/globals.css";
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
+import Footer from "@customer/components/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TrpcProvider } from "@/components/TrpcProvider";
+import { TrpcProvider } from "@customer/components/TrpcProvider";
 
 const queryClient = new QueryClient();
 

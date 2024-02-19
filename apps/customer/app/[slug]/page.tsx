@@ -1,7 +1,7 @@
 "use client";
 // import React, { useEffect, useState } from "react";
 // import { usePathname, useRouter } from "next/navigation";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@customer/hooks/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@ui/components/ui/button";
 import {
