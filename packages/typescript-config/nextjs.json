@@ -18,11 +18,9 @@
     "jsx": "preserve",
     "paths": {
       "@ui/*": ["../../packages/ui/src/*"],
-      "@/*": [
-        "../../apps/customer/*",
-        "../../apps/admin/*",
-        "../../apps/kitchen/*"
-      ]
+      "@customer/*": ["../../apps/customer/*"],
+      "@admin/*": ["../../apps/admin/*"],
+      "@kitchen/*": ["../../apps/kitchen/*"]
     }
   }
 }

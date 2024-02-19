@@ -10,7 +10,7 @@
   },
   "paths": {
     "@ui/*": ["../../packages/ui/src/*"],
-    "@/*": ["./*"],
+    "@admin/*": ["./*"],
   },
   "include": [
     "next-env.d.ts",
