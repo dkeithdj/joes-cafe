@@ -1,6 +1,6 @@
 import React from "react";
 import { OrderSelect } from "./OrderSelect";
-import { useStaff } from "@/hooks/useStaff";
+import { useStaff } from "@admin/hooks/useStaff";
 import { User2 } from "lucide-react";
 
 const AdminOrder = ({ order }) => {

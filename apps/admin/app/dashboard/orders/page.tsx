@@ -1,7 +1,7 @@
 "use client";
-import Loading from "@/components/Loading";
-import _Orders from "@/components/admin/_Orders";
-import { trpc } from "@/hooks/trpc";
+import Loading from "@admin/components/Loading";
+import _Orders from "@admin/components/admin/_Orders";
+import { trpc } from "@admin/hooks/trpc";
 import { Status } from "@repo/database";
 import React, { useState } from "react";
 
@@ -17,16 +17,12 @@ const AdminOrders = () => {
     isLoading,
   } = trpc.getOrders.useQuery({ status: status });
 
-  console.log(orders);
-  console.log(status);
-
   const edit = data?.map((person) => ({
     value: person.id,
     label: person.last_name,
   }));
 
   const fetchStaff = edit;
-  console.log(staff);
 
   return (
     <div className="w-auto mx-14">

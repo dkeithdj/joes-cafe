@@ -1,4 +1,4 @@
-import { OrderProps, ProductProps, TransactionProps } from "@/types";
+import { OrderProps, ProductProps, TransactionProps } from "@admin/types";
 import { ItemsView, Order } from "@repo/database";
 
 export const getOrders = async (): Promise<OrderProps[]> => {

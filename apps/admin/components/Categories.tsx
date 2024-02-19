@@ -1,5 +1,5 @@
 "use client";
-import { useCategories } from "@/hooks/useCategories";
+import { useCategories } from "@adminhooks/useCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@ui/components/ui/scroll-area";

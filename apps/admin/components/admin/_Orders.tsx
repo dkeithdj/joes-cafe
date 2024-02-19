@@ -9,15 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-// import { useStaff } from "@/hooks/useStaff";
-// import { usePaymethod } from "@/hooks/usePaymethod";
-// import { useItems } from "@/hooks/useItems";
-import { OrderProps } from "@/types";
-// import { useUpdateOrder } from "@/hooks/useOrders";
-import { Staff } from "@repo/database";
-import { trpc } from "@/hooks/trpc";
+import { trpc, type ReactQueryOptions, RouterOutputs } from "@admin/hooks/trpc";
 
-const _Orders = ({ order, staff }) => {
+type OrderOptions = RouterOutputs["getOrders"][0];
+
+const _Orders = ({ order, staff }: { order: OrderOptions }) => {
   const utils = trpc.useUtils();
 
   const [payMethod, setPayMethod] = useState("");

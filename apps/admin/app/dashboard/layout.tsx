@@ -1,11 +1,11 @@
 "use client";
-import _Dashboard from "@/components/_Dashboard";
+import _Dashboard from "@admin/components/_Dashboard";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@ui/components/ui/sheet";
-import SideBarNav from "@/components/_SideBarNav";
+import SideBarNav from "@admin/components/_SideBarNav";
 import { useState } from "react";
 
 export default function DashboardLayout({

@@ -5,7 +5,7 @@ import { httpBatchLink, getFetch, loggerLink } from "@trpc/client";
 import { useState } from "react";
 import superjson from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@admin/hooks/trpc";
 
 export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

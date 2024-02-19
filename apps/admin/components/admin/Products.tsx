@@ -17,7 +17,7 @@ import { Button } from "@ui/components/ui/button";
 import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
 import { Product } from "@repo/database";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@admin/hooks/trpc";
 // import { DialogClose } from "@radix-ui/react-dialog";
 
 const Products = ({ product }: {product: Product}) => {

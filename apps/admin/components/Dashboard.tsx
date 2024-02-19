@@ -1,7 +1,7 @@
 "use client";
-import { useOrders } from "@/hooks/useOrders";
-import { useStaff } from "@/hooks/useStaff";
-import { useStatus } from "@/hooks/useStatus";
+import { useOrders } from "@admin/hooks/useOrders";
+import { useStaff } from "@admin/hooks/useStaff";
+import { useStatus } from "@admin/hooks/useStatus";
 import { OrderSelect } from "./OrderSelect";
 import React from "react";
 import { User2 } from "lucide-react";

@@ -1,7 +1,7 @@
 "use client";
-import Loading from "@/components/Loading";
-import AddProduct from "@/components/admin/AddProduct";
-import Products from "@/components/admin/Products";
+import Loading from "@admin/components/Loading";
+import AddProduct from "@admin/components/admin/AddProduct";
+import Products from "@admin/components/admin/Products";
 import { Button } from "@ui/components/ui/button";
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import React, {  useState } from "react";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@admin/hooks/trpc";
 const AdminProducts = () => {
   const {
     data: products,

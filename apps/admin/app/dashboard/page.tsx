@@ -1,10 +1,10 @@
 "use client";
-import _Dashboard from "@/components/_Dashboard";
-import Analytics from "@/components/admin/Analytics";
+import _Dashboard from "@admin/components/_Dashboard";
+import Analytics from "@admin/components/admin/Analytics";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import Loading from "@/components/Loading";
+import Loading from "@admin/components/Loading";
 
 const DashboardPage = () => {
   const { data: session, status } = useSession();

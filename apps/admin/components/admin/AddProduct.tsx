@@ -6,11 +6,11 @@ import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
 import { Switch } from "@ui/components/ui/switch";
 import { Select } from "@ui/components/ui/select";
-// import { useCategories } from "@/hooks/useCategories";
-// import { useAddProduct } from "@/hooks/useProducts";
+// import { useCategories } from "@admin/hooks/useCategories";
+// import { useAddProduct } from "@admin/hooks/useProducts";
 import Image from "next/image";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
-import { trpc } from "@/hooks/trpc";
+import { trpc } from "@admin/hooks/trpc";
 
 const AddProduct = () => {
   const [productName, setProductName] = useState("");

@@ -3,7 +3,7 @@ import { prisma } from "@repo/database";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { authOptions } from "@/lib/authOptions";
+import { authOptions } from "@admin/lib/authOptions";
 
 interface userProps {
   id: string;
