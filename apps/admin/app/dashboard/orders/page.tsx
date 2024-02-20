@@ -78,7 +78,6 @@ const AdminOrders = () => {
       <div>{isLoading && <Loading length={5} height="200" />}</div>
       {orders && orders.length !== 0 ? (
         orders.map((order, i) => (
-          // FIX: resolve types
           <_Orders staff={staff} order={order} key={i} />
         ))
       ) : (

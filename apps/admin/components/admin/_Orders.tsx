@@ -13,7 +13,7 @@ import { trpc, type ReactQueryOptions, RouterOutputs } from "@admin/hooks/trpc";
 
 type OrderOptions = RouterOutputs["getOrders"][0];
 
-const _Orders = ({ order, staff }: { order: OrderOptions }) => {
+const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
   const utils = trpc.useUtils();
 
   const [payMethod, setPayMethod] = useState("");
@@ -157,7 +157,7 @@ const _Orders = ({ order, staff }: { order: OrderOptions }) => {
               <div className="flex flex-row">
                 <div className="w-24 h-9">
                   <button
-                    onClick={(e) => setStatus(e.target.value)}
+                    onClick={(e) => setStatus(e.currentTarget.value)}
                     value={"3"}
                     className="w-full h-full rounded-bl-[7px] rounded-tl-[7px] text-sm text-[#512711] outline outline-[#664229] hover:bg-slate-300"
                   >
@@ -166,7 +166,7 @@ const _Orders = ({ order, staff }: { order: OrderOptions }) => {
                 </div>
                 <div className="w-24 h-9 bg-[#664229]">
                   <button
-                    onClick={(e) => setStatus(e.target.value)}
+                    onClick={(e) => setStatus(e.currentTarget.value)}
                     value={"2"}
                     className="w-full h-full rounded-br-[7px] rounded-tr-[7px] text-sm text-[#F9EBD3] outline outline-[#664229] hover:bg-[#512711]"
                   >

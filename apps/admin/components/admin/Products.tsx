@@ -20,7 +20,7 @@ import { Product } from "@repo/database";
 import { trpc } from "@admin/hooks/trpc";
 // import { DialogClose } from "@radix-ui/react-dialog";
 
-const Products = ({ product }: {product: Product}) => {
+const Products = ({ product }: { product: Product }) => {
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [isAvailable, setIsAvailable] = useState(product.isAvailable);
@@ -38,7 +38,7 @@ const Products = ({ product }: {product: Product}) => {
       category: product.categoryId,
       image: "",
       isAvailable: isAvailable,
-    })
+    });
     // mutate({
     //   ...product,
     //   name: productName,
