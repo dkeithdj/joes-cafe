@@ -197,7 +197,6 @@ const Basket = () => {
             )}
             <DialogContent>
               {items && totalPayment && transaction && (
-                // FIX: Types
                 <Checkout
                   items={items}
                   totalAmount={totalPayment}
