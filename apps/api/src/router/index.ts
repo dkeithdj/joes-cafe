@@ -241,7 +241,9 @@ export const appRouter = router({
         },
       });
       console.log(order);
-      ctx.res.setCookie("orderId", order.id);
+      ctx.res.setCookie("orderIda", order.id, {
+        maxAge: 60 * 60 * 24,
+      });
       return order;
     }),
   updateOrder: publicProcedure

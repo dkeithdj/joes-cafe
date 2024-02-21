@@ -9,6 +9,7 @@ const Order = () => {
   const params = useParams();
   const router = useRouter();
   const orderId = Cookies.get("orderId") as string;
+  console.log(orderId);
   const customerId = Cookies.get("customer.customer") as string;
   const customerName = Cookies.get("customer.name") as string;
   // if (!orderId) return <div>Loading Cookies...</div>;
