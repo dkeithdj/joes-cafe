@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.7.1",
     "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.20.5",
     "@tanstack/react-query-devtools": "^5.18.1",
@@ -24,6 +25,7 @@
     "@types/js-cookie": "^3.0.6",
     "autoprefixer": "10.4.15",
     "bcrypt": "^5.1.1",
+    "clsx": "^2.1.0",
     "formidable": "^3.5.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.314.0",
@@ -38,8 +40,7 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
-    "zod": "^3.22.4",
-    "@repo/database": "workspace:*"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.4",

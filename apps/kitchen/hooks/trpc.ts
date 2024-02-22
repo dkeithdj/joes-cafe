@@ -1,4 +1,4 @@
-import type { AppRouter } from "@repo/api";
+import type { AppRouter } from "@repo/api/src/router";
 
 // import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";

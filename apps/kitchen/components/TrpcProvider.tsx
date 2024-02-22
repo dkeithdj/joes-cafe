@@ -5,7 +5,7 @@ import { httpBatchLink, getFetch, loggerLink } from "@trpc/client";
 import { useState } from "react";
 import superjson from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { trpc } from "@customer/hooks/trpc";
+import { trpc } from "@kitchen/hooks/trpc";
 
 export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -14,7 +14,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     () =>
       new QueryClient({
         defaultOptions: { queries: { staleTime: 5000 } },
-      })
+      }),
   );
 
   const url = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -38,8 +38,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
           },
         }),
       ],
-      transformer: superjson,
-    })
+    }),
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
