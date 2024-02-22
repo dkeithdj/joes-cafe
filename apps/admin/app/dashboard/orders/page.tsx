@@ -1,7 +1,7 @@
 "use client";
 import Loading from "@admin/components/Loading";
 import _Orders from "@admin/components/admin/_Orders";
-import { trpc } from "@admin/hooks/trpc";
+import { RouterInputs, trpc } from "@admin/hooks/trpc";
 import { Status } from "@repo/database";
 import React, { useState } from "react";
 
@@ -16,6 +16,7 @@ const AdminOrders = () => {
     isSuccess: ordersSuccess,
     isLoading,
   } = trpc.getOrders.useQuery({ status: status });
+  console.log(orders);
 
   const edit = data?.map((person) => ({
     value: person.id,

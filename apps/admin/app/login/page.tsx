@@ -5,18 +5,18 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 
 const LoginPage = () => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   const router = useRouter();
   const [data, setData] = useState({
     email: "",
     password: "",
   });
 
-  if (session) router.push("/dashboard");
+  // if (session) router.push("/dashboard");
 
   const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn("credentials", { ...data, callbackUrl: "/dashboard" });
+    // signIn("credentials", { ...data, callbackUrl: "/dashboard" });
   };
   return (
     <div>

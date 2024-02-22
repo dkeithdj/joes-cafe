@@ -1,10 +1,10 @@
 "use client";
 // import _Admin from "@admin/components/_Admin";
 // import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const Admin = () => {
-  const router = useRouter();
+  // const router = useRouter();
   // const { data: session, status } = useSession();
 
   // if (status === "loading") return <div>Loading User...</div>;
@@ -14,7 +14,7 @@ const Admin = () => {
   // } else {
   //   router.push("/dashboard");
   // }
-  router.push("/dashboard");
+  // router.push("/dashboard");
   return <div>Redirecting...</div>;
 };
 

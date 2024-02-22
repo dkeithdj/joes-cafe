@@ -7,7 +7,7 @@ import React from "react";
 import Loading from "@admin/components/Loading";
 
 const DashboardPage = () => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
   // if (session === null) router.push("/login");
 
   return (
@@ -17,15 +17,16 @@ const DashboardPage = () => {
         <div className="flex flex-row items-center gap-x-4"></div>
       </div>
       <div>
-        {status === "loading" ? (
-          <div>
-            <Loading length={3} height="250" />
-          </div>
-        ) : (
-          <>
-            <Analytics />
-          </>
-        )}
+        {/* {status === "loading" ? ( */}
+        {/*   <div> */}
+        {/*     <Loading length={3} height="250" /> */}
+        {/*   </div> */}
+        {/* ) : ( */}
+        {/*   <> */}
+        {/*     <Analytics /> */}
+        {/*   </> */}
+        {/* )} */}
+        <Analytics />
       </div>
     </div>
   );
