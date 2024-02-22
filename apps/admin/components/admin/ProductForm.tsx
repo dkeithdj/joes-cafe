@@ -12,7 +12,7 @@ const ProductForm = ({
   product,
   setProduct,
   handleSubmit,
-}) => {
+}: any) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-3 gap-1.5">
@@ -80,11 +80,11 @@ const ProductForm = ({
                 <option value="" disabled selected>
                   Select...
                 </option>
-                {categories?.map((item, i) => (
-                  <option key={i} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
+                {/* {categories?.map((item, i) => ( */}
+                {/*   <option key={i} value={item.id}> */}
+                {/*     {item.name} */}
+                {/*   </option> */}
+                {/* ))} */}
               </select>
             </div>
             <div className="col-span-1">
@@ -92,7 +92,7 @@ const ProductForm = ({
               <div>
                 <Switch
                   id="isAvailable"
-                  onChange={(e) =>
+                  onChange={(e: any) =>
                     setProduct({ ...product, isAvailable: e.target.value })
                   }
                   checked={product.isAvailable}

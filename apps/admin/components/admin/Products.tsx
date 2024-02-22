@@ -16,11 +16,11 @@ import {
 import { Button } from "@ui/components/ui/button";
 import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
-import { Product } from "@repo/database";
-import { trpc } from "@admin/hooks/trpc";
+import { RouterOutputs, trpc } from "@admin/hooks/trpc";
 // import { DialogClose } from "@radix-ui/react-dialog";
+type ProductOptions = RouterOutputs["getProducts"][0];
 
-const Products = ({ product }: { product: Product }) => {
+const Products = ({ product }: { product: ProductOptions }) => {
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [isAvailable, setIsAvailable] = useState(product.isAvailable);
@@ -35,7 +35,7 @@ const Products = ({ product }: { product: Product }) => {
       ...product,
       name: productName,
       price: price,
-      category: product.categoryId,
+      category: product.category.id,
       image: "",
       isAvailable: isAvailable,
     });

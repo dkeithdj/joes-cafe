@@ -36,7 +36,7 @@ const AddProduct = () => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     mutation.mutate({

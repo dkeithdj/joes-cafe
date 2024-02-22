@@ -78,7 +78,8 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
         </div>
         <div className="col-span-1 flex ml-5 items-end w-auto h-12">
           <div className="text-lg text-[#512711]">
-            Order Date: <span className="font-bold">{order.date}</span>
+            Order Date:{" "}
+            <span className="font-bold">{order.date.toString()}</span>
           </div>
         </div>
       </div>

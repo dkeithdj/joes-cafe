@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink, getFetch, loggerLink } from "@trpc/client";
 import { useState } from "react";
-import superjson from "superjson";
+// import superjson from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { trpc } from "@admin/hooks/trpc";
 
@@ -14,12 +14,13 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     () =>
       new QueryClient({
         defaultOptions: { queries: { staleTime: 5000 } },
-      })
+      }),
   );
 
-  const url = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000/trpc/";
+  // const url = process.env.NEXT_PUBLIC_VERCEL_URL
+  //   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  //   : "http://localhost:3000/trpc/";
+  const url = "http://localhost:3000/trpc/";
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -36,10 +37,10 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
               credentials: "include",
             });
           },
+          // transformer: superjson,
         }),
       ],
-      transformer: superjson,
-    })
+    }),
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
