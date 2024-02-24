@@ -61,6 +61,16 @@ export const appRouter = router({
         id: createTransaction.customer.id,
         name: createTransaction.customer.name,
       };
+      // ctx.createCookies("hi", "hello");
+      ctx.res.header(
+        "Set-Cookie",
+        "hello=world; Path=/; HttpOnly; Max-Age=3600; Secure; SameSite=Strict",
+      );
+      ctx.res.header(
+        "Set-Cookie",
+        "hi=hello; Path=/; HttpOnly; Max-Age=3600; Secure; SameSite=Strict",
+      );
+      // ctx.res.cookie("hi", "hello") as FastifyReply
       // ctx.res.setCookie("customer.transaction", createTransaction.id, {
       //   maxAge: 60 * 60 * 24,
       //   path: "/",
@@ -82,6 +92,28 @@ export const appRouter = router({
   getSession: publicProcedure.query(({ input, ctx }) => {
     return ctx.customer;
   }),
+  setSession: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        transactionId: z.string().optional(),
+        orderId: z.string().optional(),
+      }),
+    )
+    .mutation(({ input, ctx }) => {
+      if (!ctx.customer) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Customer not found",
+        });
+      }
+      ctx.customer = {
+        ...input,
+        ...ctx.customer,
+      };
+      return ctx.customer;
+    }),
   createProduct: publicProcedure
     .input(
       z.object({
@@ -396,7 +428,7 @@ export const appRouter = router({
       ctx.customer = {
         ...ctx.customer,
         transactionId: updateTransaction.id,
-        customerId: updateTransaction.customerId,
+        id: updateTransaction.customerId,
       };
 
       return updateTransaction;

@@ -13,10 +13,10 @@ import { FastifyReply } from "fastify";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 type Customer = {
-  id: string | null;
-  name: string | null;
-  transactionId: string | null;
-  orderId: string | null;
+  id: string;
+  name: string;
+  transactionId?: string;
+  orderId?: string;
 };
 export const createTRPCContext = async ({
   req,
@@ -25,17 +25,19 @@ export const createTRPCContext = async ({
   req: FastifyRequest;
   res: FastifyReply;
 }) => {
-  return { prisma: prisma, req, res, customer: {} };
+  const customer = {} as Customer;
+  const createCookies = res.cookie;
+  return { prisma: prisma, req, res, customer, createCookies };
 };
-export async function createContext({ req, res }: CreateFastifyContextOptions) {
-  const server = req.server;
-
-  return {
-    fastify: server,
-    req,
-    res,
-    prisma,
-  };
-}
+// export async function createContext({ req, res }: CreateFastifyContextOptions) {
+//   const server = req.server;
+//
+//   return {
+//     fastify: server,
+//     req,
+//     res,
+//     prisma,
+//   };
+// }
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
 // export type InnerContext = inferAsyncReturnType<typeof createContextInner>;
