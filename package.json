@@ -13,12 +13,12 @@
     "ui:add": "pnpm --filter @repo/ui ui:add"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
     "prettier": "^3.1.1",
     "turbo": "^1.11.3"
   },
   "dependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
     "dotenv-cli": "^7.3.0"
   },
   "prisma": {
