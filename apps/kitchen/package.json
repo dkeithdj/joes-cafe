@@ -13,7 +13,6 @@
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.7.1",
     "@repo/api": "workspace:*",
-    "@repo/database": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.20.5",
     "@tanstack/react-query-devtools": "^5.18.1",
