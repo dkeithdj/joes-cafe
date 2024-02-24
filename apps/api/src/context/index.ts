@@ -26,8 +26,7 @@ export const createTRPCContext = async ({
   res: FastifyReply;
 }) => {
   const customer = {} as Customer;
-  const createCookies = res.cookie;
-  return { prisma: prisma, req, res, customer, createCookies };
+  return { prisma: prisma, req, res, customer };
 };
 // export async function createContext({ req, res }: CreateFastifyContextOptions) {
 //   const server = req.server;
