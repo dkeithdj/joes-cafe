@@ -8,16 +8,16 @@ importers:
 
   .:
     dependencies:
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
+    devDependencies:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:packages/typescript-config
-      dotenv-cli:
-        specifier: ^7.3.0
-        version: 7.3.0
-    devDependencies:
       prettier:
         specifier: ^3.1.1
         version: 3.2.4
@@ -345,9 +345,6 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
-      '@repo/database':
-        specifier: workspace:*
-        version: link:../../packages/database
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
