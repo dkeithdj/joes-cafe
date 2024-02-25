@@ -379,6 +379,7 @@ export const appRouter = router({
           },
         },
       });
+      return items;
     }),
   getItem: publicProcedure
     .input(z.object({ transactionId: z.string() }))
