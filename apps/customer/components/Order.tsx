@@ -8,8 +8,10 @@ import { trpc } from "@customer/hooks/trpc";
 const Order = () => {
   const params = useParams();
   const router = useRouter();
+
+  const utils = trpc.useUtils();
+
   const orderId = Cookies.get("orderId") as string;
-  console.log(orderId);
   const customerId = Cookies.get("customer.customer") as string;
   const customerName = Cookies.get("customer.name") as string;
   // if (!orderId) return <div>Loading Cookies...</div>;
@@ -17,6 +19,14 @@ const Order = () => {
     orderId: orderId,
   });
   // const { data, isFetched, isError, error } = useOrder(orderId);
+
+  trpc.onUpdateOrder.useSubscription(undefined, {
+    onData: (data) => {
+      // TODO: can use this as a route redirect for kitchen
+      console.log(data);
+      utils.getOrderById.invalidate({ orderId: orderId });
+    },
+  });
 
   if (data?.status?.id !== 1) console.log("Order Processed");
 
