@@ -17,7 +17,7 @@ import { Input } from "@ui/components/ui/input";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,16 +29,9 @@ const ProductView = () => {
   const params = useParams();
   const router = useRouter();
 
-  // const [name, setName] = useState("");
-  // const [submitting, setSubmitting] = useState(false);
-
   const customerCookies = Cookies.get("customer.customer");
 
-  if (customerCookies) {
-    router.push(`/${params.slug}/${customerCookies}`);
-  } else {
-    console.log("no customer cookies");
-  }
+  const { data: session } = trpc.getSession.useQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,28 +43,23 @@ const ProductView = () => {
   const {
     mutate: addTransaction,
     isSuccess,
+    isPending,
     isError,
     data,
     error,
   } = trpc.createTransaction.useMutation();
 
+  useEffect(() => {
+    if (customerCookies) {
+      router.push(`/${params.slug}/${customerCookies}`);
+    } else {
+      console.log("no customer cookies");
+    }
+  }, [data]);
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     addTransaction(values);
-
-    if (isSuccess) {
-      const { id } = data.customer;
-      router.push(`/${params.slug}/${id}`);
-      console.log(Cookies.get("customer.customer"));
-    } else {
-      console.log("Something went wrong");
-    }
   };
-
-  // const handleSubmit = (e: any) => {
-  //   setSubmitting(true);
-  //   e.preventDefault();
-  //   setSubmitting(false);
-  // };
 
   return (
     <div>
@@ -109,7 +97,9 @@ const ProductView = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={isPending}>
+                  Submit
+                </Button>
               </form>
             </Form>
           </div>

@@ -20,11 +20,12 @@ const CustomerOrder = () => {
   } = trpc.getProducts.useQuery();
 
   const customerCookie = Cookies.get("customer.customer");
-  // useEffect(() => {
-  //   if (!customerCookie) router.push(`/${params.slug}`);
-  // }, [customerCookie]);
 
-  if (!customerCookie) router.push(`/${params.slug}`);
+  useEffect(() => {
+    if (customerCookie === undefined) router.push(`/${params.slug}`);
+  }, [customerCookie]);
+
+  // if (!customerCookie) router.push(`/${params.slug}`);
 
   if (isLoading) return <div>Loading...</div>;
 

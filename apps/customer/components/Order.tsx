@@ -28,8 +28,8 @@ const Order = () => {
     Cookies.remove("orderId");
     //create transactionId here
     updateTransaction({ id: customerId, name: customerName });
-    const transactionId = newTransactionId?.id as string;
-    Cookies.set("customer.transaction", transactionId);
+    // const transactionId = newTransactionId?.id as string;
+    // Cookies.set("customer.transaction", transactionId, { sameSite: "none" });
 
     router.back();
   };
