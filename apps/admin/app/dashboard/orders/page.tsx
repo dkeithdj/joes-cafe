@@ -9,6 +9,8 @@ const AdminOrders = () => {
   const [staff, setStaff] = useState("");
   const [status, setStatus] = useState<Status>(Status.Processing);
 
+  const utils = trpc.useUtils();
+
   const { data, isSuccess: staffSuccess } = trpc.getStaff.useQuery();
 
   const {
@@ -16,7 +18,12 @@ const AdminOrders = () => {
     isSuccess: ordersSuccess,
     isLoading,
   } = trpc.getOrders.useQuery({ status: status });
-  console.log(orders);
+
+  trpc.onCreateOrder.useSubscription(undefined, {
+    onData: (data) => {
+      utils.getOrders.invalidate();
+    },
+  });
 
   const edit = data?.map((person) => ({
     value: person.id,
