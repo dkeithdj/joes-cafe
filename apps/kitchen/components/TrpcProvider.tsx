@@ -44,6 +44,13 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
           true: wsLink({ client: wsClient }),
           false: httpBatchLink({
             url: `http://${urlEnd}`,
+            fetch: async (input, init?) => {
+              const fetch = getFetch();
+              return fetch(input, {
+                ...init,
+                credentials: "include",
+              });
+            },
           }),
         }),
         httpBatchLink({
