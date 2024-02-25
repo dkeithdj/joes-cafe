@@ -4,12 +4,15 @@ import { Status } from "@repo/database";
 import { z } from "zod";
 import { Context } from "../context";
 import fastify from "fastify";
+import { EventEmitter } from "stream";
 // import superjson from "superjson";
 
 const t = initTRPC.context<Context>().create();
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
+
+const ee = new EventEmitter();
 
 /* TODO: separate mutations and queries
  * <table>.<get/post/put/patch/delete>.<filter, e.g. by id, name, etc.>
@@ -278,15 +281,13 @@ export const appRouter = router({
           totalAmount: totalAmount,
         },
       });
-      if (!ctx.customer) {
-        throw new TRPCError({ code: "UNAUTHORIZED" });
-      }
-      ctx.customer = { ...ctx.customer, orderId: order.id };
 
       ctx.res.header(
         "Set-Cookie",
         `orderId=${order.id}; Path=/; Max-Age=86400`,
       );
+
+      ee.emit("createOrder", order.statusId);
 
       // ctx.customer.orderId = order.id;
       // ctx.res.setCookie("orderId", order.id, {
@@ -294,6 +295,17 @@ export const appRouter = router({
       // });
       return order;
     }),
+  onCreateOrder: publicProcedure.subscription(() => {
+    return observable<{ status: number }>((emit) => {
+      const onCreateOrder = (data: { status: number }) => {
+        emit.next(data);
+      };
+      ee.on("createOrder", onCreateOrder);
+      return () => {
+        ee.off("createOrder", onCreateOrder);
+      };
+    });
+  }),
   updateOrder: publicProcedure
     .input(
       z.object({
@@ -328,8 +340,21 @@ export const appRouter = router({
           },
         },
       });
+      ee.emit("updateOrder", updateOrder.statusId);
+
       return updateOrder;
     }),
+  onUpdateOrder: publicProcedure.subscription(() => {
+    return observable<{ status: number }>((emit) => {
+      const onUpdateOrder = (data: { status: number }) => {
+        emit.next(data);
+      };
+      ee.on("updateOrder", onUpdateOrder);
+      return () => {
+        ee.off("updateOrder", onUpdateOrder);
+      };
+    });
+  }),
   getStatus: publicProcedure.query(async ({ input, ctx }) => {
     const status = await ctx.prisma.order_Status.findMany();
     return status;
