@@ -61,16 +61,19 @@ export const appRouter = router({
         id: createTransaction.customer.id,
         name: createTransaction.customer.name,
       };
-      // ctx.createCookies("hi", "hello");
       ctx.res.header(
         "Set-Cookie",
-        "hello=world; Path=/; HttpOnly; Max-Age=3600; Secure; SameSite=Strict",
+        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
       );
       ctx.res.header(
         "Set-Cookie",
-        "hi=hello; Path=/; HttpOnly; Max-Age=3600; Secure; SameSite=Strict",
+        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`,
       );
-      // ctx.res.cookie("hi", "hello") as FastifyReply
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
+      );
+      // ctx.res.cookie("hi", "hello") as FastifyReply;
       // ctx.res.setCookie("customer.transaction", createTransaction.id, {
       //   maxAge: 60 * 60 * 24,
       //   path: "/",
@@ -90,7 +93,8 @@ export const appRouter = router({
       return createTransaction;
     }),
   getSession: publicProcedure.query(({ input, ctx }) => {
-    return ctx.customer;
+    const session = ctx.res.getHeaders();
+    return session;
   }),
   setSession: publicProcedure
     .input(
@@ -274,11 +278,15 @@ export const appRouter = router({
           totalAmount: totalAmount,
         },
       });
-      console.log(order);
       if (!ctx.customer) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
       ctx.customer = { ...ctx.customer, orderId: order.id };
+
+      ctx.res.header(
+        "Set-Cookie",
+        `orderId=${order.id}; Path=/; Max-Age=86400`,
+      );
 
       // ctx.customer.orderId = order.id;
       // ctx.res.setCookie("orderId", order.id, {
@@ -422,6 +430,14 @@ export const appRouter = router({
       // ctx.res.setCookie("customer.customer", updateTransaction.customerId, {
       //   maxAge: 60 * 60 * 24,
       // });
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
+      );
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
+      );
       if (!ctx.customer) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }

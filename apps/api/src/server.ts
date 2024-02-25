@@ -29,8 +29,6 @@ const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const prefix = "/trpc";
 const server = fastify({ logger: dev, maxParamLength: 5000 });
 
-// server.register(cookie);
-
 void server.register(ws);
 void server.register(fastifyTRPCPlugin, {
   prefix,
