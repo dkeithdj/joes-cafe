@@ -1,6 +1,7 @@
 "use client";
 import "@repo/ui/globals.css";
 import { TrpcProvider } from "@kitchen/components/TrpcProvider";
+import Nav from "@kitchen/components/Nav";
 
 export default function RootLayout({
   children,
@@ -9,9 +10,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-[#f9ebd3]">
         <TrpcProvider>
-          <main className="bg-[#f9ebd3]">{children}</main>
+          <Nav />
+          <main>{children}</main>
         </TrpcProvider>
       </body>
     </html>
