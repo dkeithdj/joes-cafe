@@ -2,7 +2,12 @@ import type { AppRouter } from "@repo/api/src/router";
 
 // import { httpBatchLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import { createTRPCReact } from "@trpc/react-query";
+import {
+  createTRPCReact,
+  type inferReactQueryProcedureOptions,
+} from "@trpc/react-query";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+// TODO: move these to server
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
@@ -17,6 +22,10 @@ function getBaseUrl() {
   // assume localhost
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
+export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
+export type RouterInputs = inferRouterInputs<AppRouter>;
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
 export const trpc = createTRPCReact<AppRouter>();
 // export const trpc = createTRPCNext<AppRouter>({
 //   config(opts) {
