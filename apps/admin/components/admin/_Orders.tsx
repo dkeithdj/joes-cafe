@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import { trpc, type ReactQueryOptions, RouterOutputs } from "@admin/hooks/trpc";
+import { trpc, RouterOutputs } from "@admin/hooks/trpc";
 
 type OrderOptions = RouterOutputs["getOrders"][0];
 
