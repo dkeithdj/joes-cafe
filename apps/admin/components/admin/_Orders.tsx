@@ -20,7 +20,6 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
   const [status, setStatus] = useState("");
 
   const { data: dataPaymethod } = trpc.getPaymentMethod.useQuery();
-  console.log(dataPaymethod);
 
   const { mutate: updateOrder } = trpc.updateOrder.useMutation({
     onSuccess: () => {
@@ -28,7 +27,6 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
       utils.getOrders.invalidate();
     },
   });
-  console.log("hihi", staff);
 
   const handleOrderProcess = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -168,7 +166,8 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
                 <div className="w-24 h-9 bg-[#664229]">
                   <button
                     onClick={(e) => setStatus(e.currentTarget.value)}
-                    value={"2"}
+                    //WARN: change this after seed
+                    value={"5"}
                     className="w-full h-full rounded-br-[7px] rounded-tr-[7px] text-sm text-[#F9EBD3] outline outline-[#664229] hover:bg-[#512711]"
                   >
                     Accept
