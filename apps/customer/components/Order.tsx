@@ -43,8 +43,7 @@ const Order = () => {
 
     router.back();
   };
-  // console.log(error);
-  //do a check if status is still pending or not
+  // WARN: CHANGE ID AFTER SEEDING
   return (
     <div className="relative bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] min-h-screen bg-no-repeat">
       <div className="absolute w-full h-full z-0 bg-[url('/background.png')]"></div>
@@ -65,12 +64,26 @@ const Order = () => {
                 WAITING FOR YOUR PAYMENT...
               </p>
             )}
+            {data?.status?.id === 5 && (
+              <div>
+                <p className="font-['Zilla Slab'] font-light text-[32px]">
+                  Order is Preparing in the Kitchen
+                </p>
+              </div>
+            )}
+            {data?.status?.id === 6 && (
+              <div>
+                <p className="font-['Zilla Slab'] font-light text-[32px]">
+                  On the way!
+                </p>
+              </div>
+            )}
             {data?.status?.id === 2 && (
               <div>
                 <p className="font-['Zilla Slab'] font-light text-[32px]">
-                  Order Success
+                  Enjoyed your food?
                 </p>
-                <Button onClick={returnOrder}>Go back to ordering!</Button>
+                <Button onClick={returnOrder}>Order Again!</Button>
               </div>
             )}
             {data?.status?.id === 3 && (
