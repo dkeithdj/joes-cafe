@@ -150,7 +150,7 @@ export const appRouter = router({
   getOrders: publicProcedure
     .input(
       z.object({
-        status: z.enum([Status.Declined, Status.Completed, Status.Processing]),
+        status: z.enum([Status.Processing, Status.Declined, Status.Accepted]),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -203,6 +203,44 @@ export const appRouter = router({
       });
       return orders;
     }),
+  getKitchenOrders: publicProcedure.query(async ({ input, ctx }) => {
+    const orders = await ctx.prisma.order.findMany({
+      where: {
+        status: {
+          OR: [
+            { status: { equals: Status.Preparing } },
+            { status: { equals: Status.Brewing } },
+            { status: { equals: Status.Completed } },
+          ],
+        },
+      },
+      select: {
+        id: true,
+        table: {
+          select: {
+            number: true,
+          },
+        },
+        status: {
+          select: {
+            id: true,
+            status: true,
+          },
+        },
+        transaction: {
+          select: {
+            id: true,
+            customer: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return orders;
+  }),
   getOrderById: publicProcedure
     .input(
       z.object({
@@ -344,6 +382,32 @@ export const appRouter = router({
 
       return updateOrder;
     }),
+  updateKitchenOrder: publicProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        statusId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { orderId, statusId } = input;
+
+      const updateOrder = await ctx.prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: {
+            connect: {
+              id: Number(statusId),
+            },
+          },
+        },
+      });
+      ee.emit("updateOrder", updateOrder.statusId);
+
+      return updateOrder;
+    }),
   onUpdateOrder: publicProcedure.subscription(() => {
     return observable<{ status: number }>((emit) => {
       const onUpdateOrder = (data: { status: number }) => {
@@ -411,6 +475,19 @@ export const appRouter = router({
     .query(async ({ input, ctx }) => {
       const itemsView = await ctx.prisma.itemsview.findMany({
         where: { transactionid: input.transactionId },
+      });
+
+      return itemsView;
+    }),
+  getKitchenItems: publicProcedure
+    .input(z.object({ transactionId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const itemsView = await ctx.prisma.itemsview.findMany({
+        where: { transactionid: input.transactionId },
+        select: {
+          productname: true,
+          totalquantity: true,
+        },
       });
 
       return itemsView;
