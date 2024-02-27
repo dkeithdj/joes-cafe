@@ -64,17 +64,17 @@ const ProductView = () => {
   return (
     <div>
       <div className="relative flex justify-center items-center bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] h-screen bg-no-repeat ">
-        <div className="box">
+   
           <div className="absolute flex justify-center w-full select-none z-20">
             <Image
-              className="absolute -top-36 w-64 object-cover "
+              className="absolute -top-[300px] w-64 object-cover "
               src="/Joes-Logo-Whitebg.png"
               alt="joes"
               width={200}
               height={200}
             />
           </div>
-        </div>
+      
 
         <div className="absolute w-80 h-80 flex justify-center items-center select-none z-10">
           <div className="relative w-full h-60 flex justify-center items-center">
