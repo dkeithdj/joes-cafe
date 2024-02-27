@@ -36,6 +36,7 @@ const Order = () => {
 
   const returnOrder = () => {
     Cookies.remove("orderId");
+    console.log("changes herer");
     //create transactionId here
     updateTransaction({ id: customerId, name: customerName });
     // const transactionId = newTransactionId?.id as string;
