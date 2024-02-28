@@ -166,8 +166,7 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
                 <div className="w-24 h-9 bg-[#664229]">
                   <button
                     onClick={(e) => setStatus(e.currentTarget.value)}
-                    //WARN: change this after seed
-                    value={"5"}
+                    value={"4"}
                     className="w-full h-full rounded-br-[7px] rounded-tr-[7px] text-sm text-[#F9EBD3] outline outline-[#664229] hover:bg-[#512711]"
                   >
                     Accept
