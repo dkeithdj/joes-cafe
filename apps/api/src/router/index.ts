@@ -320,6 +320,7 @@ export const appRouter = router({
         },
       });
 
+      console.log(order);
       ctx.res.header(
         "Set-Cookie",
         `orderId=${order.id}; Path=/; Max-Age=86400`,
