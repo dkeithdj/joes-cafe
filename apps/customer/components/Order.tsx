@@ -28,7 +28,7 @@ const Order = () => {
     },
   });
 
-  if (data?.status?.id !== 1) console.log("Order Processed");
+  if (data?.status?.status !== "Processing") console.log("Order Processed");
 
   // const { mutate: updateTransaction, data: newTransactionId } = useUpdateTransaction();
   const { mutate: updateTransaction, data: newTransactionId } =
@@ -36,7 +36,6 @@ const Order = () => {
 
   const returnOrder = () => {
     Cookies.remove("orderId");
-    console.log("changes herer");
     //create transactionId here
     updateTransaction({ id: customerId, name: customerName });
     // const transactionId = newTransactionId?.id as string;
@@ -44,7 +43,6 @@ const Order = () => {
 
     router.back();
   };
-  // WARN: CHANGE ID AFTER SEEDING
   return (
     <div className="relative bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] min-h-screen bg-no-repeat">
       <div className="absolute w-full h-full z-0 bg-[url('/background.png')]"></div>
@@ -60,26 +58,26 @@ const Order = () => {
             />
           </div>
           <div className="text-center z-10">
-            {data?.status?.id === 1 && (
+            {data?.status?.status === "Processing" && (
               <p className="font-['Zilla Slab'] font-light text-[32px]">
                 WAITING FOR YOUR PAYMENT...
               </p>
             )}
-            {data?.status?.id === 5 && (
+            {data?.status?.status === "Preparing" && (
               <div>
                 <p className="font-['Zilla Slab'] font-light text-[32px]">
                   Order is Preparing in the Kitchen
                 </p>
               </div>
             )}
-            {data?.status?.id === 6 && (
+            {data?.status?.status === "Brewing" && (
               <div>
                 <p className="font-['Zilla Slab'] font-light text-[32px]">
                   On the way!
                 </p>
               </div>
             )}
-            {data?.status?.id === 2 && (
+            {data?.status?.status === "Completed" && (
               <div>
                 <p className="font-['Zilla Slab'] font-light text-[32px]">
                   Enjoyed your food?
@@ -87,7 +85,7 @@ const Order = () => {
                 <Button onClick={returnOrder}>Order Again!</Button>
               </div>
             )}
-            {data?.status?.id === 3 && (
+            {data?.status?.status === "Declined" && (
               <div>
                 <p className="font-['Zilla Slab'] font-light text-[32px]">
                   Order Declined
