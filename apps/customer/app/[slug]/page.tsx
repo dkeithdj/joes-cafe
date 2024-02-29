@@ -65,16 +65,17 @@ const ProductView = () => {
     <div>
       <div className="relative flex justify-center items-center bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] h-screen bg-no-repeat ">
            {/*This is the background */}
-          <div className="absolute w-full h-full z-0">
+           <div className="absolute w-full h-full z-0">
           <Image 
           className="w-full h-full object-cover sm " 
           src="/background.png"
           alt="background"
           layout="fill"
           />
+           </div>
            {/*This is the logo */}
-          </div>
-          <div className="absolute flex justify-center w-full select-none z-20">
+         
+           <div className="absolute flex justify-center w-full select-none z-20">
             <Image
               className="absolute -top-[300px] w-64 object-cover "
               src="/Joes-Logo-Whitebg.png"
@@ -109,7 +110,7 @@ const ProductView = () => {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-center mt-2">
+                <div className="flex justify-center">
                   <Button type="submit" disabled={isPending}>
                   Submit
                   </Button>
