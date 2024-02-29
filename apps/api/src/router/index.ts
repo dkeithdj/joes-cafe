@@ -22,23 +22,50 @@ export const appRouter = router({
   hello: publicProcedure.query(({ ctx, input }) => {
     return { greeting: "hello world" };
   }),
-  getProducts: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
+  getProducts: publicProcedure
+    .input(z.string().nullable())
+    .query(async ({ input, ctx }) => {
+      console.log(typeof input);
+      const products = await ctx.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      if (input === null) {
+        return products;
+      }
+      const productsByCategory = await ctx.prisma.product.findMany({
+        where: {
+          category: {
+            id: input,
           },
         },
-        image: true,
-        isAvailable: true,
-      },
-    });
-  }),
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      return productsByCategory;
+    }),
   createTransaction: publicProcedure
     .input(
       z.object({
@@ -115,10 +142,6 @@ export const appRouter = router({
           message: "Customer not found",
         });
       }
-      ctx.customer = {
-        ...input,
-        ...ctx.customer,
-      };
       return ctx.customer;
     }),
   createProduct: publicProcedure
