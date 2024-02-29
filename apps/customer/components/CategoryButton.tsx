@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 
 const CategoryButton = ({
@@ -20,7 +20,7 @@ const CategoryButton = ({
       }}
       className={`${
         id === categoryParam ? "text-[#512711] bg-[#e1cdad]" : "text-[#e1cdad]"
-      } px-5 py-2 my-2 rounded-lg capitalize whitespace-nowrap text-[20px] `}
+      } px-5 py-2 my-2 rounded-lg capitalize whitespace-nowrap text-[20px] cursor-pointer`}
       style={{ fontFamily: "Bebas Neue" }}
     >
       {name}
