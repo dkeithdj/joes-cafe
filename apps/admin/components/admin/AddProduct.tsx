@@ -5,6 +5,7 @@ import { DialogClose, DialogFooter } from "@ui/components/ui/dialog";
 import { Label } from "@ui/components/ui/label";
 import { Input } from "@ui/components/ui/input";
 import { Switch } from "@ui/components/ui/switch";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -38,6 +39,7 @@ const formSchema = z.object({
 });
 
 const AddProduct = () => {
+  const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,18 +68,25 @@ const AddProduct = () => {
     useDropzone({ onDrop });
 
   const { data: categories } = trpc.getCategories.useQuery();
-  // const { mutate: addProduct, data } = useAddProduct();
-  const mutation = trpc.createProduct.useMutation();
+
+  const { mutate } = trpc.createProduct.useMutation({
+    onSuccess: () => {
+      utils.getProducts.invalidate();
+    },
+    onError: (error) => {
+      toast.warning(error.message);
+    },
+  });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // mutation.mutate({
-    //   name: productName,
-    //   category: category,
-    //   price: price,
-    //   image: "",
-    //   isAvailable: isAvailable,
-    // });
+    const { name, category, price, image, isAvailable } = values;
+    mutate({
+      name: name,
+      category: category,
+      price: price,
+      image: image,
+      isAvailable: isAvailable,
+    });
   };
 
   return (
