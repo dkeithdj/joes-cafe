@@ -20,7 +20,7 @@ const AdminProducts = () => {
     isLoading,
     isError,
     error,
-  } = trpc.getProducts.useQuery();
+  } = trpc.getProducts.useQuery(null);
 
   const [availability, setAvailability] = useState(true);
 
@@ -33,7 +33,7 @@ const AdminProducts = () => {
         <div className="flex flex-row items-center gap-x-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline">Add Product</Button>
+              <div>Add Product</div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
