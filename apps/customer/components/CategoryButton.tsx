@@ -6,12 +6,10 @@ const CategoryButton = ({
   id,
   name,
   handleClick,
-  isActive,
 }: {
   id: string;
   name: string;
   handleClick: (id: string) => void;
-  isActive: boolean;
 }) => {
   const searchparams = useSearchParams();
   const categoryParam = searchparams.get("category");
@@ -22,7 +20,8 @@ const CategoryButton = ({
       }}
       className={`${
         id === categoryParam ? "text-[#512711] bg-[#e1cdad]" : "text-[#e1cdad]"
-      } px-4 py-2 my-2 rounded-lg capitalize whitespace-nowrap`}
+      } px-5 py-2 my-2 rounded-lg capitalize whitespace-nowrap text-[20px] `}
+      style={{ fontFamily: "Bebas Neue" }}
     >
       {name}
     </div>
