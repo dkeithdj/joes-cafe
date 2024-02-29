@@ -111,6 +111,18 @@ export const appRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const productExists = await ctx.prisma.product.findFirst({
+        where: { name: input.name },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exists`,
+          code: "CONFLICT",
+        });
+      }
       return await ctx.prisma.product.create({
         data: {
           name: input.name,
