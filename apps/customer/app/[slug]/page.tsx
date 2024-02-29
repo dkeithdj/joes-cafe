@@ -64,7 +64,16 @@ const ProductView = () => {
   return (
     <div>
       <div className="relative flex justify-center items-center bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] h-screen bg-no-repeat ">
-   
+           {/*This is the background */}
+          <div className="absolute w-full h-full z-0">
+          <Image 
+          className="w-full h-full object-cover sm " 
+          src="/background.png"
+          alt="background"
+          layout="fill"
+          />
+           {/*This is the logo */}
+          </div>
           <div className="absolute flex justify-center w-full select-none z-20">
             <Image
               className="absolute -top-[300px] w-64 object-cover "
@@ -74,10 +83,13 @@ const ProductView = () => {
               height={200}
             />
           </div>
-      
-
+        {/*This is the transparent background */}
+        <div className="box" style={{ width: '20rem', height: '20rem', position: 'relative' }}>
+        <div style={{ content: ' ', position: 'absolute', width: '20rem', height: '20rem', background: 'white', zIndex: '1', mixBlendMode: 'soft-light', borderRadius: '10px' }}></div>
+        </div>
+   
         <div className="absolute w-80 h-80 flex justify-center items-center select-none z-10">
-          <div className="relative w-full h-60 flex justify-center items-center">
+          <div className="relative w-full h-60 top-4 flex justify-center items-center">
             {/* <p className="name absolute top-16">WHAT SHOULD WE CALL YOU?</p> */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -86,20 +98,23 @@ const ProductView = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel className="flex justify-center text-sm">Name</FormLabel>
                       <FormControl>
                         <Input placeholder="customer name" {...field} />
                       </FormControl>
                       <FormDescription>
                         This is your name on the receipt.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs"/>
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isPending}>
+                <div className="flex justify-center mt-2">
+                  <Button type="submit" disabled={isPending}>
                   Submit
-                </Button>
+                  </Button>
+                </div>
+            
               </form>
             </Form>
           </div>
@@ -126,6 +141,7 @@ const ProductView = () => {
           {/*   </div> */}
           {/* </form> */}
         </div>
+      
       </div>
     </div>
   );
