@@ -25,15 +25,16 @@ const Categories = () => {
   // router.push("?");
   // console.log(active);
   return (
-    <div className="flex justify-between w-full gap-5 flex-wrap">
-      <div className="flex gap-2 overflow-auto">
+    <div className="flex top-0 w-full h-24 sm:h-24 bg-[#211d1c] drop-shadow-[0px_10px_10px_rgba(0,0,0,0.4)]">
+      <div className = "absolute bottom-0 max-w-full">
+        <div className="flex space-x-4 overflow-x-auto scrollbar-hide" id="style2">
         {data?.map((category) => (
           <div
-            className={`${
+            className={`mr-2 ${
               active.isSet && active.id === category.id
                 ? "text-[#512711] bg-[#e1cdad]"
                 : "text-[#e1cdad]"
-            } px-4 py-2 my-2 rounded-lg capitalize whitespace-nowrap`}
+            } px-5 py-2 my-2 rounded-lg capitalize whitespace-nowrap text-[20px] `}  style={{fontFamily:'Bebas Neue'}} 
             key={category.id}
             onClick={() => {
               setActive({
@@ -53,6 +54,7 @@ const Categories = () => {
             {category.name}
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
