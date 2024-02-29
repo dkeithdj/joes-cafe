@@ -68,9 +68,7 @@ const Products = ({ product }: { product: ProductOptions }) => {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-[50px]">
-                  Edit
-                </Button>
+                <div className="w-[50px]">Edit</div>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
