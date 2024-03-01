@@ -51,6 +51,9 @@ const getStatus = (): Prisma.Order_StatusCreateInput[] => [
   { id: 1, status: "Processing" },
   { id: 2, status: "Completed" },
   { id: 3, status: "Declined" },
+  { id: 4, status: "Preparing" },
+  { id: 5, status: "Brewing" },
+  { id: 6, status: "Accepted" },
 ];
 
 const getTable = (): Prisma.TableCreateInput[] => [

@@ -1,5 +1,4 @@
 import { publicProcedure } from ".";
-import { server } from "../server";
 
 // routes for admin
 const adminRouter = {
@@ -7,5 +6,4 @@ const adminRouter = {
     // ctx.req
     return { greeting: "hello world" };
   }),
-}
-
+};

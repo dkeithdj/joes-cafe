@@ -1,54 +1,63 @@
-import {
-  FastifyTRPCPluginOptions,
-  fastifyTRPCPlugin,
-} from "@trpc/server/adapters/fastify";
-import fastify from "fastify";
-import cookie, { FastifyCookieOptions } from "@fastify/cookie";
-import ws from "@fastify/websocket";
-import { connectDB } from "@repo/database";
 import fastifyCors from "@fastify/cors";
-import { AppRouter, appRouter } from "./router";
-import { createContext } from "./context";
-import NextAuthPlugin from "fastify-next-auth";
+import ws from "@fastify/websocket";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
+import fastify, { FastifyReply } from "fastify";
+import type { FastifyRequest } from "fastify/types/request";
 
-export const server = fastify({
-  maxParamLength: 5000,
-});
+import { appRouter } from "./router";
+import type { AppRouter } from "./router";
+import { createTRPCContext } from "./context";
 
-server.register(cookie, {
-  secret: "thequickbrownfox",
-  parseOptions: {},
-} as FastifyCookieOptions);
+export { appRouter, type AppRouter } from "./router";
+export { createTRPCContext } from "./context";
 
-server.register(ws);
-server.register(fastifyTRPCPlugin, {
-  prefix: "/trpc",
+/**
+ * Inference helpers for input types
+ * @example type HelloInput = RouterInputs['example']['hello']
+ **/
+export type RouterInputs = inferRouterInputs<AppRouter>;
+
+/**
+ * Inference helpers for output types
+ * @example type HelloOutput = RouterOutputs['example']['hello']
+ **/
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+const dev = process.env.NODE_ENV !== "production";
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+const prefix = "/trpc";
+const server = fastify({ logger: dev, maxParamLength: 5000 });
+
+void server.register(ws);
+void server.register(fastifyTRPCPlugin, {
+  prefix,
+  useWSS: true,
   trpcOptions: {
     router: appRouter,
-    createContext,
-    onError({ path, error }) {
-      // report to error monitoring
-      console.error(`Error in tRPC handler on path '${path}':`, error);
+    // ctx: createTRPCContext,
+    createContext: ({
+      req,
+      res,
+    }: {
+      req: FastifyRequest;
+      res: FastifyReply;
+    }) => {
+      return createTRPCContext({ req, res });
     },
-  } satisfies FastifyTRPCPluginOptions<AppRouter>["trpcOptions"],
-  useWSS: true,
+  },
 });
 
-// server.register(fastify,{
-//   secret: process.env.AUTH_SECRET as string,
-//   trustHost: process.env.AUTH_TRUST_HOST as string,
-// providers: [
-//     ],
-// })
-
-(async () => {
+const start = async () => {
   try {
-    await connectDB();
     await server.register(fastifyCors, {
       origin: [
-        "http://localhost:3001",
-        "http://localhost:3000",
-        "http://localhost:3002",
+        // "http://localhost:3001",
+        // "http://localhost:3000",
+        // "http://localhost:3002",
+        process.env.NEXT_ADMIN_URL as string,
+        process.env.NEXT_CUSTOMER_URL as string,
+        process.env.NEXT_KITCHEN_URL as string,
       ],
       credentials: true,
     });
@@ -58,4 +67,6 @@ server.register(fastifyTRPCPlugin, {
     server.log.error(err);
     process.exit(1);
   }
-})();
+};
+
+void start();

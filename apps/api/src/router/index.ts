@@ -1,49 +1,71 @@
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
-import { Prisma, Status, prisma } from "@repo/database";
+import { Status } from "@repo/database";
 import { z } from "zod";
-import { Context } from "../context/index.js";
+import { Context } from "../context";
+import fastify from "fastify";
+import { EventEmitter } from "stream";
+// import superjson from "superjson";
 
 const t = initTRPC.context<Context>().create();
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
+const ee = new EventEmitter();
+
 /* TODO: separate mutations and queries
  * <table>.<get/post/put/patch/delete>.<filter, e.g. by id, name, etc.>
  */
 
-type ItemView = {
-  id: string;
-  productId: string;
-  productName: string;
-  productImage: string;
-  productPrice: number;
-  totalQuantity: number;
-  totalAmount: number;
-  transactionId: string;
-};
 export const appRouter = router({
   hello: publicProcedure.query(({ ctx, input }) => {
     return { greeting: "hello world" };
   }),
-  getProducts: publicProcedure.query(async () => {
-    return await prisma.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
+  getProducts: publicProcedure
+    .input(z.string().nullable())
+    .query(async ({ input, ctx }) => {
+      console.log(typeof input);
+      const products = await ctx.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      if (input === null) {
+        return products;
+      }
+      const productsByCategory = await ctx.prisma.product.findMany({
+        where: {
+          category: {
+            id: input,
           },
         },
-        image: true,
-        isAvailable: true,
-      },
-    });
-  }),
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      return productsByCategory;
+    }),
   createTransaction: publicProcedure
     .input(
       z.object({
@@ -51,7 +73,7 @@ export const appRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const createTransaction = await prisma.transaction.create({
+      const createTransaction = await ctx.prisma.transaction.create({
         data: {
           customer: {
             create: {
@@ -64,19 +86,18 @@ export const appRouter = router({
           customer: true,
         },
       });
-      ctx.res
-        .setCookie("customer.transaction", createTransaction.id, {
-          maxAge: 60 * 60 * 24,
-          path: "/",
-        })
-        .setCookie("customer.customer", createTransaction.customer.id, {
-          maxAge: 60 * 60 * 24,
-          path: "/",
-        })
-        .setCookie("customer.name", createTransaction.customer.name, {
-          maxAge: 60 * 60 * 24,
-          path: "/",
-        });
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
+      );
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`,
+      );
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
+      );
       return createTransaction;
     }),
   createProduct: publicProcedure
@@ -89,18 +110,30 @@ export const appRouter = router({
         isAvailable: z.boolean(),
       }),
     )
-    .mutation(async (opts) => {
-      return await prisma.product.create({
+    .mutation(async ({ ctx, input }) => {
+      const productExists = await ctx.prisma.product.findFirst({
+        where: { name: input.name },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exists`,
+          code: "CONFLICT",
+        });
+      }
+      return await ctx.prisma.product.create({
         data: {
-          name: opts.input.name,
-          price: opts.input.price,
+          name: input.name,
+          price: input.price,
           category: {
             connect: {
-              id: opts.input.category,
+              id: input.category,
             },
           },
-          image: opts.input.image,
-          isAvailable: opts.input.isAvailable,
+          image: input.image,
+          isAvailable: input.isAvailable,
         },
       });
     }),
@@ -108,11 +141,11 @@ export const appRouter = router({
   getOrders: publicProcedure
     .input(
       z.object({
-        status: z.enum([Status.Declined, Status.Completed, Status.Processing]),
+        status: z.enum([Status.Processing, Status.Declined, Status.Accepted]),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const orders = await prisma.order.findMany({
+      const orders = await ctx.prisma.order.findMany({
         where: {
           status: {
             status: input.status,
@@ -159,17 +192,54 @@ export const appRouter = router({
           },
         },
       });
-      console.log(orders);
       return orders;
     }),
+  getKitchenOrders: publicProcedure.query(async ({ input, ctx }) => {
+    const orders = await ctx.prisma.order.findMany({
+      where: {
+        status: {
+          OR: [
+            { status: { equals: Status.Preparing } },
+            { status: { equals: Status.Brewing } },
+            { status: { equals: Status.Completed } },
+          ],
+        },
+      },
+      select: {
+        id: true,
+        table: {
+          select: {
+            number: true,
+          },
+        },
+        status: {
+          select: {
+            id: true,
+            status: true,
+          },
+        },
+        transaction: {
+          select: {
+            id: true,
+            customer: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return orders;
+  }),
   getOrderById: publicProcedure
     .input(
       z.object({
         orderId: z.string(),
       }),
     )
-    .query(async ({ input }) => {
-      const orders = await prisma.order.findFirst({
+    .query(async ({ ctx, input }) => {
+      const orders = await ctx.prisma.order.findFirst({
         where: {
           id: input.orderId,
         },
@@ -220,7 +290,7 @@ export const appRouter = router({
     .mutation(async ({ input, ctx }) => {
       const { tableId, transactionId, totalAmount } = input;
 
-      const order = await prisma.order.create({
+      const order = await ctx.prisma.order.create({
         data: {
           transaction: {
             connect: {
@@ -240,10 +310,28 @@ export const appRouter = router({
           totalAmount: totalAmount,
         },
       });
+
       console.log(order);
-      ctx.res.setCookie("orderId", order.id);
+      ctx.res.header(
+        "Set-Cookie",
+        `orderId=${order.id}; Path=/; Max-Age=86400`,
+      );
+
+      ee.emit("createOrder", order.statusId);
+
       return order;
     }),
+  onCreateOrder: publicProcedure.subscription(() => {
+    return observable<{ status: number }>((emit) => {
+      const onCreateOrder = (data: { status: number }) => {
+        emit.next(data);
+      };
+      ee.on("createOrder", onCreateOrder);
+      return () => {
+        ee.off("createOrder", onCreateOrder);
+      };
+    });
+  }),
   updateOrder: publicProcedure
     .input(
       z.object({
@@ -256,7 +344,7 @@ export const appRouter = router({
     .mutation(async ({ input, ctx }) => {
       const { orderId, staffId, paymentId, statusId } = input;
 
-      const updateOrder = await prisma.order.update({
+      const updateOrder = await ctx.prisma.order.update({
         where: {
           id: orderId,
         },
@@ -278,18 +366,60 @@ export const appRouter = router({
           },
         },
       });
+      ee.emit("updateOrder", updateOrder.statusId);
+
       return updateOrder;
     }),
-  getStatus: publicProcedure.query(() => {}),
+  updateKitchenOrder: publicProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        statusId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { orderId, statusId } = input;
+
+      const updateOrder = await ctx.prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: {
+            connect: {
+              id: Number(statusId),
+            },
+          },
+        },
+      });
+      ee.emit("updateOrder", updateOrder.statusId);
+
+      return updateOrder;
+    }),
+  onUpdateOrder: publicProcedure.subscription(() => {
+    return observable<{ status: number }>((emit) => {
+      const onUpdateOrder = (data: { status: number }) => {
+        emit.next(data);
+      };
+      ee.on("updateOrder", onUpdateOrder);
+      return () => {
+        ee.off("updateOrder", onUpdateOrder);
+      };
+    });
+  }),
+  getStatus: publicProcedure.query(async ({ input, ctx }) => {
+    const status = await ctx.prisma.order_Status.findMany();
+    return status;
+  }),
   getPaymentMethod: publicProcedure.query(async ({ input, ctx }) => {
-    const paymentMethod = await prisma.paymentMethod.findMany();
+    const paymentMethod = await ctx.prisma.paymentMethod.findMany();
     return paymentMethod;
   }),
-  getStaff: publicProcedure.query(async () => {
-    return await prisma.staff.findMany();
+  getStaff: publicProcedure.query(async ({ input, ctx }) => {
+    return await ctx.prisma.staff.findMany();
   }),
   getCategories: publicProcedure.query(async ({ input, ctx }) => {
-    return await prisma.category.findMany();
+    return await ctx.prisma.category.findMany();
   }),
   addItem: publicProcedure
     .input(
@@ -303,7 +433,7 @@ export const appRouter = router({
     .mutation(async ({ input, ctx }) => {
       const { productId, transactionId, customerId } = input;
       // if (!itemId) {
-      const items = await prisma.items.create({
+      const items = await ctx.prisma.items.create({
         data: {
           product: {
             connect: {
@@ -326,12 +456,26 @@ export const appRouter = router({
           },
         },
       });
+      return items;
     }),
   getItem: publicProcedure
     .input(z.object({ transactionId: z.string() }))
     .query(async ({ input, ctx }) => {
-      const itemsView = await prisma.itemsview.findMany({
+      const itemsView = await ctx.prisma.itemsview.findMany({
         where: { transactionid: input.transactionId },
+      });
+
+      return itemsView;
+    }),
+  getKitchenItems: publicProcedure
+    .input(z.object({ transactionId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const itemsView = await ctx.prisma.itemsview.findMany({
+        where: { transactionid: input.transactionId },
+        select: {
+          productname: true,
+          totalquantity: true,
+        },
       });
 
       return itemsView;
@@ -339,7 +483,7 @@ export const appRouter = router({
   deleteItem: publicProcedure
     .input(z.object({ itemId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      const deleteItem = await prisma.items.delete({
+      const deleteItem = await ctx.prisma.items.delete({
         where: {
           id: input.itemId,
         },
@@ -354,7 +498,7 @@ export const appRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const updateTransaction = await prisma.transaction.create({
+      const updateTransaction = await ctx.prisma.transaction.create({
         data: {
           customer: {
             connectOrCreate: {
@@ -369,15 +513,14 @@ export const appRouter = router({
         },
       });
 
-      // ctx.res
-      //   .setCookie("customer.transaction", createTransaction.id, {
-      ctx.res.setCookie("customer.transaction", updateTransaction.id, {
-        maxAge: 60 * 60 * 24,
-      });
-      ctx.res.setCookie("customer.customer", updateTransaction.customerId, {
-        maxAge: 60 * 60 * 24,
-      });
-
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
+      );
+      ctx.res.header(
+        "Set-Cookie",
+        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
+      );
       return updateTransaction;
     }),
   randomNumber: publicProcedure.subscription(() => {

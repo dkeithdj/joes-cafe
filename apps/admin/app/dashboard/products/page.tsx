@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@ui/components/ui/dialog";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { trpc } from "@admin/hooks/trpc";
 const AdminProducts = () => {
   const {
@@ -20,11 +20,11 @@ const AdminProducts = () => {
     isLoading,
     isError,
     error,
-  } = trpc.getProducts.useQuery()
+  } = trpc.getProducts.useQuery(null);
 
   const [availability, setAvailability] = useState(true);
 
-  // if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div className="w-auto mx-14">
       {/* <Dashboard /> */}
@@ -33,7 +33,7 @@ const AdminProducts = () => {
         <div className="flex flex-row items-center gap-x-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline">Add Product</Button>
+              <div>Add Product</div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
@@ -73,10 +73,7 @@ const AdminProducts = () => {
         {isSuccess &&
           products
             .filter((product) => availability === product.isAvailable)
-            .map((product) => (
-              // FIX: types
-              <Products key={product.id} product={product} />
-            ))}
+            .map((product) => <Products key={product.id} product={product} />)}
       </div>
     </div>
   );

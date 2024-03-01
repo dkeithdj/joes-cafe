@@ -1,9 +1,16 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink, getFetch, loggerLink } from "@trpc/client";
+import {
+  httpBatchLink,
+  getFetch,
+  loggerLink,
+  splitLink,
+  wsLink,
+  createWSClient,
+} from "@trpc/client";
 import { useState } from "react";
-import superjson from "superjson";
+// import superjson from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { trpc } from "@admin/hooks/trpc";
 
@@ -14,18 +21,38 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     () =>
       new QueryClient({
         defaultOptions: { queries: { staleTime: 5000 } },
-      })
+      }),
   );
 
-  const url = process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : "http://localhost:3000/trpc/";
+  // const url = process.env.NEXT_PUBLIC_VERCEL_URL
+  //   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  //   : "http://localhost:3000/trpc/";
+  const url = "http://localhost:3000/trpc/";
+
+  const urlEnd = `localhost:3000/trpc`;
+  const wsClient = createWSClient({ url: `ws://${urlEnd}` });
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         loggerLink({
           enabled: () => true,
+        }),
+        splitLink({
+          condition(op) {
+            return op.type === "subscription";
+          },
+          true: wsLink({ client: wsClient }),
+          false: httpBatchLink({
+            url: `http://${urlEnd}`,
+            fetch: async (input, init?) => {
+              const fetch = getFetch();
+              return fetch(input, {
+                ...init,
+                credentials: "include",
+              });
+            },
+          }),
         }),
         httpBatchLink({
           url,
@@ -38,8 +65,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
           },
         }),
       ],
-      transformer: superjson,
-    })
+    }),
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

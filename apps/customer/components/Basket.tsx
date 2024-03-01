@@ -189,10 +189,8 @@ const Basket = () => {
         <div className="flex flex-grow w-full justify-end pt-2">
           <Dialog>
             {items?.length !== 0 && (
-              <DialogTrigger className="">
-                <div className="">
-                  <Button className="">Proceed to Checkout</Button>
-                </div>
+              <DialogTrigger className="outline-none focus:outline-none text-center bg-[#e1cdad] font-semibold text-md hover:text-gray-700 focus:text-black  md:text-basecursor-default flex items-center text-gray-900 p-2 rounded-lg">
+                Proceed to Checkout
               </DialogTrigger>
             )}
             <DialogContent>

@@ -17,9 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <TrpcProvider>
-          <QueryClientProvider client={queryClient}>
-            <main className="bg-[#f9ebd3]">{children}</main>
-          </QueryClientProvider>
+          {/* <QueryClientProvider client={queryClient}> */}
+          <main className="bg-[#f9ebd3] h-screen">{children}</main>
+          {/* </QueryClientProvider> */}
         </TrpcProvider>
       </body>
     </html>

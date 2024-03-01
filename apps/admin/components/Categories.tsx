@@ -1,12 +1,12 @@
 "use client";
-import { useCategories } from "@adminhooks/useCategories";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
+import { trpc } from "@admin/hooks/trpc";
 
 const Categories = () => {
   const router = useRouter();
-  const { data } = useCategories();
+  const { data } = trpc.getCategories.useQuery();
 
   const [categoryId, setCategoryId] = useState("");
   const [isActive, setIsActive] = useState(false);

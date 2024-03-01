@@ -1,13 +1,17 @@
 "use client";
 import Loading from "@admin/components/Loading";
 import _Orders from "@admin/components/admin/_Orders";
-import { trpc } from "@admin/hooks/trpc";
+import { RouterInputs, trpc } from "@admin/hooks/trpc";
 import { Status } from "@repo/database";
 import React, { useState } from "react";
 
+type StatusOptions = RouterInputs["getOrders"]["status"];
+
 const AdminOrders = () => {
   const [staff, setStaff] = useState("");
-  const [status, setStatus] = useState<Status>(Status.Processing);
+  const [status, setStatus] = useState<StatusOptions>(Status.Processing);
+
+  const utils = trpc.useUtils();
 
   const { data, isSuccess: staffSuccess } = trpc.getStaff.useQuery();
 
@@ -16,6 +20,12 @@ const AdminOrders = () => {
     isSuccess: ordersSuccess,
     isLoading,
   } = trpc.getOrders.useQuery({ status: status });
+
+  trpc.onCreateOrder.useSubscription(undefined, {
+    onData: (data) => {
+      utils.getOrders.invalidate();
+    },
+  });
 
   const edit = data?.map((person) => ({
     value: person.id,
@@ -60,8 +70,8 @@ const AdminOrders = () => {
             Processing
           </button>
           <button
-            disabled={status === Status.Completed}
-            onClick={() => setStatus(Status.Completed)}
+            disabled={status === Status.Accepted}
+            onClick={() => setStatus(Status.Accepted)}
             className="inline-flex disabled:bg-[#512711] disabled:text-[#E1CDAD] items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none "
           >
             Completed

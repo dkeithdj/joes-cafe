@@ -67,7 +67,6 @@ const Checkout = ({
     // const data = await orderData.json();
     // console.log(data);
     // console.log(data.id);
-    // Cookies.set("orderId", data.id);
     router.push(`${pathname}/checkout`);
     // }
   };

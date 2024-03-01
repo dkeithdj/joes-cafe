@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ui/components/ui/table";
-import { trpc, type ReactQueryOptions, RouterOutputs } from "@admin/hooks/trpc";
+import { trpc, RouterOutputs } from "@admin/hooks/trpc";
 
 type OrderOptions = RouterOutputs["getOrders"][0];
 
@@ -20,7 +20,6 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
   const [status, setStatus] = useState("");
 
   const { data: dataPaymethod } = trpc.getPaymentMethod.useQuery();
-  console.log(dataPaymethod);
 
   const { mutate: updateOrder } = trpc.updateOrder.useMutation({
     onSuccess: () => {
@@ -28,7 +27,6 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
       utils.getOrders.invalidate();
     },
   });
-  console.log("hihi", staff);
 
   const handleOrderProcess = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +76,8 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
         </div>
         <div className="col-span-1 flex ml-5 items-end w-auto h-12">
           <div className="text-lg text-[#512711]">
-            Order Date: <span className="font-bold">{order.date}</span>
+            Order Date:{" "}
+            <span className="font-bold">{order.date.toString()}</span>
           </div>
         </div>
       </div>
@@ -167,7 +166,7 @@ const _Orders = ({ order, staff }: { order: OrderOptions; staff: string }) => {
                 <div className="w-24 h-9 bg-[#664229]">
                   <button
                     onClick={(e) => setStatus(e.currentTarget.value)}
-                    value={"2"}
+                    value={"4"}
                     className="w-full h-full rounded-br-[7px] rounded-tr-[7px] text-sm text-[#F9EBD3] outline outline-[#664229] hover:bg-[#512711]"
                   >
                     Accept
