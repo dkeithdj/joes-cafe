@@ -53,6 +53,7 @@ const AddProduct = () => {
     },
   });
 
+  // TODO: create api to save image
   const onDrop = useCallback((acceptedFiles: File[]) => {
     console.log(acceptedFiles);
     // setPreview(acceptedFiles.map((file) => Object.assign(file,{preview: URL.createObjectURL(file)}) ));
