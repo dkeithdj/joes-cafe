@@ -22,7 +22,7 @@ const KitchenPage = () => {
 
   // moves from Preparing -> Brewing
   const handleIncoming = (orderId: string) => {
-    // 6: Brewing
+    // 5: Brewing
     updateOrder({ orderId: orderId, statusId: "5" });
   };
   // moves from Brewing -> Completed
