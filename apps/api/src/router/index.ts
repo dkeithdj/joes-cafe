@@ -523,6 +523,10 @@ export const appRouter = router({
       );
       return updateTransaction;
     }),
+  getTables: publicProcedure.query(async ({ input, ctx }) => {
+    const tables = await ctx.prisma.table.findMany();
+    return tables;
+  }),
   randomNumber: publicProcedure.subscription(() => {
     return observable<{ randomNumber: number }>((emit) => {
       const timer = setInterval(() => {
