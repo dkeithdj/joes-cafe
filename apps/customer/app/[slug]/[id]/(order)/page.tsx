@@ -11,13 +11,15 @@ const CustomerOrder = () => {
   const router = useRouter();
   const searchparams = useSearchParams();
 
+  const categoryParam = searchparams.get("category");
+
   const {
     data: products,
     isSuccess,
     isLoading,
     isError,
     error,
-  } = trpc.getProducts.useQuery();
+  } = trpc.getProducts.useQuery(categoryParam!);
 
   const customerCookie = Cookies.get("customer.customer");
 
@@ -25,25 +27,17 @@ const CustomerOrder = () => {
     if (customerCookie === undefined) router.push(`/${params.slug}`);
   }, [customerCookie]);
 
-  // if (!customerCookie) router.push(`/${params.slug}`);
-
   if (isLoading) return <div>Loading...</div>;
 
   if (isError) return <div>Error. Try refreshing</div>;
-
-  const categoryParam = searchparams.get("category");
 
   return (
     <div className="text-white ">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center ">
         {isSuccess &&
-          products
-            .filter((filter) =>
-              categoryParam && categoryParam?.length > 0
-                ? filter.category.id === categoryParam
-                : filter,
-            )
-            .map((product) => <Products key={product.id} product={product} />)}
+          products?.map((product) => (
+            <Products key={product.id} product={product} />
+          ))}
       </div>
     </div>
   );

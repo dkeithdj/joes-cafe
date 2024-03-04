@@ -22,23 +22,50 @@ export const appRouter = router({
   hello: publicProcedure.query(({ ctx, input }) => {
     return { greeting: "hello world" };
   }),
-  getProducts: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.product.findMany({
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
+  getProducts: publicProcedure
+    .input(z.string().nullable())
+    .query(async ({ input, ctx }) => {
+      console.log(typeof input);
+      const products = await ctx.prisma.product.findMany({
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      if (input === null) {
+        return products;
+      }
+      const productsByCategory = await ctx.prisma.product.findMany({
+        where: {
+          category: {
+            id: input,
           },
         },
-        image: true,
-        isAvailable: true,
-      },
-    });
-  }),
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          image: true,
+          isAvailable: true,
+        },
+      });
+      return productsByCategory;
+    }),
   createTransaction: publicProcedure
     .input(
       z.object({
@@ -59,11 +86,6 @@ export const appRouter = router({
           customer: true,
         },
       });
-      ctx.customer = {
-        transactionId: createTransaction.id,
-        id: createTransaction.customer.id,
-        name: createTransaction.customer.name,
-      };
       ctx.res.header(
         "Set-Cookie",
         `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
@@ -76,50 +98,7 @@ export const appRouter = router({
         "Set-Cookie",
         `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
       );
-      // ctx.res.cookie("hi", "hello") as FastifyReply;
-      // ctx.res.setCookie("customer.transaction", createTransaction.id, {
-      //   maxAge: 60 * 60 * 24,
-      //   path: "/",
-      // });
-      // ctx.res.setCookie("customer.transaction", createTransaction.id, {
-      //   maxAge: 60 * 60 * 24,
-      //   path: "/",
-      // });
-      // ctx.res.setCookie("customer.customer", createTransaction.customer.id, {
-      //   maxAge: 60 * 60 * 24,
-      //   path: "/",
-      // });
-      // ctx.res.setCookie("customer.name", createTransaction.customer.name, {
-      //   maxAge: 60 * 60 * 24,
-      //   path: "/",
-      // });
       return createTransaction;
-    }),
-  getSession: publicProcedure.query(({ input, ctx }) => {
-    const session = ctx.res.getHeaders();
-    return session;
-  }),
-  setSession: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string(),
-        transactionId: z.string().optional(),
-        orderId: z.string().optional(),
-      }),
-    )
-    .mutation(({ input, ctx }) => {
-      if (!ctx.customer) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Customer not found",
-        });
-      }
-      ctx.customer = {
-        ...input,
-        ...ctx.customer,
-      };
-      return ctx.customer;
     }),
   createProduct: publicProcedure
     .input(
@@ -132,6 +111,18 @@ export const appRouter = router({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const productExists = await ctx.prisma.product.findFirst({
+        where: { name: input.name },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exists`,
+          code: "CONFLICT",
+        });
+      }
       return await ctx.prisma.product.create({
         data: {
           name: input.name,
@@ -328,10 +319,6 @@ export const appRouter = router({
 
       ee.emit("createOrder", order.statusId);
 
-      // ctx.customer.orderId = order.id;
-      // ctx.res.setCookie("orderId", order.id, {
-      //   maxAge: 60 * 60 * 24,
-      // });
       return order;
     }),
   onCreateOrder: publicProcedure.subscription(() => {
@@ -526,14 +513,6 @@ export const appRouter = router({
         },
       });
 
-      // ctx.res
-      //   .setCookie("customer.transaction", createTransaction.id, {
-      // ctx.res.setCookie("customer.transaction", updateTransaction.id, {
-      //   maxAge: 60 * 60 * 24,
-      // });
-      // ctx.res.setCookie("customer.customer", updateTransaction.customerId, {
-      //   maxAge: 60 * 60 * 24,
-      // });
       ctx.res.header(
         "Set-Cookie",
         `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
@@ -542,17 +521,12 @@ export const appRouter = router({
         "Set-Cookie",
         `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
       );
-      if (!ctx.customer) {
-        throw new TRPCError({ code: "UNAUTHORIZED" });
-      }
-      ctx.customer = {
-        ...ctx.customer,
-        transactionId: updateTransaction.id,
-        id: updateTransaction.customerId,
-      };
-
       return updateTransaction;
     }),
+  getTables: publicProcedure.query(async ({ input, ctx }) => {
+    const tables = await ctx.prisma.table.findMany();
+    return tables;
+  }),
   randomNumber: publicProcedure.subscription(() => {
     return observable<{ randomNumber: number }>((emit) => {
       const timer = setInterval(() => {

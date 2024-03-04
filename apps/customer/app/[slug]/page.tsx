@@ -31,8 +31,6 @@ const ProductView = () => {
 
   const customerCookies = Cookies.get("customer.customer");
 
-  const { data: session } = trpc.getSession.useQuery();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -64,30 +62,45 @@ const ProductView = () => {
   return (
     <div>
       <div className="relative flex justify-center items-center bg-gradient-to-t from-[#E7D6B8] to-[#D2B48C] h-screen bg-no-repeat ">
-           {/*This is the background */}
-          <div className="absolute w-full h-full z-0">
-          <Image 
-          className="w-full h-full object-cover sm " 
-          src="/background.png"
-          alt="background"
-          layout="fill"
+        {/*This is the background */}
+        <div className="absolute w-full h-full z-0">
+          <Image
+            className="w-full h-full object-cover sm "
+            src="/background.png"
+            alt="background"
+            layout="fill"
           />
-           {/*This is the logo */}
-          </div>
-          <div className="absolute flex justify-center w-full select-none z-20">
-            <Image
-              className="absolute -top-[300px] w-64 object-cover "
-              src="/Joes-Logo-Whitebg.png"
-              alt="joes"
-              width={200}
-              height={200}
-            />
-          </div>
-        {/*This is the transparent background */}
-        <div className="box" style={{ width: '20rem', height: '20rem', position: 'relative' }}>
-        <div style={{ content: ' ', position: 'absolute', width: '20rem', height: '20rem', background: 'white', zIndex: '1', mixBlendMode: 'soft-light', borderRadius: '10px' }}></div>
         </div>
-   
+        {/*This is the logo */}
+
+        <div className="absolute flex justify-center w-full select-none z-20">
+          <Image
+            className="absolute -top-[300px] w-64 object-cover "
+            src="/Joes-Logo-Whitebg.png"
+            alt="joes"
+            width={200}
+            height={200}
+          />
+        </div>
+        {/*This is the transparent background */}
+        <div
+          className="box"
+          style={{ width: "20rem", height: "20rem", position: "relative" }}
+        >
+          <div
+            style={{
+              content: " ",
+              position: "absolute",
+              width: "20rem",
+              height: "20rem",
+              background: "white",
+              zIndex: "1",
+              mixBlendMode: "soft-light",
+              borderRadius: "10px",
+            }}
+          ></div>
+        </div>
+
         <div className="absolute w-80 h-80 flex justify-center items-center select-none z-10">
           <div className="relative w-full h-60 top-4 flex justify-center items-center">
             {/* <p className="name absolute top-16">WHAT SHOULD WE CALL YOU?</p> */}
@@ -98,23 +111,24 @@ const ProductView = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex justify-center text-sm">Name</FormLabel>
+                      <FormLabel className="flex justify-center text-sm">
+                        Name
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="customer name" {...field} />
                       </FormControl>
                       <FormDescription>
                         This is your name on the receipt.
                       </FormDescription>
-                      <FormMessage className="text-xs"/>
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-center mt-2">
+                <div className="flex justify-center">
                   <Button type="submit" disabled={isPending}>
-                  Submit
+                    Submit
                   </Button>
                 </div>
-            
               </form>
             </Form>
           </div>
@@ -141,7 +155,6 @@ const ProductView = () => {
           {/*   </div> */}
           {/* </form> */}
         </div>
-      
       </div>
     </div>
   );

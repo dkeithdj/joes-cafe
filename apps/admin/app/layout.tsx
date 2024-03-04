@@ -3,6 +3,7 @@ import "@repo/ui/globals.css";
 // import Provider from "@admin/components/Provider";
 import _Dashboard from "@admin/components/_Dashboard";
 import { TrpcProvider } from "@admin/components/TrpcProvider";
+import { Toaster } from "@ui/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -18,6 +19,7 @@ export default function RootLayout({
           <main className="bg-[#f9ebd3]">{children}</main>
           {/* </QueryClientProvider> */}
           {/* </Provider> */}
+          <Toaster />
         </TrpcProvider>
       </body>
     </html>

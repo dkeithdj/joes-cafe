@@ -1,7 +1,5 @@
 import type { AppRouter } from "@repo/api/src/router";
 
-// import { httpBatchLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
 import {
   createTRPCReact,
   type inferReactQueryProcedureOptions,
