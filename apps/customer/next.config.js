@@ -2,4 +2,7 @@
 module.exports = {
   transpilePackages: ["@repo/ui"],
   reactStrictMode: true,
+  images: {
+    domains: ["localhost"],
+  },
 };
