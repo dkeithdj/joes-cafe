@@ -50,12 +50,13 @@ const Products = ({ product }: { product: ProductOptions }) => {
   return (
     <Card className=" h-[150px] max-w-[500px] rounded-[24px] flex flex-row items-center  space-x-2">
       <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
-        <Image
-          // src={"/Joes-Logo-Whitebg.png"}
-          src={product.image || "/Joes-Logo-Whitebg.png"}
-          alt="coffee"
-          width={130}
-          height={130}
+        <img
+          // FIXME: do environment variable
+          src={
+            (product.image && `http://localhost:3000/${product.image}?r=45`) ||
+            "/Joes-Logo-Whitebg.png"
+          }
+          alt={product.name}
         />
       </div>
       <div className="">

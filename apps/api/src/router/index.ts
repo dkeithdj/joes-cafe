@@ -5,6 +5,8 @@ import { z } from "zod";
 import { Context } from "../context";
 import fastify from "fastify";
 import { EventEmitter } from "stream";
+import fs, { readFileSync } from "fs";
+
 // import superjson from "superjson";
 
 const t = initTRPC.context<Context>().create();
@@ -25,7 +27,6 @@ export const appRouter = router({
   getProducts: publicProcedure
     .input(z.string().nullable())
     .query(async ({ input, ctx }) => {
-      console.log(typeof input);
       const products = await ctx.prisma.product.findMany({
         select: {
           id: true,
@@ -70,7 +71,7 @@ export const appRouter = router({
     .input(
       z.object({
         name: z.string(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const createTransaction = await ctx.prisma.transaction.create({
@@ -88,15 +89,15 @@ export const appRouter = router({
       });
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
+        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`,
+        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
+        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`
       );
       return createTransaction;
     }),
@@ -108,7 +109,7 @@ export const appRouter = router({
         category: z.string(),
         image: z.string(),
         isAvailable: z.boolean(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const productExists = await ctx.prisma.product.findFirst({
@@ -137,12 +138,68 @@ export const appRouter = router({
         },
       });
     }),
+  editProduct: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        price: z.number(),
+        category: z.string(),
+        image: z.string(),
+        isAvailable: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // const idExist = await ctx.prisma.product.findFirst({
+      //   where: {
+      //     id: input.id,
+      //   },
+      //   select: {
+      //     name: true
+      //   }
+      // })
+      // idExist?.name
+      const productExists = await ctx.prisma.product.findFirst({
+        where: {
+          name: input.name,
+          NOT: {
+            id: input.id,
+          },
+        },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exist from another product`,
+          code: "CONFLICT",
+        });
+      }
+      const editProduct = ctx.prisma.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          price: input.price,
+          category: {
+            connect: {
+              id: input.category,
+            },
+          },
+          image: input.image,
+          isAvailable: input.isAvailable,
+        },
+      });
+      return editProduct;
+    }),
 
   getOrders: publicProcedure
     .input(
       z.object({
         status: z.enum([Status.Processing, Status.Declined, Status.Accepted]),
-      }),
+      })
     )
     .query(async ({ input, ctx }) => {
       const orders = await ctx.prisma.order.findMany({
@@ -236,7 +293,7 @@ export const appRouter = router({
     .input(
       z.object({
         orderId: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const orders = await ctx.prisma.order.findFirst({
@@ -285,7 +342,7 @@ export const appRouter = router({
         tableId: z.string(),
         transactionId: z.string(),
         totalAmount: z.number(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { tableId, transactionId, totalAmount } = input;
@@ -311,10 +368,9 @@ export const appRouter = router({
         },
       });
 
-      console.log(order);
       ctx.res.header(
         "Set-Cookie",
-        `orderId=${order.id}; Path=/; Max-Age=86400`,
+        `orderId=${order.id}; Path=/; Max-Age=86400`
       );
 
       ee.emit("createOrder", order.statusId);
@@ -339,7 +395,7 @@ export const appRouter = router({
         staffId: z.string(),
         paymentId: z.string(),
         statusId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, staffId, paymentId, statusId } = input;
@@ -375,7 +431,7 @@ export const appRouter = router({
       z.object({
         orderId: z.string(),
         statusId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, statusId } = input;
@@ -428,7 +484,7 @@ export const appRouter = router({
         productId: z.string(),
         transactionId: z.string(),
         customerId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { productId, transactionId, customerId } = input;
@@ -495,7 +551,7 @@ export const appRouter = router({
       z.object({
         id: z.string(),
         name: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const updateTransaction = await ctx.prisma.transaction.create({
@@ -515,14 +571,18 @@ export const appRouter = router({
 
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
+        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
+        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`
       );
       return updateTransaction;
     }),
+  getTables: publicProcedure.query(async ({ input, ctx }) => {
+    const tables = await ctx.prisma.table.findMany();
+    return tables;
+  }),
   randomNumber: publicProcedure.subscription(() => {
     return observable<{ randomNumber: number }>((emit) => {
       const timer = setInterval(() => {

@@ -35,6 +35,7 @@
       "cache": false,
       "persistent": true
     },
+    "db:migrate:dev": {},
     "db:migrate:deploy": {},
     "db:push": {
       "cache": false

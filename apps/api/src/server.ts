@@ -1,5 +1,8 @@
 import fastifyCors from "@fastify/cors";
 import ws from "@fastify/websocket";
+import multipart from "@fastify/multipart";
+import fastifyStatic from "@fastify/static";
+import fastifyModernImages from "fastify-modern-images";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import fastify, { FastifyReply } from "fastify";
@@ -8,6 +11,11 @@ import type { FastifyRequest } from "fastify/types/request";
 import { appRouter } from "./router";
 import type { AppRouter } from "./router";
 import { createTRPCContext } from "./context";
+import { promisify } from "util";
+import { pipeline } from "stream";
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
 
 export { appRouter, type AppRouter } from "./router";
 export { createTRPCContext } from "./context";
@@ -28,8 +36,17 @@ const dev = process.env.NODE_ENV !== "production";
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const prefix = "/trpc";
 const server = fastify({ logger: dev, maxParamLength: 5000 });
+const pump = promisify(pipeline);
 
 void server.register(ws);
+void server.register(multipart);
+void server.register(fastifyStatic, {
+  root: path.join(__dirname, "..", "..", "..", "data"),
+  prefix: "/public/",
+});
+void server.register(fastifyModernImages, {
+  quality: "6",
+});
 void server.register(fastifyTRPCPlugin, {
   prefix,
   useWSS: true,
@@ -46,6 +63,58 @@ void server.register(fastifyTRPCPlugin, {
       return createTRPCContext({ req, res });
     },
   },
+});
+
+server.post("/api/uploadProductImage", async (req, reply) => {
+  const parts = await req.parts();
+
+  let fileName = "";
+  for await (const part of parts) {
+    if (part.type === "file") {
+      const image = part.filename.split(".");
+      const dir = path.join(__dirname, "..", "..", "..", "data", fileName);
+
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+      const imagePath = `${fileName}.${image[1]}`;
+
+      await pump(part.file, fs.createWriteStream(path.join(dir, imagePath)));
+
+      return reply.send({
+        imagePath: `public/${fileName}/${fileName}.${image[1]}`,
+      });
+    } else {
+      const { name }: { name: string } = JSON.parse(part.value as string);
+      fileName = name.toLowerCase().trim().replace(/ +/g, "_");
+    }
+  }
+});
+// FIXME: delete/override previous file
+server.patch("/api/uploadProductImage/:id", async (req, reply) => {
+  const { id } = req.params as { id: string };
+  console.log(id);
+  const parts = await req.parts();
+
+  let fileName = "";
+  for await (const part of parts) {
+    if (part.type === "file") {
+      const image = part.filename.split(".");
+      const dir = path.join(__dirname, "..", "..", "..", "data", fileName);
+
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+      const imagePath = `${fileName}.${image[1]}`;
+
+      await pump(part.file, fs.createWriteStream(path.join(dir, imagePath)));
+
+      return reply.send({
+        imagePath: `public/${fileName}/${fileName}.${image[1]}`,
+      });
+    } else {
+      const { name }: { name: string } = JSON.parse(part.value as string);
+      fileName = name.toLowerCase().trim().replace(/ +/g, "_");
+    }
+  }
 });
 
 const start = async () => {
