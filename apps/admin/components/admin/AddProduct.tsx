@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Button } from "@ui/components/ui/button";
 import { DialogClose, DialogFooter } from "@ui/components/ui/dialog";
 import { Label } from "@ui/components/ui/label";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,36 +25,72 @@ import {
   SelectValue,
 } from "@ui/components/ui/select";
 import Image from "next/image";
-import { trpc } from "@admin/hooks/trpc";
+import { RouterInputs, trpc } from "@admin/hooks/trpc";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpg", "image/jpeg"];
+const MAX_IMAGE_SIZE = 4; //In MegaBytes
+
+const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
+  const result = sizeInBytes / (1024 * 1024);
+  return +result.toFixed(decimalsNum);
+};
+
 const formSchema = z.object({
   name: z.string().min(1, { message: "Product name is required" }),
   category: z.string().min(1, { message: "Select a category" }),
   price: z.coerce.number().positive(),
-  image: z.any(),
+  image: z
+    .custom<FileList>()
+    .refine((files) => {
+      return Array.from(files ?? []).length !== 0;
+    }, "Image is required")
+    .refine((files) => {
+      return Array.from(files ?? []).every(
+        (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
+      );
+    }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
+    .refine((files) => {
+      return Array.from(files ?? []).every((file) =>
+        ACCEPTED_IMAGE_TYPES.includes(file.type),
+      );
+    }, "File type is not supported"),
   isAvailable: z.boolean(),
 });
 
+function getImageData(event: ChangeEvent<HTMLInputElement>) {
+  // FileList is immutable, so we need to create a new one
+  const dataTransfer = new DataTransfer();
+
+  // Add newly uploaded images
+  Array.from(event.target.files!).forEach((image) =>
+    dataTransfer.items.add(image),
+  );
+
+  const files = dataTransfer.files;
+  const displayUrl = URL.createObjectURL(event.target.files![0]);
+
+  return { files, displayUrl };
+}
 const AddProduct = () => {
   const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
-
+  // const [preview, setPreview] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       category: "",
       price: 0,
-      image: "",
       isAvailable: true,
     },
   });
 
-  // TODO: create api to save image
+  // FIX: create api to save image
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     console.log(acceptedFiles);
     // setPreview(acceptedFiles.map((file) => Object.assign(file,{preview: URL.createObjectURL(file)}) ));
@@ -81,12 +118,25 @@ const AddProduct = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { name, category, price, image, isAvailable } = values;
-    mutate({
-      name: name,
-      category: category,
-      price: price,
-      image: image,
-      isAvailable: isAvailable,
+
+    const formData = new FormData();
+    formData.append("file", image[0]);
+    formData.append("productName", JSON.stringify({ name: name }));
+
+    fetch(`http://localhost:3000/api/uploadProductImage`, {
+      method: "POST",
+      body: formData,
+    }).then((res) => {
+      if (res.ok) {
+        console.log(res);
+        // mutate({
+        //   name: name,
+        //   category: category,
+        //   price: price,
+        //   image: "hi",
+        //   isAvailable: isAvailable,
+        // });
+      }
     });
   };
 
@@ -94,34 +144,73 @@ const AddProduct = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-3 gap-1.5">
-          <div
-            {...getRootProps({
-              className:
-                "flex justify-center items-center rounded-lg row-span-full bg-[#f9ebd3] h-[180px]",
-            })}
-          >
-            <Input
-              {...getInputProps()}
-              className="w-24 h-24 opacity-0 absolute"
-            />
-            <Label htmlFor="product-image">
-              {preview ? (
-                <img
-                  className="cursor-pointer object-cover h-[180px] rounded-lg"
-                  src={preview as string}
-                  alt={acceptedFiles[0]?.name}
-                />
-              ) : (
-                <Image
-                  className="w-24 h-24 cursor-pointer"
-                  src={"/add.svg"}
-                  alt="add"
-                  width={100}
-                  height={100}
-                />
-              )}
-            </Label>
-          </div>
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field: { onChange, value, ...rest } }) => (
+              <FormItem className="flex flex-col justify-center items-center rounded-lg row-span-full bg-[#f9ebd3] h-[180px]">
+                <FormLabel>
+                  {preview ? (
+                    <img
+                      className="cursor-pointer object-cover h-[180px] rounded-lg"
+                      src={preview as string}
+                      alt="upload"
+                    />
+                  ) : (
+                    <Image
+                      className="w-24 h-24 cursor-pointer"
+                      src={"/add.svg"}
+                      alt="add"
+                      width={100}
+                      height={100}
+                    />
+                  )}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    {...rest}
+                    onChange={(event) => {
+                      const { files, displayUrl } = getImageData(event);
+                      setPreview(displayUrl);
+                      onChange(files);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <div */}
+          {/*   {...getRootProps({ */}
+          {/*     className: */}
+          {/*       "flex justify-center items-center rounded-lg row-span-full bg-[#f9ebd3] h-[180px]", */}
+          {/*   })} */}
+          {/* > */}
+          {/*   <Input */}
+          {/*     {...getInputProps()} */}
+          {/*     className="w-24 h-24 opacity-0 absolute" */}
+          {/*   /> */}
+          {/*   <Label htmlFor="product-image"> */}
+          {/*     {preview ? ( */}
+          {/*       <img */}
+          {/*         className="cursor-pointer object-cover h-[180px] rounded-lg" */}
+          {/*         src={preview as string} */}
+          {/*         alt={acceptedFiles[0]?.name} */}
+          {/*       /> */}
+          {/*     ) : ( */}
+          {/*       <Image */}
+          {/*         className="w-24 h-24 cursor-pointer" */}
+          {/*         src={"/add.svg"} */}
+          {/*         alt="add" */}
+          {/*         width={100} */}
+          {/*         height={100} */}
+          {/*       /> */}
+          {/*     )} */}
+          {/*   </Label> */}
+          {/* </div> */}
           <div className="col-span-2">
             <FormField
               control={form.control}
@@ -149,31 +238,6 @@ const AddProduct = () => {
                 </FormItem>
               )}
             />
-            {/* <div> */}
-            {/*   <Label htmlFor="productNname" className=""> */}
-            {/*     Product Name */}
-            {/*   </Label> */}
-            {/*   <Input */}
-            {/*     id="productNname" */}
-            {/*     value={productName} */}
-            {/*     onChange={(e) => setProductName(e.target.value)} */}
-            {/*     className="" */}
-            {/*     required */}
-            {/*   /> */}
-            {/* </div> */}
-            {/* <div> */}
-            {/*   <Label htmlFor="price" className=""> */}
-            {/*     Price */}
-            {/*   </Label> */}
-            {/*   <Input */}
-            {/*     id="price" */}
-            {/*     type="number" */}
-            {/*     value={price} */}
-            {/*     onChange={(e) => setPrice(Number(e.target.value))} */}
-            {/*     className="col-span-3" */}
-            {/*     required */}
-            {/*   /> */}
-            {/* </div> */}
             <div className="grid grid-cols-3">
               <div className="col-span-2">
                 <FormField
@@ -206,24 +270,6 @@ const AddProduct = () => {
                     </FormItem>
                   )}
                 />
-                {/* <Label htmlFor="category" className=""> */}
-                {/*   Category */}
-                {/* </Label> */}
-                {/* <select */}
-                {/*   id="category" */}
-                {/*   onChange={(e) => setCategory(e.target.value)} */}
-                {/*   className="rounded-lg outline outline-[#664229b4] w-[100px]" */}
-                {/*   required */}
-                {/* > */}
-                {/*   <option value="" disabled selected> */}
-                {/*     Select... */}
-                {/*   </option> */}
-                {/*   {categories?.map((item, i) => ( */}
-                {/*     <option key={i} value={item.id}> */}
-                {/*       {item.name} */}
-                {/*     </option> */}
-                {/*   ))} */}
-                {/* </select> */}
               </div>
 
               <div className="col-span-1">
@@ -247,15 +293,6 @@ const AddProduct = () => {
                     </FormItem>
                   )}
                 />
-                {/* <Label htmlFor="isAvailable">Availabilty</Label> */}
-                {/* <div> */}
-                {/*   <Switch */}
-                {/*     id="isAvailable" */}
-                {/*     onClick={() => setIsAvailable(!isAvailable)} */}
-                {/*     checked={isAvailable} */}
-                {/*     className="data-[state=checked]:bg-[#512711] data-[state=unchecked]:bg-[#f9ebd3]" */}
-                {/*   /> */}
-                {/* </div> */}
               </div>
             </div>
           </div>
