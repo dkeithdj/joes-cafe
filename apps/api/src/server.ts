@@ -1,6 +1,8 @@
 import fastifyCors from "@fastify/cors";
 import ws from "@fastify/websocket";
 import multipart from "@fastify/multipart";
+import fastifyStatic from "@fastify/static";
+import fastifyModernImages from "fastify-modern-images";
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import fastify, { FastifyReply } from "fastify";
@@ -13,6 +15,7 @@ import { promisify } from "util";
 import { pipeline } from "stream";
 import fs from "fs";
 import path from "path";
+import sharp from "sharp";
 
 export { appRouter, type AppRouter } from "./router";
 export { createTRPCContext } from "./context";
@@ -36,7 +39,14 @@ const server = fastify({ logger: dev, maxParamLength: 5000 });
 const pump = promisify(pipeline);
 
 void server.register(ws);
-void server.register(multipart, { attachFieldsToBody: true });
+void server.register(multipart);
+void server.register(fastifyStatic, {
+  root: path.join(__dirname, "..", "..", "..", "data"),
+  prefix: "/public/",
+});
+void server.register(fastifyModernImages, {
+  quality: "6",
+});
 void server.register(fastifyTRPCPlugin, {
   prefix,
   useWSS: true,
@@ -55,32 +65,30 @@ void server.register(fastifyTRPCPlugin, {
   },
 });
 
-server.post(
-  "/api/uploadProductImage",
+server.post("/api/uploadProductImage", async (req, reply) => {
+  const parts = await req.parts();
 
-  async (req, reply) => {
-    const aa = await req.body;
-    console.log(aa);
-    const parts = req.parts();
-    for await (const part of parts) {
-      console.log(part.fields["product"]);
-      if (part.type === "file") {
-        // await pump(part.file, fs.createWriteStream(part.filename))
-      } else {
-        // part.type === 'field
-        console.log(part.fields);
-      }
+  let fileName = "";
+  for await (const part of parts) {
+    if (part.type === "file") {
+      const image = part.filename.split(".");
+      const dir = path.join(__dirname, "..", "..", "..", "data", fileName);
+
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+      const imagePath = `${fileName}.${image[1]}`;
+
+      await pump(part.file, fs.createWriteStream(path.join(dir, imagePath)));
+
+      return reply.send({
+        imagePath: `public/${fileName}/${fileName}.${image[1]}`,
+      });
+    } else {
+      const { name }: { name: string } = JSON.parse(part.value as string);
+      fileName = name.toLowerCase().trim().replace(/ +/g, "_");
     }
-    // const image = part.filename.split(".");
-    // const parsed = image[0].replace(" ", "_");
-    // const dir = `../../../data/${parsed}`;
-    //
-    // if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    //
-    // await pump(part.file, fs.createWriteStream(`${dir}/${parsed}.${image[0]}`));
-    reply.send();
-  },
-);
+  }
+});
 
 const start = async () => {
   try {

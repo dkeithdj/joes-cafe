@@ -16,13 +16,6 @@ export const publicProcedure = t.procedure;
 
 const ee = new EventEmitter();
 
-const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpg", "image/jpeg"];
-const MAX_IMAGE_SIZE = 4; //In MegaBytes
-
-const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
-  const result = sizeInBytes / (1024 * 1024);
-  return +result.toFixed(decimalsNum);
-};
 /* TODO: separate mutations and queries
  * <table>.<get/post/put/patch/delete>.<filter, e.g. by id, name, etc.>
  */
@@ -78,7 +71,7 @@ export const appRouter = router({
     .input(
       z.object({
         name: z.string(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const createTransaction = await ctx.prisma.transaction.create({
@@ -96,15 +89,15 @@ export const appRouter = router({
       });
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
+        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`,
+        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
+        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`
       );
       return createTransaction;
     }),
@@ -114,61 +107,43 @@ export const appRouter = router({
         name: z.string(),
         price: z.number(),
         category: z.string(),
-        image: z.any(),
-        // image: z
-        //   .custom<FileList>()
-        //   .refine((files) => {
-        //     return files.length !== 0;
-        //   }, "Image is required")
-        //   .refine((files) => {
-        //     return Array.from(files ?? []).every(
-        //       (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
-        //     );
-        //   }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
-        //   .refine((files) => {
-        //     return Array.from(files ?? []).every((file) =>
-        //       ACCEPTED_IMAGE_TYPES.includes(file.type),
-        //     );
-        //   }, "File type is not supported"),
+        image: z.string(),
         isAvailable: z.boolean(),
-      }),
+      })
     )
     .mutation(async ({ ctx, input }) => {
-      console.log(input.image);
-      // const productExists = await ctx.prisma.product.findFirst({
-      //   where: { name: input.name },
-      //   select: {
-      //     name: true,
-      //   },
-      // });
-      // if (productExists) {
-      //   throw new TRPCError({
-      //     message: `${productExists.name} already exists`,
-      //     code: "CONFLICT",
-      //   });
-      // }
-      // const data = readFileSync(input.image[0].name);
-      // console.log(data);
-      // return await ctx.prisma.product.create({
-      //   data: {
-      //     name: input.name,
-      //     price: input.price,
-      //     category: {
-      //       connect: {
-      //         id: input.category,
-      //       },
-      //     },
-      //     image: input.image,
-      //     isAvailable: input.isAvailable,
-      //   },
-      // });
+      const productExists = await ctx.prisma.product.findFirst({
+        where: { name: input.name },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exists`,
+          code: "CONFLICT",
+        });
+      }
+      return await ctx.prisma.product.create({
+        data: {
+          name: input.name,
+          price: input.price,
+          category: {
+            connect: {
+              id: input.category,
+            },
+          },
+          image: input.image,
+          isAvailable: input.isAvailable,
+        },
+      });
     }),
 
   getOrders: publicProcedure
     .input(
       z.object({
         status: z.enum([Status.Processing, Status.Declined, Status.Accepted]),
-      }),
+      })
     )
     .query(async ({ input, ctx }) => {
       const orders = await ctx.prisma.order.findMany({
@@ -262,7 +237,7 @@ export const appRouter = router({
     .input(
       z.object({
         orderId: z.string(),
-      }),
+      })
     )
     .query(async ({ ctx, input }) => {
       const orders = await ctx.prisma.order.findFirst({
@@ -311,7 +286,7 @@ export const appRouter = router({
         tableId: z.string(),
         transactionId: z.string(),
         totalAmount: z.number(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { tableId, transactionId, totalAmount } = input;
@@ -339,7 +314,7 @@ export const appRouter = router({
 
       ctx.res.header(
         "Set-Cookie",
-        `orderId=${order.id}; Path=/; Max-Age=86400`,
+        `orderId=${order.id}; Path=/; Max-Age=86400`
       );
 
       ee.emit("createOrder", order.statusId);
@@ -364,7 +339,7 @@ export const appRouter = router({
         staffId: z.string(),
         paymentId: z.string(),
         statusId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, staffId, paymentId, statusId } = input;
@@ -400,7 +375,7 @@ export const appRouter = router({
       z.object({
         orderId: z.string(),
         statusId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, statusId } = input;
@@ -453,7 +428,7 @@ export const appRouter = router({
         productId: z.string(),
         transactionId: z.string(),
         customerId: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const { productId, transactionId, customerId } = input;
@@ -520,7 +495,7 @@ export const appRouter = router({
       z.object({
         id: z.string(),
         name: z.string(),
-      }),
+      })
     )
     .mutation(async ({ input, ctx }) => {
       const updateTransaction = await ctx.prisma.transaction.create({
@@ -540,11 +515,11 @@ export const appRouter = router({
 
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
+        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
+        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`
       );
       return updateTransaction;
     }),
