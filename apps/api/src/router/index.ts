@@ -5,6 +5,8 @@ import { z } from "zod";
 import { Context } from "../context";
 import fastify from "fastify";
 import { EventEmitter } from "stream";
+import fs, { readFileSync } from "fs";
+
 // import superjson from "superjson";
 
 const t = initTRPC.context<Context>().create();
@@ -14,6 +16,13 @@ export const publicProcedure = t.procedure;
 
 const ee = new EventEmitter();
 
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpg", "image/jpeg"];
+const MAX_IMAGE_SIZE = 4; //In MegaBytes
+
+const sizeInMB = (sizeInBytes: number, decimalsNum = 2) => {
+  const result = sizeInBytes / (1024 * 1024);
+  return +result.toFixed(decimalsNum);
+};
 /* TODO: separate mutations and queries
  * <table>.<get/post/put/patch/delete>.<filter, e.g. by id, name, etc.>
  */
@@ -25,7 +34,6 @@ export const appRouter = router({
   getProducts: publicProcedure
     .input(z.string().nullable())
     .query(async ({ input, ctx }) => {
-      console.log(typeof input);
       const products = await ctx.prisma.product.findMany({
         select: {
           id: true,
@@ -106,36 +114,54 @@ export const appRouter = router({
         name: z.string(),
         price: z.number(),
         category: z.string(),
-        image: z.string(),
+        image: z.any(),
+        // image: z
+        //   .custom<FileList>()
+        //   .refine((files) => {
+        //     return files.length !== 0;
+        //   }, "Image is required")
+        //   .refine((files) => {
+        //     return Array.from(files ?? []).every(
+        //       (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
+        //     );
+        //   }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
+        //   .refine((files) => {
+        //     return Array.from(files ?? []).every((file) =>
+        //       ACCEPTED_IMAGE_TYPES.includes(file.type),
+        //     );
+        //   }, "File type is not supported"),
         isAvailable: z.boolean(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const productExists = await ctx.prisma.product.findFirst({
-        where: { name: input.name },
-        select: {
-          name: true,
-        },
-      });
-      if (productExists) {
-        throw new TRPCError({
-          message: `${productExists.name} already exists`,
-          code: "CONFLICT",
-        });
-      }
-      return await ctx.prisma.product.create({
-        data: {
-          name: input.name,
-          price: input.price,
-          category: {
-            connect: {
-              id: input.category,
-            },
-          },
-          image: input.image,
-          isAvailable: input.isAvailable,
-        },
-      });
+      console.log(input.image);
+      // const productExists = await ctx.prisma.product.findFirst({
+      //   where: { name: input.name },
+      //   select: {
+      //     name: true,
+      //   },
+      // });
+      // if (productExists) {
+      //   throw new TRPCError({
+      //     message: `${productExists.name} already exists`,
+      //     code: "CONFLICT",
+      //   });
+      // }
+      // const data = readFileSync(input.image[0].name);
+      // console.log(data);
+      // return await ctx.prisma.product.create({
+      //   data: {
+      //     name: input.name,
+      //     price: input.price,
+      //     category: {
+      //       connect: {
+      //         id: input.category,
+      //       },
+      //     },
+      //     image: input.image,
+      //     isAvailable: input.isAvailable,
+      //   },
+      // });
     }),
 
   getOrders: publicProcedure
@@ -311,7 +337,6 @@ export const appRouter = router({
         },
       });
 
-      console.log(order);
       ctx.res.header(
         "Set-Cookie",
         `orderId=${order.id}; Path=/; Max-Age=86400`,
