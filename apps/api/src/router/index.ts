@@ -138,7 +138,7 @@ export const appRouter = router({
         },
       });
     }),
-  editProduct: publicProcedure
+  updateProduct: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -150,15 +150,6 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // const idExist = await ctx.prisma.product.findFirst({
-      //   where: {
-      //     id: input.id,
-      //   },
-      //   select: {
-      //     name: true
-      //   }
-      // })
-      // idExist?.name
       const productExists = await ctx.prisma.product.findFirst({
         where: {
           name: input.name,
@@ -176,7 +167,7 @@ export const appRouter = router({
           code: "CONFLICT",
         });
       }
-      const editProduct = ctx.prisma.product.update({
+      const updateProduct = ctx.prisma.product.update({
         where: {
           id: input.id,
         },
@@ -192,7 +183,7 @@ export const appRouter = router({
           isAvailable: input.isAvailable,
         },
       });
-      return editProduct;
+      return updateProduct;
     }),
 
   getOrders: publicProcedure

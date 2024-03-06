@@ -75,7 +75,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
   return { files, displayUrl };
 }
-const AddProduct = () => {
+const AddProduct = ({ setOpen }: { setOpen: (bool: boolean) => void }) => {
   const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
   // const [preview, setPreview] = useState("");
@@ -256,11 +256,8 @@ const AddProduct = () => {
           </div>
         </div>
         <DialogFooter className="pt-4">
-          <DialogClose>
-            <Button type="submit">Add Product</Button>
-          </DialogClose>
+          <Button type="submit">Add Product</Button>
         </DialogFooter>
-        <Button type="submit">Add Product</Button>
       </form>
     </Form>
   );

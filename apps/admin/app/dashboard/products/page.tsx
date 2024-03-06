@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { trpc } from "@admin/hooks/trpc";
 import EditProduct from "@admin/components/admin/EditProduct";
 const AdminProducts = () => {
+  const [open, setOpen] = useState(false);
   const {
     data: products,
     isSuccess,
@@ -32,7 +33,7 @@ const AdminProducts = () => {
       <div className="flex flex-row justify-between">
         <div className="text-6xl text-[#603D04] py-4 ">Products</div>
         <div className="flex flex-row items-center gap-x-4">
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <div>Add Product</div>
             </DialogTrigger>
@@ -41,7 +42,7 @@ const AdminProducts = () => {
                 <DialogTitle>Add Product</DialogTitle>
                 <DialogDescription>Add product details.</DialogDescription>
               </DialogHeader>
-              <AddProduct />
+              <AddProduct setOpen={setOpen} />
             </DialogContent>
           </Dialog>
         </div>

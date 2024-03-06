@@ -91,8 +91,9 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 const EditProduct = ({ product }: { product: ProductOptions }) => {
   const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(
-    product.image
+    `http://localhost:3000/${product.image}`
   );
+  const [open, setOpen] = useState(false);
   // const [preview, setPreview] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -109,7 +110,7 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
 
   const { data: categories } = trpc.getCategories.useQuery();
 
-  const { mutate } = trpc.editProduct.useMutation({
+  const { mutate } = trpc.updateProduct.useMutation({
     onSuccess: () => {
       utils.getProducts.invalidate();
     },
@@ -139,6 +140,7 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
           image: (data && data.imagePath) || (product.image as string),
           isAvailable: isAvailable || product.isAvailable,
         });
+        setOpen(false);
       })
       .catch((err) => {
         console.log(err);
@@ -166,7 +168,7 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
               PHP {product.price}.00
             </div>
 
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <div className="w-[50px]">Edit</div>
               </DialogTrigger>
@@ -187,7 +189,7 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
                         render={({ field: { onChange, value, ...rest } }) => (
                           <FormItem className="flex flex-col justify-center items-center rounded-lg row-span-full bg-[#f9ebd3] h-[180px]">
                             <FormLabel>
-                              {product.image && preview ? (
+                              {product.image || preview ? (
                                 <img
                                   className="cursor-pointer object-cover h-[180px] rounded-lg"
                                   src={
@@ -319,11 +321,8 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
                       </div>
                     </div>
                     <DialogFooter className="pt-4">
-                      <DialogClose>
-                        <Button type="submit">Add Product</Button>
-                      </DialogClose>
+                      <Button type="submit">Edit Product</Button>
                     </DialogFooter>
-                    <Button type="submit">Add Product</Button>
                   </form>
                 </Form>
               </DialogContent>
