@@ -138,6 +138,62 @@ export const appRouter = router({
         },
       });
     }),
+  editProduct: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        price: z.number(),
+        category: z.string(),
+        image: z.string(),
+        isAvailable: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // const idExist = await ctx.prisma.product.findFirst({
+      //   where: {
+      //     id: input.id,
+      //   },
+      //   select: {
+      //     name: true
+      //   }
+      // })
+      // idExist?.name
+      const productExists = await ctx.prisma.product.findFirst({
+        where: {
+          name: input.name,
+          NOT: {
+            id: input.id,
+          },
+        },
+        select: {
+          name: true,
+        },
+      });
+      if (productExists) {
+        throw new TRPCError({
+          message: `${productExists.name} already exist from another product`,
+          code: "CONFLICT",
+        });
+      }
+      const editProduct = ctx.prisma.product.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          price: input.price,
+          category: {
+            connect: {
+              id: input.category,
+            },
+          },
+          image: input.image,
+          isAvailable: input.isAvailable,
+        },
+      });
+      return editProduct;
+    }),
 
   getOrders: publicProcedure
     .input(

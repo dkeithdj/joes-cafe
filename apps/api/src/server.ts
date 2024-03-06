@@ -89,6 +89,33 @@ server.post("/api/uploadProductImage", async (req, reply) => {
     }
   }
 });
+// FIXME: delete/override previous file
+server.patch("/api/uploadProductImage/:id", async (req, reply) => {
+  const { id } = req.params as { id: string };
+  console.log(id);
+  const parts = await req.parts();
+
+  let fileName = "";
+  for await (const part of parts) {
+    if (part.type === "file") {
+      const image = part.filename.split(".");
+      const dir = path.join(__dirname, "..", "..", "..", "data", fileName);
+
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+
+      const imagePath = `${fileName}.${image[1]}`;
+
+      await pump(part.file, fs.createWriteStream(path.join(dir, imagePath)));
+
+      return reply.send({
+        imagePath: `public/${fileName}/${fileName}.${image[1]}`,
+      });
+    } else {
+      const { name }: { name: string } = JSON.parse(part.value as string);
+      fileName = name.toLowerCase().trim().replace(/ +/g, "_");
+    }
+  }
+});
 
 const start = async () => {
   try {
