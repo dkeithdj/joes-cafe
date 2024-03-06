@@ -53,12 +53,12 @@ const Product = ({
         <div className="absolute inset-0 bg-muted/60 rounded-[24px]"></div>
       )}
       <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden">
-        <Image
-          // src={"/Joes-Logo-Whitebg.png"}
-          src={product?.image || "/Joes-Logo-Whitebg.png"}
-          alt="coffee"
-          width={130}
-          height={130}
+        <img
+          src={
+            (product.image && `http://localhost:3000/${product.image}`) ||
+            "/Joes-Logo-Whitebg.png"
+          }
+          alt={product.name}
         />
       </div>
       <div className="w-[130px] mt-4">
