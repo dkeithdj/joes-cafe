@@ -13,6 +13,7 @@ import {
 } from "@ui/components/ui/dialog";
 import React, { useState } from "react";
 import { trpc } from "@admin/hooks/trpc";
+import EditProduct from "@admin/components/admin/EditProduct";
 const AdminProducts = () => {
   const {
     data: products,
@@ -73,7 +74,9 @@ const AdminProducts = () => {
         {isSuccess &&
           products
             .filter((product) => availability === product.isAvailable)
-            .map((product) => <Products key={product.id} product={product} />)}
+            .map((product) => (
+              <EditProduct key={product.id} product={product} />
+            ))}
       </div>
     </div>
   );

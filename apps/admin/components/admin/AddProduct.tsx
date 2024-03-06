@@ -91,20 +91,6 @@ const AddProduct = () => {
 
   // FIX: create api to save image
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    console.log(acceptedFiles);
-    // setPreview(acceptedFiles.map((file) => Object.assign(file,{preview: URL.createObjectURL(file)}) ));
-    const file = new FileReader();
-
-    file.onload = () => {
-      setPreview(file.result);
-    };
-
-    file.readAsDataURL(acceptedFiles[0]);
-  }, []);
-  const { acceptedFiles, getRootProps, getInputProps, isDragActive } =
-    useDropzone({ onDrop });
-
   const { data: categories } = trpc.getCategories.useQuery();
 
   const { mutate } = trpc.createProduct.useMutation({
@@ -183,34 +169,6 @@ const AddProduct = () => {
               </FormItem>
             )}
           />
-          {/* <div */}
-          {/*   {...getRootProps({ */}
-          {/*     className: */}
-          {/*       "flex justify-center items-center rounded-lg row-span-full bg-[#f9ebd3] h-[180px]", */}
-          {/*   })} */}
-          {/* > */}
-          {/*   <Input */}
-          {/*     {...getInputProps()} */}
-          {/*     className="w-24 h-24 opacity-0 absolute" */}
-          {/*   /> */}
-          {/*   <Label htmlFor="product-image"> */}
-          {/*     {preview ? ( */}
-          {/*       <img */}
-          {/*         className="cursor-pointer object-cover h-[180px] rounded-lg" */}
-          {/*         src={preview as string} */}
-          {/*         alt={acceptedFiles[0]?.name} */}
-          {/*       /> */}
-          {/*     ) : ( */}
-          {/*       <Image */}
-          {/*         className="w-24 h-24 cursor-pointer" */}
-          {/*         src={"/add.svg"} */}
-          {/*         alt="add" */}
-          {/*         width={100} */}
-          {/*         height={100} */}
-          {/*       /> */}
-          {/*     )} */}
-          {/*   </Label> */}
-          {/* </div> */}
           <div className="col-span-2">
             <FormField
               control={form.control}
