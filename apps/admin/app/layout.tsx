@@ -1,6 +1,5 @@
 "use client";
 import "@repo/ui/globals.css";
-// import Provider from "@admin/components/Provider";
 import _Dashboard from "@admin/components/_Dashboard";
 import { TrpcProvider } from "@admin/components/TrpcProvider";
 import { Toaster } from "@ui/components/ui/sonner";
@@ -12,13 +11,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-[#f9ebd3]">
         <TrpcProvider>
-          {/* <Provider> */}
-          {/* <QueryClientProvider client={queryClient}> */}
-          <main className="bg-[#f9ebd3]">{children}</main>
-          {/* </QueryClientProvider> */}
-          {/* </Provider> */}
+          <main>{children}</main>
           <Toaster />
         </TrpcProvider>
       </body>

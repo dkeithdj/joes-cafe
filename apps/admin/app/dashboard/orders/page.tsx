@@ -91,7 +91,9 @@ const AdminOrders = () => {
           <_Orders staff={staff} order={order} key={i} />
         ))
       ) : (
-        <div></div>
+        <div className="flex justify-center items-center font-bold">
+          Empty Orders
+        </div>
       )}
     </div>
   );
