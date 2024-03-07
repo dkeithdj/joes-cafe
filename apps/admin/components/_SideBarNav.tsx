@@ -1,12 +1,16 @@
 "use client";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ScrollArea } from "@ui/components/ui/scroll-area";
 import { useState } from "react";
 
-const SideBarNav = ({ active, setActive }: any) => {
+const SideBarNav = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const currPathName = pathname.substring(1).split("/");
+  // console.log(pathname.substring(1).split("/"));
+  const [active, setActive] = useState(currPathName[1]);
 
   return (
     <ScrollArea className="h-screen rounded-md">
@@ -27,11 +31,11 @@ const SideBarNav = ({ active, setActive }: any) => {
         <div className="pt-3 pb-5">
           <button
             onClick={() => {
-              setActive("dashboard");
-              router.push("/dashboard");
+              setActive("analytics");
+              router.push("/dashboard/analytics");
             }}
             className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
-              active === "dashboard"
+              active === "analytics"
                 ? "bg-[#512711] text-[#F9EBD3]"
                 : "text-[#512711] bg-[#F9EBD3]"
             } text-[20px] font-['Alata']  rounded-xl w-full h-14 `}
@@ -67,6 +71,36 @@ const SideBarNav = ({ active, setActive }: any) => {
             } text-[20px] font-['Alata']  rounded-xl w-full h-14`}
           >
             Products
+          </button>
+        </div>
+        <div className="pb-5">
+          <button
+            onClick={() => {
+              setActive("Categories");
+              router.push("/dashboard/categories");
+            }}
+            className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
+              active === "categories"
+                ? "bg-[#512711] text-[#F9EBD3]"
+                : "text-[#512711] bg-[#F9EBD3]"
+            } text-[20px] font-['Alata']  rounded-xl w-full h-14`}
+          >
+            Categories
+          </button>
+        </div>
+        <div className="pb-5">
+          <button
+            onClick={() => {
+              setActive("tables");
+              router.push("/dashboard/tables");
+            }}
+            className={`hover:bg-[#512711] hover:text-[#F9EBD3] ${
+              active === "tables"
+                ? "bg-[#512711] text-[#F9EBD3]"
+                : "text-[#512711] bg-[#F9EBD3]"
+            } text-[20px] font-['Alata']  rounded-xl w-full h-14`}
+          >
+            Tables
           </button>
         </div>
         <div className="pt-8 pb-4 justify-end">
