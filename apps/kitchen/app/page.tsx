@@ -35,10 +35,12 @@ const KitchenPage = () => {
     console.log(`Order ${orderId} Served`);
   };
   return (
-    <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-2 justify-items-center">
-      <Card>
-        <CardHeader className="bg-[#D2B48C] rounded-md rounded-b-none">
-          Incoming
+    <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-2 justify-items-center ">
+      <Card className="rounded-3xl w-11/12 my-16">
+        <CardHeader className="bg-[#D2B48C] rounded-3xl rounded-b-none w-full flex items-center justify-center">
+          <h1 className="text-3xl text-mainText alata leading-10 text-[#512711]">
+          INCOMING
+          </h1>
         </CardHeader>
         {isSuccess &&
           orderData
@@ -53,9 +55,11 @@ const KitchenPage = () => {
               />
             ))}
       </Card>
-      <Card>
-        <CardHeader className="bg-[#B09478] rounded-md rounded-b-none">
-          On-going
+      <Card className="rounded-3xl w-11/12 my-16">
+        <CardHeader className="bg-[#B09478] rounded-3xl rounded-b-none w-full flex items-center justify-center">
+        <h1 className="text-3xl text-mainText alata text-[#F9EBD3]">
+          ON-GOING
+        </h1>
         </CardHeader>
         {isSuccess &&
           orderData
@@ -70,9 +74,11 @@ const KitchenPage = () => {
               />
             ))}
       </Card>
-      <Card>
-        <CardHeader className="bg-[#603D04] rounded-md rounded-b-none">
-          Completed
+      <Card className="rounded-3xl w-11/12 my-16">
+        <CardHeader className="bg-[#603D04] rounded-3xl rounded-b-none w-full flex items-center justify-center">
+        <h1 className="text-3xl text-mainText alata  text-[#F9EBD3]">
+          COMPLETED
+        </h1>
         </CardHeader>
         {isSuccess &&
           orderData
