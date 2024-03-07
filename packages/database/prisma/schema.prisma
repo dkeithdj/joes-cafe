@@ -142,8 +142,8 @@ view itemsview {
   productname   String
   productimage  String?
   productprice  Int
-  totalquantity BigInt
-  totalamount   BigInt?
+  totalquantity Int
+  totalamount   Int
   transactionid String
 }
 
