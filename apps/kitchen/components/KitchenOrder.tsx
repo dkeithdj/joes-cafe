@@ -23,43 +23,43 @@ const KitchenOrder = ({
     transactionId: order.transaction.id,
   });
   return (
-    <div className={`bg-[${color}] rounded-lg m-2`}>
+    <div className={`bg-[${color}] rounded-lg m-2 `}>
       <CardContent className="py-2">
-        <table>
-          <tbody>
-            <tr>
-              <td className="w-[8ch] text-ellipsis">Order #:</td>
-              <td className="max-w-[17ch] text-end truncate">{order.id}</td>
+        <table className="w-full">
+          <tbody className="inline-block align-bottom w-full">
+            <tr className="flex justify-end">
+              <td className="w-full text-white alata">Order #:</td>
+              <td className="w-full text-end text-white alata">{order.id}</td>
             </tr>
-            <tr>
-              <td className="w-[8ch]">Name:</td>
-              <td className="w-[17ch] text-end">
+            <tr className="flex justify-end">
+              <td className="w-full text-white alata">Name:</td>
+              <td className="w-full text-white text-end alata">
                 {order.transaction.customer.name}
               </td>
             </tr>
-            <tr>
-              <td className="w-[8ch]">Table:</td>
-              <td className="w-[17ch] text-end">{order.table.number}</td>
+            <tr className="flex justify-end">
+              <td className="w-full text-white alata">Table:</td>
+              <td className="w-full text-white text-end alata">{order.table.number}</td>
             </tr>
           </tbody>
         </table>
       </CardContent>
-      <Separator className="w-[90%] mx-auto" />
+      <Separator className="w-[95%] mx-auto bg-black" />
       <CardContent className="py-2">
-        <table>
+        <table className="w-full">
           <tbody>
             {isSuccess &&
               itemsData.map((item, i) => (
-                <tr className="" key={i}>
-                  <td className="w-[20ch]">{item.productname}</td>
-                  <td className="w-[5ch] text-end">x{item.totalquantity}</td>
+                <tr className="flex justify-end" key={i}>
+                  <td className="w-full text-black alata">{item.productname}</td>
+                  <td className="w-full text-black text-end alata">x{item.totalquantity}</td>
                 </tr>
               ))}
           </tbody>
         </table>
       </CardContent>
       <CardContent className="py-2">
-        <Button className="w-full" onClick={() => handleOrder(order.id)}>
+        <Button className="w-full alata" onClick={() => handleOrder(order.id)}>
           {text}
         </Button>
       </CardContent>
