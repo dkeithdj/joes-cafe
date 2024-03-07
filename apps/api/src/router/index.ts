@@ -574,6 +574,15 @@ export const appRouter = router({
     const tables = await ctx.prisma.table.findMany();
     return tables;
   }),
+  createTable: publicProcedure.mutation(async ({ input, ctx }) => {
+    const countTables = await ctx.prisma.table.count();
+    const createTable = await ctx.prisma.table.create({
+      data: {
+        number: countTables + 1,
+      },
+    });
+    return createTable;
+  }),
   randomNumber: publicProcedure.subscription(() => {
     return observable<{ randomNumber: number }>((emit) => {
       const timer = setInterval(() => {
