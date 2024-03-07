@@ -468,6 +468,77 @@ export const appRouter = router({
   getCategories: publicProcedure.query(async ({ input, ctx }) => {
     return await ctx.prisma.category.findMany();
   }),
+  getCategoriesAndProductCount: publicProcedure.query(
+    async ({ input, ctx }) => {
+      const categoriesByCount = await ctx.prisma.category.findMany({
+        include: {
+          _count: {
+            select: { products: true },
+          },
+        },
+      });
+      return categoriesByCount;
+    }
+  ),
+  createCategory: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const doesCategoryExist = await ctx.prisma.category.findFirst({
+        where: { name: input.name },
+        select: {
+          name: true,
+        },
+      });
+      if (doesCategoryExist) {
+        throw new TRPCError({
+          message: `${doesCategoryExist.name} already exists`,
+          code: "CONFLICT",
+        });
+      }
+      const createCategory = await ctx.prisma.category.create({
+        data: {
+          name: input.name,
+        },
+      });
+      return createCategory;
+    }),
+  updateCategory: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        isAvailable: z.boolean(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const categoryExists = await ctx.prisma.category.findFirst({
+        where: {
+          name: input.name,
+          NOT: {
+            id: input.id,
+          },
+        },
+        select: {
+          name: true,
+        },
+      });
+      if (categoryExists) {
+        throw new TRPCError({
+          message: `${categoryExists.name} already exist from another category`,
+          code: "CONFLICT",
+        });
+      }
+      const updateCategory = ctx.prisma.category.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          isAvailable: input.isAvailable,
+        },
+      });
+      return updateCategory;
+    }),
   addItem: publicProcedure
     .input(
       z.object({
