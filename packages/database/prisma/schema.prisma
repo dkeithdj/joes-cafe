@@ -8,22 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Next-Auth START
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -40,7 +38,7 @@ model User {
   id             String    @id @default(cuid())
   name           String?
   email          String?   @unique
-  hashedPassword String?   @db.Text
+  hashedPassword String?
   emailVerified  DateTime?
   image          String?
   accounts       Account[]
@@ -54,8 +52,6 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-
-// Next-Auth END
 
 model Customer {
   id          String        @id @default(cuid())
@@ -80,6 +76,7 @@ model Category {
   id          String    @id @default(cuid())
   name        String
   description String?
+  isAvailable Boolean   @default(true)
   products    Product[]
 }
 
@@ -101,25 +98,25 @@ model Product {
   price       Int
   description String?
   image       String?
-  category    Category @relation(fields: [categoryId], references: [id])
   isAvailable Boolean
   categoryId  String
   Items       Items[]
+  category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model Items {
   id            String      @id @default(cuid())
-  product       Product     @relation(fields: [productId], references: [id])
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
   productId     String
   transactionId String
+  product       Product     @relation(fields: [productId], references: [id])
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
 }
 
 model Transaction {
   id         String   @id @default(cuid())
-  order      Order[]
-  items      Items[]
   customerId String
+  items      Items[]
+  order      Order[]
   customer   Customer @relation(fields: [customerId], references: [id])
 }
 
@@ -127,34 +124,34 @@ model Order {
   id            String         @id @default(cuid())
   date          DateTime       @default(now())
   totalAmount   Int
-  table         Table          @relation(fields: [tableId], references: [id])
-  transaction   Transaction    @relation(fields: [transactionId], references: [id])
-  status        Order_Status   @relation(fields: [statusId], references: [id])
   staffId       String?
-  staff         Staff?         @relation(fields: [staffId], references: [id])
-  paymentMethod PaymentMethod? @relation(fields: [paymentId], references: [id])
   tableId       String
   transactionId String
   statusId      Int            @default(1)
   paymentId     String?
+  paymentMethod PaymentMethod? @relation(fields: [paymentId], references: [id])
+  staff         Staff?         @relation(fields: [staffId], references: [id])
+  status        Order_Status   @relation(fields: [statusId], references: [id])
+  table         Table          @relation(fields: [tableId], references: [id])
+  transaction   Transaction    @relation(fields: [transactionId], references: [id])
 }
 
 view itemsview {
-  id            String   @id
+  id            String  @id
   productid     String
   productname   String
   productimage  String?
   productprice  Int
-  totalquantity Int      @default(0)
-  totalamount   Decimal? @db.Decimal(32, 0)
+  totalquantity BigInt
+  totalamount   BigInt?
   transactionid String
 }
 
 enum Status {
   Processing
-  Accepted
+  Completed
   Declined
+  Accepted
   Preparing
   Brewing
-  Completed
 }
