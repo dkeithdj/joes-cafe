@@ -189,7 +189,7 @@ export const appRouter = router({
   getOrders: publicProcedure
     .input(
       z.object({
-        status: z.enum([Status.Processing, Status.Declined, Status.Accepted]),
+        status: z.enum([Status.Processing, Status.Declined, Status.Completed]),
       })
     )
     .query(async ({ input, ctx }) => {
