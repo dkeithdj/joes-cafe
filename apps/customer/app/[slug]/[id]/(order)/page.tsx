@@ -33,7 +33,7 @@ const CustomerOrder = () => {
 
   return (
     <div className="text-white ">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center ">
+      <div className="grid grid-cols-2 gap-x-5 gap-y-5 pl-5 pr-5 pt-5 w-full bg-[#f9ebd3] h-full md:grid-cols-3 lg:grid-cols-4 place-items-center ">
         {isSuccess &&
           products?.map((product) => (
             <Products key={product.id} product={product} />

@@ -103,7 +103,7 @@ const Basket = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="flex relative rounded-lg shadow-sm">
+        <div className="flex relative rounded-lg shadow-sm pl-16">
           {items && items.length > 0 ? (
             <div>
               {!isLoading && (
@@ -118,20 +118,19 @@ const Basket = () => {
           <div className="w-10 h-10 bg-[#f9ebd3] rounded-l-lg flex justify-center items-center border-r">
             ☕
           </div>
-          <div className="w-24 h-10 bg-white rounded-r-lg flex justify-center items-center border-l">
+          <div className="w-24 h-10 bg-white rounded-r-lg flex justify-center items-center border-l bebasNeue">
             Coffee Basket
           </div>
         </div>
       </PopoverTrigger>
-      <PopoverContent align="start" className="flex flex-col">
+      <PopoverContent align="start" className="flex flex-col w-[330px] bg-[#FAF0DF] pl-5 pr-5 border-none">
         {items && items.length !== 0 ? (
           <div>
             {items &&
               items.map((item, i) => (
                 <Card
                   key={i}
-                  className=" h-[100px] rounded-[24px] flex flex-row items-center  space-x-2 my-2"
-                >
+                  className=" h-[100px] rounded-[10px] flex flex-row items-center space-x-2 my-2 bg-[#2E2A29] ">
                   <div className="flex w-[80px] h-[80px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
                     <Image
                       src={"/Joes-Logo-Whitebg.png"}
@@ -142,10 +141,10 @@ const Basket = () => {
                     />
                   </div>
                   <div className="grid grid-cols-2 pr-2 py-2 w-[80%]">
-                    <div className="font-bold text-base">
+                    <div className="text-base text-white text-Yantramanav font-black">
                       {item.productname}
                     </div>
-                    <div className="text-end">
+                    <div className="text-end text-white text-Yantramanav font-black">
                       PHP {item.totalamount + ""}.00
                     </div>
                     <div className="col-span-2">
@@ -153,13 +152,12 @@ const Basket = () => {
                         <div className="flex flex-row h-8 w-full rounded-lg relative bg-transparent mt-1">
                           <button
                             onClick={() => minusItem(item.id)}
-                            className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none"
-                          >
+                            className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
                             <span className="m-auto text-2xl font-thin">-</span>
                           </button>
                           <input
                             type="number"
-                            className="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700"
+                            className="outline-none focus:outline-none text-center w-full bg-white font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700"
                             name="custom-input-number"
                             value={item.totalquantity}
                             readOnly
@@ -186,10 +184,10 @@ const Basket = () => {
         ) : (
           <div>Basket is empty, Buy our Products!</div>
         )}
-        <div className="flex flex-grow w-full justify-end pt-2">
+        <div className="flex flex-grow w-full justify-end items-center">
           <Dialog>
             {items?.length !== 0 && (
-              <DialogTrigger className="outline-none focus:outline-none text-center bg-[#e1cdad] font-semibold text-md hover:text-gray-700 focus:text-black  md:text-basecursor-default flex items-center text-gray-900 p-2 rounded-lg">
+              <DialogTrigger className="justify-center outline-none focus:outline-none text-center bg-[#171E31] font-semibold text-md hover:text-gray-700 focus:text-white  md:text-basecursor-default flex items-center text-white p-2 rounded-lg text-Yantramanav w-52">
                 Proceed to Checkout
               </DialogTrigger>
             )}
