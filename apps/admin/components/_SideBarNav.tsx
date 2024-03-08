@@ -103,14 +103,15 @@ const SideBarNav = () => {
             Tables
           </button>
         </div>
-        <div className="pt-8 pb-4 justify-end">
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="hover:bg-[#512711] hover:text-[#F9EBD3] text-[#512711]  bg-[#F9EBD3] text-[20px] font-['Alata'] rounded-xl w-full h-14"
-          >
-            Log Out
-          </button>
-        </div>
+
+        {/* <div className="pt-8 pb-4 justify-end"> */}
+        {/*   <button */}
+        {/*     onClick={() => signOut({ callbackUrl: "/login" })} */}
+        {/*     className="hover:bg-[#512711] hover:text-[#F9EBD3] text-[#512711]  bg-[#F9EBD3] text-[20px] font-['Alata'] rounded-xl w-full h-14" */}
+        {/*   > */}
+        {/*     Log Out */}
+        {/*   </button> */}
+        {/* </div> */}
       </div>
       {/* </> */}
     </ScrollArea>
