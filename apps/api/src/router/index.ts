@@ -28,6 +28,11 @@ export const appRouter = router({
     .input(z.string().nullable())
     .query(async ({ input, ctx }) => {
       const products = await ctx.prisma.product.findMany({
+        where: {
+          category: {
+            isAvailable: true,
+          },
+        },
         select: {
           id: true,
           name: true,
@@ -67,11 +72,29 @@ export const appRouter = router({
       });
       return productsByCategory;
     }),
+  getAllProducts: publicProcedure.query(async ({ input, ctx }) => {
+    const products = await ctx.prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        image: true,
+        isAvailable: true,
+      },
+    });
+    return products;
+  }),
   createTransaction: publicProcedure
     .input(
       z.object({
         name: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const createTransaction = await ctx.prisma.transaction.create({
@@ -89,15 +112,15 @@ export const appRouter = router({
       });
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`
+        `customer.transaction=${createTransaction.id}; Path=/; Max-Age=86400`,
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`
+        `customer.customer=${createTransaction.customer.id}; Path=/; Max-Age=86400`,
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`
+        `customer.name=${createTransaction.customer.name}; Path=/; Max-Age=86400`,
       );
       return createTransaction;
     }),
@@ -109,7 +132,7 @@ export const appRouter = router({
         category: z.string(),
         image: z.string(),
         isAvailable: z.boolean(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const productExists = await ctx.prisma.product.findFirst({
@@ -147,7 +170,7 @@ export const appRouter = router({
         category: z.string(),
         image: z.string(),
         isAvailable: z.boolean(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const productExists = await ctx.prisma.product.findFirst({
@@ -190,7 +213,7 @@ export const appRouter = router({
     .input(
       z.object({
         status: z.enum([Status.Processing, Status.Declined, Status.Completed]),
-      })
+      }),
     )
     .query(async ({ input, ctx }) => {
       const orders = await ctx.prisma.order.findMany({
@@ -284,7 +307,7 @@ export const appRouter = router({
     .input(
       z.object({
         orderId: z.string(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const orders = await ctx.prisma.order.findFirst({
@@ -333,7 +356,7 @@ export const appRouter = router({
         tableId: z.string(),
         transactionId: z.string(),
         totalAmount: z.number(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const { tableId, transactionId, totalAmount } = input;
@@ -361,7 +384,7 @@ export const appRouter = router({
 
       ctx.res.header(
         "Set-Cookie",
-        `orderId=${order.id}; Path=/; Max-Age=86400`
+        `orderId=${order.id}; Path=/; Max-Age=86400`,
       );
 
       ee.emit("createOrder", order.statusId);
@@ -386,7 +409,7 @@ export const appRouter = router({
         staffId: z.string(),
         paymentId: z.string(),
         statusId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, staffId, paymentId, statusId } = input;
@@ -422,7 +445,7 @@ export const appRouter = router({
       z.object({
         orderId: z.string(),
         statusId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const { orderId, statusId } = input;
@@ -466,11 +489,19 @@ export const appRouter = router({
     return await ctx.prisma.staff.findMany();
   }),
   getCategories: publicProcedure.query(async ({ input, ctx }) => {
-    return await ctx.prisma.category.findMany();
+    return await ctx.prisma.category.findMany({
+      where: {
+        isAvailable: true,
+      },
+    });
   }),
-  getCategoriesAndProductCount: publicProcedure.query(
-    async ({ input, ctx }) => {
+  getCategoriesAndProductCount: publicProcedure
+    .input(z.boolean())
+    .query(async ({ input, ctx }) => {
       const categoriesByCount = await ctx.prisma.category.findMany({
+        where: {
+          isAvailable: input,
+        },
         include: {
           _count: {
             select: { products: true },
@@ -478,10 +509,9 @@ export const appRouter = router({
         },
       });
       return categoriesByCount;
-    }
-  ),
+    }),
   createCategory: publicProcedure
-    .input(z.object({ name: z.string() }))
+    .input(z.object({ name: z.string(), isAvailable: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       const doesCategoryExist = await ctx.prisma.category.findFirst({
         where: { name: input.name },
@@ -498,6 +528,7 @@ export const appRouter = router({
       const createCategory = await ctx.prisma.category.create({
         data: {
           name: input.name,
+          isAvailable: input.isAvailable,
         },
       });
       return createCategory;
@@ -508,7 +539,7 @@ export const appRouter = router({
         id: z.string(),
         name: z.string(),
         isAvailable: z.boolean(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const categoryExists = await ctx.prisma.category.findFirst({
@@ -546,7 +577,7 @@ export const appRouter = router({
         productId: z.string(),
         transactionId: z.string(),
         customerId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const { productId, transactionId, customerId } = input;
@@ -613,7 +644,7 @@ export const appRouter = router({
       z.object({
         id: z.string(),
         name: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const updateTransaction = await ctx.prisma.transaction.create({
@@ -633,11 +664,11 @@ export const appRouter = router({
 
       ctx.res.header(
         "Set-Cookie",
-        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`
+        `customer.transaction=${updateTransaction.id}; Path=/; Max-Age=86400`,
       );
       ctx.res.header(
         "Set-Cookie",
-        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`
+        `customer.customer=${updateTransaction.customerId}; Path=/; Max-Age=86400`,
       );
       return updateTransaction;
     }),
