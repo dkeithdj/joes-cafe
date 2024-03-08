@@ -26,7 +26,7 @@ const AdminProducts = () => {
 
   const [availability, setAvailability] = useState(true);
 
-  if (isLoading) return <div>Loading...</div>;
+  // if (isLoading) return <div>Loading...</div>;
   return (
     <div className="w-auto mx-14">
       {/* <Dashboard /> */}
@@ -35,7 +35,9 @@ const AdminProducts = () => {
         <div className="flex flex-row items-center gap-x-4">
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <div>Add Product</div>
+              <div className="flex flex-row items-center gap-x-4">
+                <Button>Add Product</Button>
+              </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
