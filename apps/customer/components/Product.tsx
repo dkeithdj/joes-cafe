@@ -48,13 +48,11 @@ const Product = ({
   };
 
   return (
-  
-    <Card className=" w-[250px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
-  
+    <Card className="relative w-[250px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
       {!product.isAvailable && (
-        <div className="absolute inset-0 bg-muted/60 rounded-[24px]"></div>
+        <div className="absolute inset-0 bg-muted/60 h-full rounded-[24px] overflow-hidden"></div>
       )}
-      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden">
+      <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden ">
         <img
           src={
             (product.image && `http://localhost:3000/${product.image}`) ||
@@ -66,7 +64,9 @@ const Product = ({
       <div className="w-[200px] mt-4 ">
         <div className="">
           <div className="flex items-start justify-between">
-            <div className="bebasNeue text-xl leading-4 text-[#B3875D]">{product.name}</div>
+            <div className="bebasNeue text-xl leading-4 text-[#B3875D]">
+              {product.name}
+            </div>
             <Image
               src={"/add.svg"}
               alt="add"
@@ -84,9 +84,7 @@ const Product = ({
           </div>
         </div>
       </div>
-    
     </Card>
-    
   );
 };
 
