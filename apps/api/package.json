@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "dotenv -e .env -- node ./dist/server.js",
+    "start": "dotenv -e .env -- ts-node-dev ./src/server.ts",
     "dev": "dotenv -e .env -- ts-node-dev ./src/server.ts",
     "lint": "tsc --noEmit && TIMING=1 eslint \"src/**/*.ts*\"",
     "test": "dotenv -e .env.test -- tap src/**/*.test.ts --ts --no-check-coverage"

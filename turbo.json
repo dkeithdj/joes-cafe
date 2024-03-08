@@ -22,6 +22,15 @@
       ],
       "dependsOn": ["build", "^db:generate", "test", "lint"]
     },
+    "start": {
+      "dotEnv": [
+        ".env.production.local",
+        ".env.local",
+        ".env.production",
+        ".env"
+      ],
+      "dependsOn": ["^build", "^db:generate"]
+    },
     "test": {
       "dotEnv": [".env.test.local", ".env.test", ".env"],
       "dependsOn": ["build"],
