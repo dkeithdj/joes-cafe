@@ -62,12 +62,12 @@ const formSchema = z.object({
     }, "Image is required")
     .refine((files) => {
       return Array.from(files ?? []).every(
-        (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
+        (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
       );
     }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
     .refine((files) => {
       return Array.from(files ?? []).every((file) =>
-        ACCEPTED_IMAGE_TYPES.includes(file.type)
+        ACCEPTED_IMAGE_TYPES.includes(file.type),
       );
     }, "File type is not supported")
     .or(z.string()),
@@ -80,7 +80,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
   // Add newly uploaded images
   Array.from(event.target.files!).forEach((image) =>
-    dataTransfer.items.add(image)
+    dataTransfer.items.add(image),
   );
 
   const files = dataTransfer.files;
@@ -91,7 +91,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 const EditProduct = ({ product }: { product: ProductOptions }) => {
   const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(
-    `http://localhost:3000/${product.image}`
+    `http://localhost:3000/${product.image}`,
   );
   const [open, setOpen] = useState(false);
   // const [preview, setPreview] = useState("");
@@ -106,13 +106,13 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
     },
   });
 
-  // FIX: create api to save image
-
   const { data: categories } = trpc.getCategories.useQuery();
 
   const { mutate } = trpc.updateProduct.useMutation({
     onSuccess: () => {
       utils.getProducts.invalidate();
+      utils.getAllProducts.invalidate();
+      toast.success("Updated Product");
     },
     onError: (error) => {
       toast.warning(error.message);
@@ -122,34 +122,46 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { name, category, price, image, isAvailable } = values;
 
-    const formData = new FormData();
-    formData.append("productName", JSON.stringify({ name: name }));
-    formData.append("file", image[0]);
-
-    fetch(`http://localhost:3000/api/uploadProductImage/${product.id}`, {
-      method: "PATCH",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data: { imagePath: string }) => {
-        mutate({
-          id: product.id,
-          name: name || product.name,
-          category: category || product.category.id,
-          price: price || product.price,
-          image: (data && data.imagePath) || (product.image as string),
-          isAvailable: isAvailable || product.isAvailable,
-        });
-        setOpen(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        toast("Something went wrong, try again");
+    console.log(image);
+    if (image == product.image) {
+      mutate({
+        id: product.id,
+        name: name,
+        category: category,
+        price: price,
+        image: product.image,
+        isAvailable: isAvailable,
       });
+    } else {
+      const formData = new FormData();
+      formData.append("productName", JSON.stringify({ name: name }));
+      formData.append("file", image[0]);
+
+      fetch(`http://localhost:3000/api/uploadProductImage/${product.id}`, {
+        method: "PATCH",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data: { imagePath: string }) => {
+          mutate({
+            id: product.id,
+            name: name || product.name,
+            category: category || product.category.id,
+            price: price || product.price,
+            image: data.imagePath,
+            isAvailable: isAvailable || product.isAvailable,
+          });
+          setOpen(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong, try again");
+        });
+    }
   };
 
   return (
-    <Card className=" h-[150px] max-w-[500px] rounded-[24px] flex flex-row items-center  space-x-2">
+    <Card className=" h-[150px] max-w-[500px] rounded-[24px] flex flex-row items-center  space-x-2 bg-[#e1cdad] border-none">
       <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center ml-[10px]  object-cover overflow-hidden">
         <img
           // FIXME: do environment variable
@@ -163,14 +175,19 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
       <div className="">
         <div className="">
           <div className="flex flex-col">
-            <div className="text-2xl">{product.name}</div>
+            <div className="text-2xl font-bold">{product.name}</div>
             <div className="font-['Yantramanav'] font-semibold">
               PHP {product.price}.00
+            </div>
+            <div className="font-['Yantramanav'] font-semibold">
+              {product.category.name}
             </div>
 
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <div className="w-[50px]">Edit</div>
+                <div className="w-[50px]">
+                  <Button>Edit</Button>
+                </div>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
