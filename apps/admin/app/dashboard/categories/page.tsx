@@ -1,7 +1,6 @@
 "use client";
-import Loading from "@admin/components/Loading";
-import AddProduct from "@admin/components/admin/AddProduct";
-import Products from "@admin/components/admin/Products";
+import { trpc } from "@admin/hooks/trpc";
+import { Card } from "@ui/components/ui/card";
 import { Button } from "@ui/components/ui/button";
 import {
   Dialog,
@@ -12,39 +11,66 @@ import {
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import React, { useState } from "react";
-import { trpc } from "@admin/hooks/trpc";
-import EditProduct from "@admin/components/admin/EditProduct";
-const AdminProducts = () => {
+import Loading from "@admin/components/Loading";
+import { toast } from "sonner";
+import AddCategoryCard from "@admin/components/AddCategoryCard";
+import EditCategoryCard from "@admin/components/EditCategoryCard";
+
+const CategoriesPage = () => {
+  const [availability, setAvailability] = useState(true);
   const [open, setOpen] = useState(false);
+  const utils = trpc.useUtils();
+
   const {
-    data: products,
+    data: categoryByProduct,
     isSuccess,
     isLoading,
-    isError,
-    error,
-  } = trpc.getProducts.useQuery(null);
+  } = trpc.getCategoriesAndProductCount.useQuery(availability);
 
-  const [availability, setAvailability] = useState(true);
+  const { mutate: createCategory } = trpc.createCategory.useMutation({
+    onSuccess() {
+      utils.getCategoriesAndProductCount.invalidate();
+      utils.getCategories.invalidate();
+      toast.success("Added Category");
+    },
+    onError(err) {
+      toast.error(err.message);
+    },
+  });
 
-  // if (isLoading) return <div>Loading...</div>;
+  const helperCreateCategory = ({
+    name,
+    isAvailable,
+  }: {
+    name: string;
+    isAvailable: boolean;
+  }) => {
+    createCategory({
+      name: name,
+      isAvailable: isAvailable,
+    });
+  };
+
   return (
     <div className="w-auto mx-14">
-      {/* <Dashboard /> */}
       <div className="flex flex-row justify-between">
-        <div className="text-6xl text-[#603D04] py-4 ">Products</div>
+        <div className="text-6xl text-[#603D04] py-4 ">Categories</div>
+
         <div className="flex flex-row items-center gap-x-4">
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <div className="flex flex-row items-center gap-x-4">
-                <Button>Add Product</Button>
+                <Button>Add Category</Button>
               </div>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
-                <DialogTitle>Add Product</DialogTitle>
-                <DialogDescription>Add product details.</DialogDescription>
+                <DialogTitle>Add Category</DialogTitle>
               </DialogHeader>
-              <AddProduct setOpen={setOpen} />
+              <AddCategoryCard
+                mutate={helperCreateCategory}
+                setOpen={setOpen}
+              />
             </DialogContent>
           </Dialog>
         </div>
@@ -73,16 +99,17 @@ const AdminProducts = () => {
           <Loading length={6} height="150" />
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isSuccess &&
-          products
-            .filter((product) => availability === product.isAvailable)
-            .map((product) => (
-              <EditProduct key={product.id} product={product} />
+          categoryByProduct
+            // .filter((category) => availability === category.isAvailable)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((category, id) => (
+              <EditCategoryCard key={id} category={category} />
             ))}
       </div>
     </div>
   );
 };
 
-export default AdminProducts;
+export default CategoriesPage;

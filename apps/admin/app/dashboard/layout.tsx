@@ -1,12 +1,9 @@
 "use client";
 import _Dashboard from "@admin/components/_Dashboard";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@ui/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@ui/components/ui/sheet";
 import SideBarNav from "@admin/components/_SideBarNav";
 import { useState } from "react";
+import { useParams, usePathname } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -20,7 +17,7 @@ export default function DashboardLayout({
         <Sheet>
           <SheetTrigger>Open Sidebar</SheetTrigger>
           <SheetContent side={"left"} className="bg-[#F9EBD3]">
-            <SideBarNav active={active} setActive={setActive} />
+            <SideBarNav />
           </SheetContent>
         </Sheet>
       </div>
@@ -29,7 +26,7 @@ export default function DashboardLayout({
           {/* <!--Side Options--> */}
 
           <div className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 bg-[#E1CDAD] drop-shadow-xl overflow-y-auto">
-            <SideBarNav active={active} setActive={setActive} />
+            <SideBarNav />
           </div>
           {/* <!--Main Container--> */}
           <div className="p-4 sm:ml-64 w-full">

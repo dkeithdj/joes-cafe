@@ -5,12 +5,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Loading from "@admin/components/Loading";
-import { trpc } from "@admin/hooks/trpc";
 
-const DashboardPage = () => {
+const AnalyticsPage = () => {
   // const { data: session, status } = useSession();
   // if (session === null) router.push("/login");
-  const { data, isSuccess } = trpc.getTables.useQuery();
 
   return (
     <div className="w-auto mx-14">
@@ -30,19 +28,8 @@ const DashboardPage = () => {
         {/* )} */}
         <Analytics />
       </div>
-      <div>
-        <p>Tables</p>
-        <div>
-          {isSuccess &&
-            data.map(({ number, id }) => (
-              <div key={id}>
-                {number}: {id}
-              </div>
-            ))}
-        </div>
-      </div>
     </div>
   );
 };
 
-export default DashboardPage;
+export default AnalyticsPage;
