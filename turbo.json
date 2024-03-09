@@ -40,6 +40,12 @@
       "dependsOn": ["^lint"]
     },
     "dev": {
+      "dotEnv": [
+        ".env.development.local",
+        ".env.local",
+        ".env.development",
+        ".env"
+      ],
       "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true

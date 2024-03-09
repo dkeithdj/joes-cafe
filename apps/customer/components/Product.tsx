@@ -55,7 +55,8 @@ const Product = ({
       <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden ">
         <img
           src={
-            (product.image && `http://localhost:3000/${product.image}`) ||
+            (product.image &&
+              `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}`) ||
             "/Joes-Logo-Whitebg.png"
           }
           alt={product.name}
