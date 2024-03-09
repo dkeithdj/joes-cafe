@@ -23,16 +23,16 @@ import { useState } from "react";
 import { trpc } from "@customer/hooks/trpc";
 import { itemsview } from "@repo/database";
 
-type itemsView = Pick<
-  itemsview,
-  | "id"
-  | "productid"
-  | "productname"
-  | "productimage"
-  | "productprice"
-  | "totalquantity"
-  | "transactionid"
-> & { totalamount: string | null; productimage: string | null };
+// type itemsView = Pick<
+//   itemsview,
+//   | "id"
+//   | "productid"
+//   | "productname"
+//   | "productimage"
+//   | "productprice"
+//   | "totalquantity"
+//   | "transactionid"
+// > & { totalamount: string | null; productimage: string | null };
 
 const Checkout = ({
   items,
@@ -40,7 +40,7 @@ const Checkout = ({
   tableId,
   transactionId,
 }: {
-  items: itemsView[];
+  items: itemsview[];
   totalAmount: number;
   tableId: string;
   transactionId: string;

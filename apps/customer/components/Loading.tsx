@@ -15,7 +15,7 @@ const Loading = ({
       {Array.from({ length: length }, (v, i) => (
         <Skeleton
           key={i}
-          className={`my-4 w-[${width}px] h-[${height}px] rounded-[24px]`}
+          className={`my-4 w-[${width}px] h-[${height}px] rounded-[24px] bg-[#221E1D]`}
         />
       ))}
     </>

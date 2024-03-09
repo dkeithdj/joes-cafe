@@ -29,14 +29,16 @@ const Categories = () => {
           className="flex space-x-4 overflow-x-auto scrollbar-hide"
           id="style2"
         >
-          {data?.map((category) => (
-            <CategoryButton
-              key={category.id}
-              id={category.id}
-              name={category.name}
-              handleClick={handleClick}
-            />
-          ))}
+          {data
+            ?.sort((a, b) => a.name.localeCompare(b.name))
+            .map((category) => (
+              <CategoryButton
+                key={category.id}
+                id={category.id}
+                name={category.name}
+                handleClick={handleClick}
+              />
+            ))}
         </div>
       </div>
     </div>
