@@ -10,6 +10,7 @@
         ".env.production",
         ".env"
       ],
+      "env": ["NEXT_PUBLIC_HOST_URL"],
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -24,11 +25,12 @@
     },
     "start": {
       "dotEnv": [
+        ".env",
         ".env.production.local",
         ".env.local",
-        ".env.production",
-        ".env"
+        ".env.production"
       ],
+      "env": ["NEXT_PUBLIC_HOST_URL"],
       "dependsOn": ["^build", "^db:generate"]
     },
     "test": {
@@ -40,6 +42,12 @@
       "dependsOn": ["^lint"]
     },
     "dev": {
+      "dotEnv": [
+        ".env.development.local",
+        ".env.local",
+        ".env.development",
+        ".env"
+      ],
       "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true

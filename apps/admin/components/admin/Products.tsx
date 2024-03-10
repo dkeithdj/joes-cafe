@@ -53,7 +53,8 @@ const Products = ({ product }: { product: ProductOptions }) => {
         <img
           // FIXME: do environment variable
           src={
-            (product.image && `http://localhost:3000/${product.image}?r=45`) ||
+            (product.image &&
+              `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}?r=45`) ||
             "/Joes-Logo-Whitebg.png"
           }
           alt={product.name}

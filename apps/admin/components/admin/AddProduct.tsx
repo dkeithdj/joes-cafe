@@ -50,12 +50,12 @@ const formSchema = z.object({
     }, "Image is required")
     .refine((files) => {
       return Array.from(files ?? []).every(
-        (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE
+        (file) => sizeInMB(file.size) <= MAX_IMAGE_SIZE,
       );
     }, `The maximum image size is ${MAX_IMAGE_SIZE}MB`)
     .refine((files) => {
       return Array.from(files ?? []).every((file) =>
-        ACCEPTED_IMAGE_TYPES.includes(file.type)
+        ACCEPTED_IMAGE_TYPES.includes(file.type),
       );
     }, "File type is not supported"),
   isAvailable: z.boolean(),
@@ -67,7 +67,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 
   // Add newly uploaded images
   Array.from(event.target.files!).forEach((image) =>
-    dataTransfer.items.add(image)
+    dataTransfer.items.add(image),
   );
 
   const files = dataTransfer.files;
@@ -109,10 +109,13 @@ const AddProduct = ({ setOpen }: { setOpen: (bool: boolean) => void }) => {
     formData.append("productName", JSON.stringify({ name: name }));
     formData.append("file", image[0]);
 
-    fetch(`http://localhost:3000/api/uploadProductImage`, {
-      method: "POST",
-      body: formData,
-    })
+    fetch(
+      `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/api/uploadProductImage`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    )
       .then((res) => res.json())
       .then((data: { imagePath: string }) => {
         mutate({

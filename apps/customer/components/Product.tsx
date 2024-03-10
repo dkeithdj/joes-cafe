@@ -48,20 +48,21 @@ const Product = ({
   };
 
   return (
-    <Card className="relative w-[250px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
+    <Card className="relative w-[150px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
       {!product.isAvailable && (
         <div className="absolute inset-0 bg-muted/60 h-full rounded-[24px] overflow-hidden"></div>
       )}
       <div className="flex w-[130px] h-[130px] items-center rounded-[14px] justify-center mt-[10px] object-cover overflow-hidden ">
         <img
           src={
-            (product.image && `http://localhost:3000/${product.image}`) ||
+            (product.image &&
+              `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}`) ||
             "/Joes-Logo-Whitebg.png"
           }
           alt={product.name}
         />
       </div>
-      <div className="w-[200px] mt-4 ">
+      <div className="w-[130px] mt-4 ">
         <div className="">
           <div className="flex items-start justify-between">
             <div className="bebasNeue text-xl leading-4 text-[#B3875D]">
