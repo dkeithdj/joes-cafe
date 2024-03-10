@@ -13,7 +13,6 @@ import { useState } from "react";
 // import superjson from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { trpc } from "@admin/hooks/trpc";
-import { hostURL } from "@repo/api";
 
 export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -28,9 +27,9 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
   // const url = process.env.NEXT_PUBLIC_VERCEL_URL
   //   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   //   : "http://localhost:3000/trpc/";
-  const url = `http://${process.env.NEXT_PUBLIC_HOST_URL}:3001/trpc/`;
-
-  const urlEnd = `${process.env.NEXT_PUBLIC_HOST_URL}:3001/trpc`;
+  const url = `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/trpc/`;
+  console.log(process.env.NEXT_PUBLIC_HOST_URL);
+  const urlEnd = `${process.env.NEXT_PUBLIC_HOST_URL}:3000/trpc`;
   const wsClient = createWSClient({ url: `ws://${urlEnd}` });
 
   const [trpcClient] = useState(() =>
@@ -72,7 +71,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools />
+        {/* <ReactQueryDevtools /> */}
       </QueryClientProvider>
     </trpc.Provider>
   );

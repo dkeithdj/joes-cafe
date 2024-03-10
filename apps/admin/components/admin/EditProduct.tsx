@@ -91,7 +91,7 @@ function getImageData(event: ChangeEvent<HTMLInputElement>) {
 const EditProduct = ({ product }: { product: ProductOptions }) => {
   const utils = trpc.useUtils();
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(
-    `http://localhost:3000/${product.image}`,
+    `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}`,
   );
   const [open, setOpen] = useState(false);
   // const [preview, setPreview] = useState("");
@@ -137,10 +137,13 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
       formData.append("productName", JSON.stringify({ name: name }));
       formData.append("file", image[0]);
 
-      fetch(`http://localhost:3000/api/uploadProductImage/${product.id}`, {
-        method: "PATCH",
-        body: formData,
-      })
+      fetch(
+        `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/api/uploadProductImage/${product.id}`,
+        {
+          method: "PATCH",
+          body: formData,
+        },
+      )
         .then((res) => res.json())
         .then((data: { imagePath: string }) => {
           mutate({
@@ -166,7 +169,8 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
         <img
           // FIXME: do environment variable
           src={
-            (product.image && `http://localhost:3000/${product.image}?q=50`) ||
+            (product.image &&
+              `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}?q=50`) ||
             "/Joes-Logo-Whitebg.png"
           }
           alt={product.name}
@@ -211,7 +215,7 @@ const EditProduct = ({ product }: { product: ProductOptions }) => {
                                   className="cursor-pointer object-cover h-[180px] rounded-lg"
                                   src={
                                     (preview as string) ||
-                                    `http://localhost:3000/${product.image}` ||
+                                    `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/${product.image}` ||
                                     "/Joes-Logo-Whitebg.png"
                                   }
                                   alt="upload"

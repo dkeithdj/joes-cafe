@@ -127,10 +127,13 @@ const start = async () => {
         process.env.NEXT_ADMIN_URL as string,
         process.env.NEXT_CUSTOMER_URL as string,
         process.env.NEXT_KITCHEN_URL as string,
+        `http://${process.env.NEXT_PUBLIC_HOST_URL}:3001`,
+        `http://${process.env.NEXT_PUBLIC_HOST_URL}:3002`,
+        `http://${process.env.NEXT_PUBLIC_HOST_URL}:3003`,
       ],
       credentials: true,
     });
-    await server.listen({ port: 3000 });
+    await server.listen({ port: 3000, host: "::" });
     console.log("💫 Server listening on port 3000...");
   } catch (err) {
     server.log.error(err);

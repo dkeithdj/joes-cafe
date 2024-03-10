@@ -48,7 +48,7 @@ const Product = ({
   };
 
   return (
-    <Card className="relative w-[250px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
+    <Card className="relative w-[150px] h-full m-4 rounded-[24px] flex flex-col items-center bg-[#221E1D]">
       {!product.isAvailable && (
         <div className="absolute inset-0 bg-muted/60 h-full rounded-[24px] overflow-hidden"></div>
       )}
@@ -62,7 +62,7 @@ const Product = ({
           alt={product.name}
         />
       </div>
-      <div className="w-[200px] mt-4 ">
+      <div className="w-[130px] mt-4 ">
         <div className="">
           <div className="flex items-start justify-between">
             <div className="bebasNeue text-xl leading-4 text-[#B3875D]">
