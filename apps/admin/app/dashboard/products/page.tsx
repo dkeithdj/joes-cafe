@@ -14,7 +14,10 @@ import {
 import React, { useState } from "react";
 import { trpc } from "@admin/hooks/trpc";
 import EditProduct from "@admin/components/admin/EditProduct";
+import { usePathname } from "next/navigation";
 const AdminProducts = () => {
+  const pathname = usePathname();
+  console.log(pathname);
   const [open, setOpen] = useState(false);
   const {
     data: products,

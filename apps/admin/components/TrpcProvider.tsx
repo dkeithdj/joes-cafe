@@ -27,9 +27,9 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
   // const url = process.env.NEXT_PUBLIC_VERCEL_URL
   //   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
   //   : "http://localhost:3000/trpc/";
-  const url = "http://localhost:3000/trpc/";
-
-  const urlEnd = `localhost:3000/trpc`;
+  const url = `http://${process.env.NEXT_PUBLIC_HOST_URL}:3000/trpc/`;
+  console.log(process.env.NEXT_PUBLIC_HOST_URL);
+  const urlEnd = `${process.env.NEXT_PUBLIC_HOST_URL}:3000/trpc`;
   const wsClient = createWSClient({ url: `ws://${urlEnd}` });
 
   const [trpcClient] = useState(() =>
@@ -71,7 +71,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools />
+        {/* <ReactQueryDevtools /> */}
       </QueryClientProvider>
     </trpc.Provider>
   );

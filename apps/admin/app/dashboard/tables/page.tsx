@@ -56,7 +56,7 @@ const TablePage = () => {
                   <div id={id}>
                     <Canvas
                       // TODO: FIXTHIS URL
-                      text={`http://localhost:3002/${id}`}
+                      text={`http://${process.env.NEXT_PUBLIC_HOST_URL}:3002/${id}`}
                       options={{
                         margin: 2,
                         width: 300,
