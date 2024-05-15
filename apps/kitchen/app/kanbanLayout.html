@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joe's Kitchen</title>
+    <link rel="stylesheet" href="output.css">
+</head>
+<style>
+    .flex ::-webkit-scrollbar{
+        display: none;
+    }
+</style>
+
+<body class="flex flex-col items-center justify-center h-svh bg-bg">
+    <div class="flex items-center justify-center w-full h-20 bg-[#E1CDAD] mt-6 px-4">
+        <img src="img/274699969_520965519373631_9023120564138208754_n-removebg-preview (1).svg">
+        <h1 class="text-3xl text-[#2E2A29] font-main font-bold px-4">
+            KITCHEN SYSTEM
+        </h1>
+        <img src="img/274699969_520965519373631_9023120564138208754_n-removebg-preview (1).svg">
+    </div>
+    <div class="flex flex-row justify-between w-11/12 h-3/4 my-16">
+        <!--Incoming-->
+        <div class="flex flex-col w-96 h-full bg-white rounded-3xl overflow-hidden">
+            <div class="flex items-center justify-center w-full h-16 bg-lightbrown flex-shrink-0">
+                <h1 class="text-3xl text-mainText font-main">
+                    INCOMING
+                </h1>
+            </div>
+            <div class="flex flex-col justify-start w-full h-full px-6 py-6 space-y-6 overflow-auto">
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-lightbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="flex-row inline-flex w-auto h-auto space-x-2">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto space-x-2">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-lightbrown active:border active:border-primaryBtn">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-lightbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-lightbrown active:border active:border-primaryBtn">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-lightbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-lightbrown active:border active:border-primaryBtn">
+                            Accept
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--On-going-->
+        <div class="flex flex-col w-96 h-full bg-white rounded-3xl overflow-hidden">
+            <div class="flex items-center justify-center w-full h-16 bg-midbrown flex-shrink-0">
+                <h1 class="text-3xl text-[#F9EBD3] font-main">
+                    ON-GOING
+                </h1>
+            </div>
+            <div class="flex flex-col justify-start w-full h-full px-6 py-6 space-y-6 overflow-auto">
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-midbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-midbrown active:border active:border-primaryBtn">
+                            Complete
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-midbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-midbrown active:border active:border-primaryBtn">
+                            Complete
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-midbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-primaryBtn">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-mainText font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-mainText font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-primaryBtn text-white font-main rounded active:text-primaryBtn active:bg-midbrown active:border active:border-primaryBtn">
+                            Complete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Completed-->
+        <div class="flex flex-col w-96 h-full bg-white rounded-3xl overflow-hidden">
+            <div class="flex items-center justify-center w-full h-16 bg-darkbrown flex-shrink-0">
+                <h1 class="text-3xl text-[#F9EBD3] font-main">
+                    COMPLETED
+                </h1>
+            </div>
+            <div class="flex flex-col justify-start w-full h-full px-6 py-6 space-y-6 overflow-auto">
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-darkbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-[#F9EBD3]">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-[#9B9B9B] text-white font-main rounded">
+                            Order Served
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-darkbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-[#F9EBD3]">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-[#9B9B9B] text-white font-main rounded">
+                            Order Served
+                        </button>
+                    </div>
+                </div>
+                <!--Order Card Container-->
+                <div class="w-full inline-flex h-auto flex-col bg-darkbrown rounded-md p-5 space-y-5">
+                    <!--Customer's Info-->
+                    <div class="w-full inline-flex h-auto flex-col">
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Order Number:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Name:
+                            </p>
+                        </div>
+                        <div class="inline-flex w-auto h-auto">
+                            <p class="text-base text-white font-main">
+                                Table:
+                            </p>
+                        </div>
+                    </div>
+                    <!--Divider-->
+                    <div class="w-full">
+                        <hr class="w-full border-t border-[#F9EBD3]">
+                    </div>
+                    <!--Products Ordered-->
+                    <div class="w-full flex-col inline-flex h-auto">
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Coffee Latte
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Iced Americano
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x2
+                            </p>
+                        </div>
+                        <div class="w-full flex-row inline-flex h-auto justify-between">
+                            <!--Product-->
+                            <p class="text-[#F9EBD3] font-main">
+                                Aloe Vera Tea
+                            </p>
+                            <!--Qty-->
+                            <p class="text-[#F9EBD3] font-main">
+                                x1
+                            </p>
+                        </div>
+                    </div>
+                    <!--Primary Button-->
+                    <div class="w-full h-auto">
+                        <button class="w-full h-9 bg-[#9B9B9B] text-white font-main rounded">
+                            Order Served
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
